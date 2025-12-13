@@ -33,4 +33,4 @@ app.get('/healthz', (req, res) => {
 export default app
 
 
-// svo.bz/abc (or 123)
+// svo.bz/123 (or abc)
