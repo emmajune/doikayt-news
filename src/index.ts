@@ -37,13 +37,17 @@ app.get('/pantry-test', (req, res) => {
   animalSounds: {
     goose: 'honk',
     dragon: 'RAWRR',
-    kitty: 'mraow -_-'
+    kitty: 'mraow',
   }
 }
 
-pantryClient.basket
-  .create('test', payload)
-  .then((response) => res.send(response))
+// pantryClient.basket
+//   .create('test', payload)
+//   .then((response) => res.send(response))
+
+  pantryClient.basket
+      .get('test', payload)
+      .then((response) => res.send(response))
 })
 
 
