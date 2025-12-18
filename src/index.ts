@@ -9,6 +9,10 @@ const __dirname = path.dirname(__filename)
 
 const app = express()
 
+const pantryID = "4b8eeebc-b2e8-404b-808d-da8a45297b77"
+const pantryClient = new pantry(pantryID)
+
+
 // Home route - HTML
 app.get('/', (req, res) => {
   // res.type('html').send(``)
@@ -29,7 +33,14 @@ app.get('/api-data', (req, res) => {
 
 // pantry test - JSON
 app.get('/pantry-test', (req, res) => {
-  res.send('HIIII')
+  const payload = {
+  pending: [],
+  complete: []
+}
+
+pantryClient.basket
+  .create('ToDoList', payload)
+  .then((response) => res.send(response))
 })
 
 
