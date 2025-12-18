@@ -34,12 +34,15 @@ app.get('/api-data', (req, res) => {
 // pantry test - JSON
 app.get('/pantry-test', (req, res) => {
   const payload = {
-  pending: [],
-  complete: []
+  animalSounds: {
+    goose: 'honk',
+    dragon: 'RAWRR',
+    kitty: 'mraow -_-'
+  }
 }
 
 pantryClient.basket
-  .create('ToDoList', payload)
+  .create('test', payload)
   .then((response) => res.send(response))
 })
 
