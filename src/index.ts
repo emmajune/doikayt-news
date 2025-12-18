@@ -2,6 +2,8 @@ import express from 'express'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
+import pantry from 'pantry-node'
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
@@ -24,6 +26,12 @@ app.get('/api-data', (req, res) => {
     items: ['apple', 'banana', 'cherry'],
   })
 })
+
+// pantry test - JSON
+app.get('/pantry-test', (req, res) => {
+  res.send('HIIII')
+})
+
 
 // Health check
 app.get('/healthz', (req, res) => {
