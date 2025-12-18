@@ -47,7 +47,7 @@ app.get('/pantry-test', (req, res) => {
 
   pantryClient.basket
       .get('test', payload)
-      .then((response) => res.send(JSON.parse(response).goose))
+      .then((response) => res.send(JSON.parse(response).animalSounds.goose))
 })
 
 
