@@ -52,7 +52,7 @@ app.get('/pantry-test', (req, res) => {
 
 
 app.get('/rss-test', async (req, res) => {
-  var htmlNews = await constellateRSS('zeteo')
+  var htmlNews = await constellateRSS('common_dreams')
   res.type('html').send(htmlNews)
 })
 
