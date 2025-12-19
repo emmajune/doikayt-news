@@ -15,7 +15,7 @@ const pantryClient = new pantry(pantryID)
 
 // Home route - HTML
 app.get('/', (req, res) => {
-  // res.type('html').send(``)
+  // res.type('html').send(`<!doctype html>...`)
   res.sendFile(path.join(__dirname, '..', 'components', 'index.html'))
 })
 
@@ -35,19 +35,17 @@ app.get('/api-data', (req, res) => {
 app.get('/pantry-test', (req, res) => {
   const payload = {
   animalSounds: {
-    goose: 'honk',
-    dragon: 'RAWRR',
-    kitty: 'mraow',
+    goose: 'honk!',
+    // dragon: 'RAWRR',
+    // kitty: 'mraow',
+    // bug: 'chitter'
   }
 }
 
-// pantryClient.basket
-//   .create('test', payload)
-//   .then((response) => res.send(response))
-
   pantryClient.basket
-      .get('test', payload)
-      .then((response) => res.send(response.animalSounds.goose))
+      //get, create, delete
+      .update('test', payload)
+      .then((response) => res.send(response))
 })
 
 
@@ -56,7 +54,11 @@ app.get('/healthz', (req, res) => {
   res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() })
 })
 
+app.listen(1080)
+
 export default app
 
 
-// svo.bz/123 (or abc)
+// svo.bz/123 (or abc) (or xyz)
+
+//const ddg = await fetch('https://duckduckgo.com').then(response=>response.text())
