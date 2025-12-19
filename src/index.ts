@@ -3,6 +3,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 import pantry from 'pantry-node'
+import { xml2json } from 'xml-js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -61,6 +62,6 @@ export default app
 
 // svo.bz/123 (or abc) (or xyz)
 
-const truthoutRSS = await fetch('https://truthout.org/latest/feed/').then(response=>response.text())
+const sampleRSS = await fetch('https://truthout.org/latest/feed/').then(response=>response.text())
 
-console.log(truthoutRSS)
+console.log(JSON.parse(xml2json(sampleRSS, {compact: true})).rss.channel.item[0].title._text)
