@@ -61,4 +61,6 @@ export default app
 
 // svo.bz/123 (or abc) (or xyz)
 
-//const ddg = await fetch('https://duckduckgo.com').then(response=>response.text())
+const truthoutRSS = await fetch('https://truthout.org/latest/feed/').then(response=>response.text())
+
+console.log(truthoutRSS)
