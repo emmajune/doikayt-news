@@ -61,7 +61,35 @@ export default app
 
 
 // svo.bz/123 (or abc) (or xyz)
+async function constellateRSS(source) {
+  const linksRSS = {
+    truthout:'https://truthout.org/latest/feed', the_intercept:'https://theintercept.com/feed',
+    common_dreams:'https://commondreams.com/rss.xml', mondoweiss:'https://mondoweiss.net/feed',
+    zeteo:'https://zeteo.com/feed', npr:'https://feeds.npr.org/1001/rss.xml',
+    the_guardian:'https://theguardian.com/us/rss', plus_972_magazine:'https://www.972mag.com/feed',
+    the_electronic_intifada:'https://electronicintifada.net/rss.xml',
+    the_nation:'https://thenation.com/feed/?post_type=article'
+  }
 
-const sampleRSS = await fetch('https://truthout.org/latest/feed/').then(response=>response.text())
+  const sampleRSS = await fetch(linksRSS[source])
+    .then(response=>response.text())
 
-console.log(JSON.parse(xml2json(sampleRSS, {compact: true})).rss.channel.item[0].title._text)
+  var objectRSS = JSON.parse(xml2json(sampleRSS, {compact: true}))
+  objectRSS = objectRSS.rss.channel
+  const itemsRSS = objectRSS.item
+  var itemsArr = []
+  for (var i = 0; i < itemsRSS.length; i++) {
+    let { title, link, description } = itemsRSS[i]
+    title = title?._text || title._cdata
+    link = link?._text || link._cdata
+    description = (description?._text || description._cdata)
+    // .split('\n')[0]
+    const htmlTemplate = `<a href="${link}">${title}</a>
+    <br />
+    <p>${description}</p>`
+    itemsArr.push(`${title}\n${link}\n${description}`)
+  }
+  return itemsArr.join('\n\n')
+}
+
+console.log(await constellateRSS('zeteo'))
