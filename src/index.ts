@@ -4,9 +4,7 @@ import { fileURLToPath } from 'url'
 
 import pantry from 'pantry-node'
 
-
-
-import constellateRSS from 'constellateRSS'
+import constellateRSS from './constellateRSS/index.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
