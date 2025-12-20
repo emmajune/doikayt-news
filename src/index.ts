@@ -53,6 +53,9 @@ app.get('/pantry-test', (req, res) => {
 
 app.get('/rss-test', async (req, res) => {
   var htmlNews = await constellateRSS(['the_intercept', 'truthout', 'common_dreams', 'mondoweiss', 'zeteo', 'npr', 'the_guardian', 'the_electronic_intifada', 'the_nation', 'drop_site_news', 'in_these_times'])
+  var pageHTML = `
+    
+  `
   res.type('html').send(htmlNews)
 })
 

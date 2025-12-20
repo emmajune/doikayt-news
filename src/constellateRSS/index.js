@@ -28,7 +28,8 @@ export async function constellateRSS(sourcesArr) {
       
       const parser = new XMLParser()
       let jObj = parser.parse(sourceRSS)  //converts rss to json
-      let sourceObject = jObj.rss.channel
+      let sourceObject = jObj?.rss?.channel
+      sourceObject ? sourceObject : []
       const sourceItemsArr = sourceObject.item
       collectedRSS = collectedRSS.concat(sourceItemsArr)
     }
@@ -51,10 +52,17 @@ export async function constellateRSS(sourcesArr) {
   
   for (let i = 0; i < collectedRSS.length; i++) {
     let { title, link, description } = collectedRSS[i]
-    let source = ''
+    let source = link.split('://')[1].split('/')[0]
+    if (source.split('.').length === 2) {
+      source = source.split('.')[0]
+    }
+    else {
+      source = source.split('.')[1].split('.')[0]
+    }
+    source = source.toUpperCase()
     description = sanitizeHtml(description, { allowedTags: [] })
-    description = description.substring(0, 600)
-    compiledHTML += `${link.split('://')[1].split('/')[0].split('.')[1].split('.')[0]}: <a href="${link}">${title} (${source})</a><p>${description}</p>\n\n\n`
+    let shortDescription = description.substring(0, 130) + '...';
+    compiledHTML += `${source}: <div title="${description}"><a href="${link}">${title} (${source})</a><p>${shortDescription}</p></div>\n\n\n`
   }
 
   return compiledHTML.replaceAll(' ()', '')
