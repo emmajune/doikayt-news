@@ -11,7 +11,8 @@ export async function constellateRSS(sourcesArr) {
     the_electronic_intifada: 'https://electronicintifada.net/rss.xml',
     the_nation: 'https://thenation.com/feed/?post_type=article', drop_site_news: 'https://www.dropsitenews.com/feed',
     in_these_times: 'https://inthesetimes.com/rss', dissent_magazine: 'https://dissentmagazine.org/feed/',
-    mother_jones: 'https://www.motherjones.com/feed', al_jazeera: 'https://www.aljazeera.com/xml/rss/all.xml'
+    mother_jones: 'https://www.motherjones.com/feed', al_jazeera: 'https://www.aljazeera.com/xml/rss/all.xml',
+    counterpunch: 'https://counterpunch.org/feed', internation_viewpoint: 'https://internationalviewpoint.org/spip.php?page=backend', its_going_down: 'https://itsgoingdown.org/feed/'
   }
 
   //+972mag and jewishcurrents and jacobin all (prolly) have captchas (for some reason)
@@ -33,7 +34,7 @@ export async function constellateRSS(sourcesArr) {
     }
   
 
-// orders news in ascending order of date published
+// orders news in descending order of date published
   collectedRSS.sort((a, b) => {
     a = new Date(a.pubDate)
     a = a.getTime()
@@ -42,14 +43,12 @@ export async function constellateRSS(sourcesArr) {
     return b - a 
   })
 
-// reorders news in descending order
-  collectedRSS.reverse()
 
 
   var compiledHTML = ''
   
   for (let i = 0; i < collectedRSS.length; i++) {
-    let { title, link, description } = collectedRSS[i]
+    let { title, pubDate, link, description } = collectedRSS[i]
     let source = link.split('://')[1].split('/')[0]
     if (source.split('.').length === 2) {
       source = source.split('.')[0]
@@ -57,7 +56,11 @@ export async function constellateRSS(sourcesArr) {
     else {
       source = source.split('.')[1].split('.')[0]
     }
+    
     source = source.toUpperCase()
+    
+    pubDate = pubDate.substring(6, 16)
+
     if (title.length > 87) {
       title = title.substring(0, 87) + '...' 
     }
@@ -71,11 +74,16 @@ export async function constellateRSS(sourcesArr) {
     description = description.replace(/\n\n/g, '\n')
 
     let shortDescription = description
-    if (description.length > 107) {
-       shortDescription = description.substring(0, 107) + '...' 
+    if (description.length > 307) {
+       shortDescription = description.substring(0, 307) + '...' 
     }
-    compiledHTML += `<div title="${description}">${source}: 
-    <a href="${link}">${title}</a><p>${shortDescription}</p></div>`
+    compiledHTML += `
+    <div title="${description}" class="news-item">
+      <label>${source}, ${pubDate}:
+        <a href="${link}">${title}</a>
+        <p class="description">${shortDescription}</p>
+      </label>
+    </div>`
   }
 
   return compiledHTML.replaceAll(' ()', '')
