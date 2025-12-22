@@ -15,10 +15,11 @@ export async function constellateRSS(sourcesArr) {
     the_guardian: 'https://theguardian.com/us/rss', 
     the_electronic_intifada: 'https://electronicintifada.net/rss.xml',
     the_nation: 'https://thenation.com/feed/?post_type=article', drop_site_news: 'https://www.dropsitenews.com/feed',
-    in_these_times: 'https://inthesetimes.com/rss'
+    in_these_times: 'https://inthesetimes.com/rss', dissent_magazine: 'https://dissentmagazine.org/feed/',
+    mother_jones: 'https://www.motherjones.com/feed', al_jazeera: 'https://www.aljazeera.com/xml/rss/all.xml'
   }
 
-  //+972mag and jewishcurrents have captchas (for some reason)
+  //+972mag and jewishcurrents and jacobin all (prolly) have captchas (for some reason)
 
 
   let collectedRSS = [] //the grand list of rss items
@@ -28,10 +29,12 @@ export async function constellateRSS(sourcesArr) {
       
       const parser = new XMLParser()
       let jObj = parser.parse(sourceRSS)  //converts rss to json
-      let sourceObject = jObj?.rss?.channel
-      sourceObject ? sourceObject : []
-      const sourceItemsArr = sourceObject.item
-      collectedRSS = collectedRSS.concat(sourceItemsArr)
+
+      if (jObj?.rss?.channel) {
+        let sourceObject = jObj.rss.channel
+        const sourceItemsArr = sourceObject.item
+        collectedRSS = collectedRSS.concat(sourceItemsArr)
+      }
     }
   
 
@@ -60,9 +63,19 @@ export async function constellateRSS(sourcesArr) {
       source = source.split('.')[1].split('.')[0]
     }
     source = source.toUpperCase()
+    if (title.length > 87) {
+      title = title.substring(0, 87) + '...' 
+    }
+    
+
     description = sanitizeHtml(description, { allowedTags: [] })
-    let shortDescription = description.substring(0, 130) + '...';
-    compiledHTML += `${source}: <div title="${description}"><a href="${link}">${title} (${source})</a><p>${shortDescription}</p></div>\n\n\n`
+    let shortDescription = description
+    if (description.length > 107) {
+       shortDescription = description.substring(0, 107) + '...' 
+    }
+    description.replace(/[a-z][A-Z]/g, '')
+    compiledHTML += `${source}: <div title="${description}">
+    <a href="${link}">${title}</a><p>${shortDescription}</p></div>\n\n\n`
   }
 
   return compiledHTML.replaceAll(' ()', '')
