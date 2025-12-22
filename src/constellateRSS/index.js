@@ -1,9 +1,4 @@
-import sanitizeHtml from 'sanitize-html'
-
 import { XMLParser, XMLBuilder, XMLValidator} from "fast-xml-parser"
-
-
-
 
 
 export async function constellateRSS(sourcesArr) {
@@ -66,16 +61,21 @@ export async function constellateRSS(sourcesArr) {
     if (title.length > 87) {
       title = title.substring(0, 87) + '...' 
     }
-    
 
-    description = sanitizeHtml(description, { allowedTags: [] })
+    function unHtml(str) {
+      str = str.replace(/(<[\s\S]*?>)+/g, ' ')
+      return str
+    }
+
+    description = unHtml(description)
+    description = description.replace(/\n\n/g, '\n')
+
     let shortDescription = description
     if (description.length > 107) {
        shortDescription = description.substring(0, 107) + '...' 
     }
-    description.replace(/[a-z][A-Z]/g, '')
-    compiledHTML += `${source}: <div title="${description}">
-    <a href="${link}">${title}</a><p>${shortDescription}</p></div>\n\n\n`
+    compiledHTML += `<div title="${description}">${source}: 
+    <a href="${link}">${title}</a><p>${shortDescription}</p></div>`
   }
 
   return compiledHTML.replaceAll(' ()', '')
