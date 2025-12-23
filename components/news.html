@@ -12,12 +12,16 @@
     <title>doikayt_news</title>
   </head>
   <body>
-    <main class="container">
+    <main class="container-fluid">
       <div>
         <form>
           <input id="searchbar" type="search" />
         </form>
-        THE_NEWS_GOES_HERE
+        <hr></hr>
+        <hr></hr>
+        <div class="the-news">
+          THE_NEWS_GOES_HERE
+        </div>
       </div>
     </main>
     <style>
@@ -25,8 +29,13 @@
         width: 100%;
         padding-top: 10px;
         border-radius: 5px;
-        border-style: solid;
       }
+      .news-titlebar {
+        display: inline-block;
+        overflow-y: hidden;
+        height: 1.3em;
+      }
+      /* adaptive titlebar overflow js??? */
     </style>
   </body>
 </html>
