@@ -95,40 +95,6 @@ export default constellateRSS
 
 /*
 
-search formula ideas:
+decided to use fusejs for sezrchingQ!
 
-4ld = 1st 4 lines of description 
-
-(vv descending order of result quality)
-
-1: one perfect match in title, 2 in 4ld
-
-2: one perfect match in title, 1 perfect match and 1 imperfect match 4ld
-
-3: one perfect match in title, 2 imperfect matches in 4ld
-
-4: one imperfect match in title, 2 imperfect matches in 4ld
-
-5: one imperfect match in title, 1 imperfect match and and 1 scrambled match in 4ld (xn scramblednesses)
-
-6: one imperfect match in title, 2 scrambled matches in 4ld (xn scramblednesses)
-
-7: one imperfect match in title, 1 scrambled match in 4ld (xn scramblednesses)
-
-8: one imperfect match in title, 1 partial scrambled match in 4ld (xn scramblednesses, xn partialities)
-
-9: one scrambled match in title (xn scramblednesses), nada in description
-
-10 one partial scrambled match in title (xn scramblednesses, xn partialities)
-
-11: nada in title, 2 perf matches in 4ld
-
-12: nada, 1perf + 1imp
-
-13: 
-
-
-waaaa add synonyms in abovealksdfjasdlfk
-
-TODO: pick just a few of guardian's rss feeds
 */

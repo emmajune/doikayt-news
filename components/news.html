@@ -1,13 +1,14 @@
 <!doctype html>
 <html lang="en">
-  <!-- IDEA: limit to last 7 days of news (at least, for default) -->
+  <!-- IDEA: limit to last 7 days of news (at least, as the default) -->
   <head>
+    
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link
   rel="stylesheet"
   href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
->
+>   <meta http-equiv="Cache-Control" content="no-cache">
     <link rel="icon" type="image/png" href="/favicon.png">
     <title>doikayt_news</title>
   </head>
@@ -17,8 +18,6 @@
         <form>
           <input id="searchbar" type="search" />
         </form>
-        <hr></hr>
-        <hr></hr>
         <div class="the-news">
           THE_NEWS_GOES_HERE
         </div>
@@ -35,7 +34,6 @@
         overflow-y: hidden;
         height: 1.3em;
       }
-      /* adaptive titlebar overflow js??? */
     </style>
   </body>
 </html>
