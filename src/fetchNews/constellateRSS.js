@@ -15,7 +15,7 @@ export async function constellateRSS(sourcesArr) {
     counterpunch: 'https://counterpunch.org/feed', internation_viewpoint: 'https://internationalviewpoint.org/spip.php?page=backend', its_going_down: 'https://itsgoingdown.org/feed/'
   }
 
-  //+972mag and jewishcurrents and jacobin all (prolly) have captchas (for some reason)
+  //+972mag and jewishcurrents and jacobin don't work
 
 
   let collectedRSS = [] //the grand list of rss items
@@ -32,63 +32,8 @@ export async function constellateRSS(sourcesArr) {
         collectedRSS = collectedRSS.concat(sourceItemsArr)
       }
     }
-  
 
-// orders news in descending order of date published
-  collectedRSS.sort((a, b) => {
-    a = new Date(a.pubDate)
-    a = a.getTime()
-    b = new Date(b.pubDate)
-    b = b.getTime()
-    return b - a 
-  })
-
-  console.log(collectedRSS.slice(0, 3))
-
-  var compiledHTML = ''
-  
-  for (let i = 0; i < collectedRSS.length; i++) {
-    let { title, pubDate, link, description } = collectedRSS[i]
-    let source = link.split('://')[1].split('/')[0]
-    if (source.split('.').length === 2) {
-      source = source.split('.')[0]
-    }
-    else {
-      source = source.split('.')[1].split('.')[0]
-    }
-    
-    source = source.toUpperCase()
-    
-    pubDate = pubDate.substring(6, 16)
-
-    if (title.length > 87) {
-      title = title.substring(0, 87) + '...' 
-    }
-
-    function unHtml(str) {
-      str = str.replace(/(<[\s\S]*?>)+/g, ' ')
-      return str
-    }
-
-    description = unHtml(description)
-    description = description.replace(/\n\n/g, '\n')
-
-    let shortDescription = description
-    if (description.length > 307) {
-       shortDescription = description.substring(0, 307) + '...' 
-    }
-    compiledHTML += `
-    <div title="${description}" class="news-item">
-      <label>
-        <span class="news-titlebar">${source}, ${pubDate}:
-          <a href="${link}">${title}</a>
-        </span>
-        <p class="description">${shortDescription}</p>
-      </label>
-    </div>`
-  }
-
-  return compiledHTML.replaceAll(' ()', '')
+  return collectedRSS
 }
 
 export default constellateRSS
