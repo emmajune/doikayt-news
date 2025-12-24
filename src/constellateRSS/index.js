@@ -43,7 +43,7 @@ export async function constellateRSS(sourcesArr) {
     return b - a 
   })
 
-
+  console.log(collectedRSS.slice(0, 3))
 
   var compiledHTML = ''
   

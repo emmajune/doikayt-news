@@ -64,11 +64,12 @@ app.get('/pantry-test', (req, res) => {
 
 
 app.get('/rss-test', async (req, res) => {
-  var htmlNews = await constellateRSS(['the_intercept'])//, 'truthout', 'common_dreams', 'mondoweiss', 'zeteo', 'npr', 'the_guardian', 'the_electronic_intifada', 'the_nation', 'drop_site_news', 'in_these_times', 'dissent_magazine', 'mother_jones', 'al_jazeera'])
+  var htmlNews = await constellateRSS(['npr'])//'the_intercept', 'truthout', 'common_dreams', 'mondoweiss', 'zeteo', 'npr', 'the_guardian', 'the_electronic_intifada', 'the_nation', 'drop_site_news', 'in_these_times', 'dissent_magazine', 'mother_jones', 'al_jazeera'])
   var randoFavicon = rando(1000000)
   var pageHTML:any = await readFile(path.join(__dirname, '..', 'components', 'news.html'))
   pageHTML = pageHTML.toString().replace('THE_NEWS_GOES_HERE', htmlNews)
   pageHTML = pageHTML.replace('RANDOM_ICON_NUMBER_GOES_HERE', randoFavicon)
+  pageHTML = pageHTML.replace('/favicon.png', '/favicon.png?'+rando(9999))
   res.type('html').send(pageHTML)
 })
 

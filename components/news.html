@@ -9,21 +9,80 @@
   rel="stylesheet"
   href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
 >   <meta http-equiv="Cache-Control" content="no-cache">
+
     <link rel="icon" type="image/png" href="/favicon.png">
     <title>doikayt_news</title>
   </head>
   <body>
-    <main class="container-fluid">
-      <div>
-        <form>
-          <input id="searchbar" type="search" />
+    <main class="container">
+      <div id="content">
+        <span style="width: 100%; display: inline-block; text-align: center; letter-spacing: 3ch; padding: 10px; font-size: 1.2em;">\<b>doikayt-news</b><span style="letter-spacing: normal">\</span></span>
+        <form id="searchform">
+          <input id="searchbar" type="search" style="border-width: 2px" />
         </form>
+        <div style="width: 100%; height: 16px; overflow-y: hidden; margin-bottom: 12px">
+        
+        <img src="favicon.png?1"><img src="favicon.png?2"><img src="favicon.png?31"><img src="favicon.png?41"><img src="favicon.png?5">
+        <img src="favicon.png?12"><img src="favicon.png?21"><img src="favicon.png?32"><img src="favicon.png?42"><img src="favicon.png?5">
+        <img src="favicon.png?13"><img src="favicon.png?22"><img src="favicon.png?33"><img src="favicon.png?43"><img src="favicon.png?5">
+        <img src="favicon.png?14"><img src="favicon.png?23"><img src="favicon.png?34"><img src="favicon.png?44"><img src="favicon.png?5">
+        <img src="favicon.png?15"><img src="favicon.png?24"><img src="favicon.png?35"><img src="favicon.png?45"><img src="favicon.png?5">
+        <img src="favicon.png?16"><img src="favicon.png?52"><img src="favicon.png?36"><img src="favicon.png?46"><img src="favicon.png?5">
+        <img src="favicon.png?17"><img src="favicon.png?2"><img src="favicon.png?31"><img src="favicon.png?41"><img src="favicon.png?5">
+        <img src="favicon.png?18"><img src="favicon.png?21"><img src="favicon.png?32"><img src="favicon.png?42"><img src="favicon.png?5">
+        <img src="favicon.png?19"><img src="favicon.png?22"><img src="favicon.png?33"><img src="favicon.png?43"><img src="favicon.png?5">
+        <img src="favicon.png?110"><img src="favicon.png?23"><img src="favicon.png?34"><img src="favicon.png?44"><img src="favicon.png?5">
+        <img src="favicon.png?111"><img src="favicon.png?24"><img src="favicon.png?35"><img src="favicon.png?45"><img src="favicon.png?5">
+        <img src="favicon.png?112"><img src="favicon.png?52"><img src="favicon.png?36"><img src="favicon.png?46"><img src="favicon.png?5">
+        <img src="favicon.png?113"><img src="favicon.png?2"><img src="favicon.png?31"><img src="favicon.png?41"><img src="favicon.png?5">
+        <img src="favicon.png?114"><img src="favicon.png?21"><img src="favicon.png?32"><img src="favicon.png?42"><img src="favicon.png?5">
+        <img src="favicon.png?115"><img src="favicon.png?22"><img src="favicon.png?33"><img src="favicon.png?43"><img src="favicon.png?5">
+        <img src="favicon.png?116"><img src="favicon.png?23"><img src="favicon.png?34"><img src="favicon.png?44"><img src="favicon.png?5">
+        <img src="favicon.png?117"><img src="favicon.png?24"><img src="favicon.png?35"><img src="favicon.png?45"><img src="favicon.png?5">
+        <img src="favicon.png?118"><img src="favicon.png?52"><img src="favicon.png?36"><img src="favicon.png?46"><img src="favicon.png?5">
+        <img src="favicon.png?119"><img src="favicon.png?2"><img src="favicon.png?31"><img src="favicon.png?41"><img src="favicon.png?5">
+        <img src="favicon.png?1220"><img src="favicon.png?21"><img src="favicon.png?32"><img src="favicon.png?42"><img src="favicon.png?5">
+        <img src="favicon.png?1321"><img src="favicon.png?22"><img src="favicon.png?33"><img src="favicon.png?43"><img src="favicon.png?5">
+        <img src="favicon.png?1422"><img src="favicon.png?23"><img src="favicon.png?34"><img src="favicon.png?44"><img src="favicon.png?5">
+        <img src="favicon.png?1523"><img src="favicon.png?24"><img src="favicon.png?35"><img src="favicon.png?45"><img src="favicon.png?5">
+        <img src="favicon.png?1624"><img src="favicon.png?52"><img src="favicon.png?36"><img src="favicon.png?46"><img src="favicon.png?5">
+        <img src="favicon.png?1025"><img src="favicon.png?2"><img src="favicon.png?31"><img src="favicon.png?41"><img src="favicon.png?5">
+        <img src="favicon.png?12"><img src="favicon.png?21"><img src="favicon.png?32"><img src="favicon.png?42"><img src="favicon.png?5">
+        <img src="favicon.png?13"><img src="favicon.png?22"><img src="favicon.png?33"><img src="favicon.png?43"><img src="favicon.png?5">
+        <img src="favicon.png?14"><img src="favicon.png?23"><img src="favicon.png?34"><img src="favicon.png?44"><img src="favicon.png?5">
+        <img src="favicon.png?15"><img src="favicon.png?24"><img src="favicon.png?35"><img src="favicon.png?45"><img src="favicon.png?5">
+        <img src="favicon.png?16"><img src="favicon.png?52"><img src="favicon.png?36"><img src="favicon.png?46"><img src="favicon.png?5">
+        
+      </div>
         <div class="the-news">
           THE_NEWS_GOES_HERE
         </div>
       </div>
     </main>
     <style>
+      #content {
+        width: 100%;
+      }
+
+      #searchform {
+        width: 100%;
+      }
+
+      #searchbar {
+        margin-top: 15px;
+        margin-left: 10%;
+        margin-right: 10%;
+        width: 80%;
+        /* box-shadow:black 0px -1px 1px; */
+      }
+
+      #searchbar:not(:active, :focus) {
+        border-color: black;
+      }
+
+      hr {
+        border-color: black;
+      }
       .news-item {
         width: 100%;
         padding-top: 10px;
@@ -34,6 +93,7 @@
         overflow-y: hidden;
         height: 1.3em;
       }
+
     </style>
   </body>
 </html>
