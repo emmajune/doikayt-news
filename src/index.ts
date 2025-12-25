@@ -65,7 +65,7 @@ app.get('/pantry-test', (req, res) => {
 
 app.get('/news', async (req, res) => {
   const query = req.url.split('?q=')[1]
-  const htmlNews = await fetchNews(query, ['the_intercept', 'truthout', 'common_dreams', 'mondoweiss', 'zeteo', 'npr', 'the_guardian', 'the_electronic_intifada', 'the_nation', 'drop_site_news', 'in_these_times', 'dissent_magazine', 'mother_jones', 'al_jazeera'])
+  const htmlNews = await fetchNews(query)
   const randoFavicon = rando(1000000)
   var pageHTML:any = await readFile(path.join(__dirname, '..', 'components', 'news.html'))
   pageHTML = pageHTML.toString().replace('THE_NEWS_GOES_HERE', htmlNews)

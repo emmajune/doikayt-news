@@ -15,7 +15,7 @@ export async function compileNews(newsItems) {
 
     source = source.toUpperCase()
 
-    pubDate = pubDate.substring(5, 16)
+    pubDate = pubDate?.substring(5, 16)
 
     if (title.length > 87) {
         title = title.substring(0, 87) + '...' 
