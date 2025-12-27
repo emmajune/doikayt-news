@@ -63,15 +63,20 @@ app.get('/pantry-test', (req, res) => {
 })
 
 
-app.get('/news', async (req, res) => {
-  const query = req.url.split('?q=')[1]
-  const htmlNews = await fetchNews(query)
+app.get('/news', async (req:any, res) => {
+  const query = req.url.split('q=')[1]
+  var sources:any = Object.keys(req.query);
+  sources.pop()
+  sources = sources.length ? sources : undefined
+  console.log(sources)
+  const htmlNews = await fetchNews(query, sources)
   const randoFavicon = rando(1000000)
   var pageHTML:any = await readFile(path.join(__dirname, '..', 'components', 'news.html'))
   pageHTML = pageHTML.toString().replace('THE_NEWS_GOES_HERE', htmlNews)
   pageHTML = pageHTML.replace('RANDOM_ICON_NUMBER_GOES_HERE', randoFavicon)
   pageHTML = pageHTML.replace('/favicon.png', '/favicon.png?'+rando(9999))
   res.type('html').send(pageHTML)
+  
 })
 
 

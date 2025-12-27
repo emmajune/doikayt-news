@@ -35,13 +35,12 @@ export async function compileNews(newsItems) {
     }
     compiledHTML += `
     <div title="${description}" class="news-item">
-        <label>
         <span class="news-titlebar">${source}, ${pubDate}:
             <a href="${link}">${title}</a>
         </span>
         <p class="description">${shortDescription}</p>
-        </label>
-    </div>`
+    </div>
+    <br />`
     }
 
     return compiledHTML.replaceAll(' ()', '')

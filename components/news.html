@@ -1,100 +1,94 @@
-<!doctype html>
-<html lang="en">
-  <!-- IDEA: limit to last 7 days of news (at least, as the default) -->
-  <head>
-    
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
->   <meta http-equiv="Cache-Control" content="no-cache">
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="icon" type="image/png" href="/favicon.png">
-    <title>doikayt_news</title>
-  </head>
-  <body>
-    <main class="container">
-      <div id="content" style="width: 100%">
-        pobodys nerfect..............................
-        <span style="width: 100%; display: inline-block; text-align: center; letter-spacing: 3ch; padding: 10px; font-size: 1.5em;"><b>doikayt - new<span style="letter-spacing: normal">s</span></b></span>
-        <form id="searchform" action="/news">
-          <input id="searchbar" name="q" type="search" style="border-width: 2px" />
-        </form>
-        <div style="width: 100%; height: 16px; overflow-y: hidden; margin-bottom: 20px">
-        
-        <img src="favicon.png?1"><img src="favicon.png?2"><img src="favicon.png?31"><img src="favicon.png?41"><img src="favicon.png?5">
-        <img src="favicon.png?12"><img src="favicon.png?21"><img src="favicon.png?32"><img src="favicon.png?42"><img src="favicon.png?5">
-        <img src="favicon.png?13"><img src="favicon.png?22"><img src="favicon.png?33"><img src="favicon.png?43"><img src="favicon.png?5">
-        <img src="favicon.png?14"><img src="favicon.png?23"><img src="favicon.png?34"><img src="favicon.png?44"><img src="favicon.png?5">
-        <img src="favicon.png?15"><img src="favicon.png?24"><img src="favicon.png?35"><img src="favicon.png?45"><img src="favicon.png?5">
-        <img src="favicon.png?16"><img src="favicon.png?52"><img src="favicon.png?36"><img src="favicon.png?46"><img src="favicon.png?5">
-        <img src="favicon.png?17"><img src="favicon.png?2"><img src="favicon.png?31"><img src="favicon.png?41"><img src="favicon.png?5">
-        <img src="favicon.png?18"><img src="favicon.png?21"><img src="favicon.png?32"><img src="favicon.png?42"><img src="favicon.png?5">
-        <img src="favicon.png?19"><img src="favicon.png?22"><img src="favicon.png?33"><img src="favicon.png?43"><img src="favicon.png?5">
-        <img src="favicon.png?110"><img src="favicon.png?23"><img src="favicon.png?34"><img src="favicon.png?44"><img src="favicon.png?5">
-        <img src="favicon.png?111"><img src="favicon.png?24"><img src="favicon.png?35"><img src="favicon.png?45"><img src="favicon.png?5">
-        <img src="favicon.png?112"><img src="favicon.png?52"><img src="favicon.png?36"><img src="favicon.png?46"><img src="favicon.png?5">
-        <img src="favicon.png?113"><img src="favicon.png?2"><img src="favicon.png?31"><img src="favicon.png?41"><img src="favicon.png?5">
-        <img src="favicon.png?114"><img src="favicon.png?21"><img src="favicon.png?32"><img src="favicon.png?42"><img src="favicon.png?5">
-        <img src="favicon.png?115"><img src="favicon.png?22"><img src="favicon.png?33"><img src="favicon.png?43"><img src="favicon.png?5">
-        <img src="favicon.png?116"><img src="favicon.png?23"><img src="favicon.png?34"><img src="favicon.png?44"><img src="favicon.png?5">
-        <img src="favicon.png?117"><img src="favicon.png?24"><img src="favicon.png?35"><img src="favicon.png?45"><img src="favicon.png?5">
-        <img src="favicon.png?118"><img src="favicon.png?52"><img src="favicon.png?36"><img src="favicon.png?46"><img src="favicon.png?5">
-        <img src="favicon.png?119"><img src="favicon.png?2"><img src="favicon.png?31"><img src="favicon.png?41"><img src="favicon.png?5">
-        <img src="favicon.png?1220"><img src="favicon.png?21"><img src="favicon.png?32"><img src="favicon.png?42"><img src="favicon.png?5">
-        <img src="favicon.png?1321"><img src="favicon.png?22"><img src="favicon.png?33"><img src="favicon.png?43"><img src="favicon.png?5">
-        <img src="favicon.png?1422"><img src="favicon.png?23"><img src="favicon.png?34"><img src="favicon.png?44"><img src="favicon.png?5">
-        <img src="favicon.png?1523"><img src="favicon.png?24"><img src="favicon.png?35"><img src="favicon.png?45"><img src="favicon.png?5">
-        <img src="favicon.png?1624"><img src="favicon.png?52"><img src="favicon.png?36"><img src="favicon.png?46"><img src="favicon.png?5">
-        <img src="favicon.png?1025"><img src="favicon.png?2"><img src="favicon.png?31"><img src="favicon.png?41"><img src="favicon.png?5">
-        <img src="favicon.png?12"><img src="favicon.png?21"><img src="favicon.png?32"><img src="favicon.png?42"><img src="favicon.png?5">
-        <img src="favicon.png?13"><img src="favicon.png?22"><img src="favicon.png?33"><img src="favicon.png?43"><img src="favicon.png?5">
-        <img src="favicon.png?14"><img src="favicon.png?23"><img src="favicon.png?34"><img src="favicon.png?44"><img src="favicon.png?5">
-        <img src="favicon.png?15"><img src="favicon.png?24"><img src="favicon.png?35"><img src="favicon.png?45"><img src="favicon.png?5">
-        <img src="favicon.png?16"><img src="favicon.png?52"><img src="favicon.png?36"><img src="favicon.png?46"><img src="favicon.png?5">
-        
-      </div>
-        <div class="the-news">
-          THE_NEWS_GOES_HERE
-        </div>
-      </div>
-    </main>
+		<title>Kelp</title>
+		<meta name="description" content="The HTML-first UI library">
+		
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/kelpui@1/css/kelp.css">
+	</head>
+	<body>
+    <form role="search" action="">
+      <kelp-disclosure is-dropdown>
+        <button type="button">Sources</button>
+        <ul>
+          <li>
+            <details>
+              <summary>Global South Perspectives</summary>
+              <label for="the_electronic_intifada">
+                <input id="the_electronic_intifada" type="checkbox" name="the_electronic_intifada" /> Electronic Intifada
+              </label>
+            </details>
+            <details>
+              <summary>Global North Perspectives</summary>
+              <label for="truthout">
+                <input id="truthout" type="checkbox" name="truthout"/> Truthout
+              </label>
+            </details>
+          </li>
+        </ul>
+      </kelp-disclosure>
+      <input type="text" id="searchbar" class="inline-block" name="q"></input>
+      <button id="submit-button" class="inline-block" autocomplete="off">Go</button>
+    </form>
+		<main class="container-xl">
+			<h1>The News:</h1>
+      THE_NEWS_GOES_HERE
+		</main>
     <style>
-      #content {
-        width: 100%;
-      }
+      /* form[role="search"] {
+        width: 100vw;
+      } */
 
-      #searchform {
-        width: 100%;
+      kelp-disclosure {
+        margin-left: 3px;
       }
-
+      nav {
+        height: calc(2.3em - 3px);
+        background-color: orange;
+      }
       #searchbar {
-        margin-top: 15px;
-        margin-left: 10%;
-        margin-right: 10%;
-        width: 80%;
-        /* box-shadow:black 0px -1px 1px; */
+        width: min(20ch, 90vw);
+        background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAACzAAAAswBfxuVbgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAHsSURBVEiJrdW7j01RFAbw375EwzQukZiCYiReMcZ4FaNAgkSr0Gk0olEqkEgkdDr+ARGNbtSEZhIjErmChIjCOwjimZnZinOv7Htmn3vuFStZydk737e+s9bae+0QY1S2EELARmzHNmzGS9zteIzxyzxizmKMXY4R3EHs4Z9wpMzNeRq4gRP4VhM89RsY7iUQOiUKIZzB2TQ53MY0HmAltmA3liW4pxiNMX6vLBHG8Dv5s+fYk02ZJq6WMrlYWSIsav9hB/wIQ7W15VTCmcVElcChBDiDHX01jwWYSriTVQLnE9CVfoIn5ImE+y6HaWA8aclUtlHVNt3OGpaHEFaVAQ3FyejY/UGixxh/4nGytTUn8DVZLxlEIMOZzQncS9bjZUAvCyEsxepk60mdwP5BBHAg+f6BZznQLt2X5mifJ6iJNwnvUuUswrUE+Bk7a4IPYVL3RRvpJdDEa90X7gIWlwIH7MOLUtZzOFY3TQ/iV4k4g5Zi9txqZ1c1WbMi5dQ3KZrez6ieUxzxniK5+i7EacULVhX4OkaxttToeSJ/34OchRCGFU/mGD4qJm0rxvgqwazDTaxIqBHHY4yX+x5sNadqPd5mMjn8XwTaIhsyIq1GZX0GtBjjQ+zF+2T7Q88e/IuFENbgpGIInvsDyI+2L844Yv4AAAAASUVORK5CYII=");
+        background-repeat: no-repeat;
+        background-size: 1.2em 1.2em;
+        background-position-y: center;
+        background-position-x: 0.4em;
+        padding-left: 2em;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        border-bottom-right-radius: 0px;
+        border-top-right-radius: 0px;
+        box-sizing: content-box;
+        margin: 3px;
+        margin-right: 0;
+        margin-left: 4px;
       }
+      form button {
+        position: relative;
+        /* left: -6px; */
+        top: -2px;
+      }
+      input[type="submit"]:focus {
+        z-index: 1;
+      }
+      .logo {
+        margin-top: 0.35em;
+        height: 1em;
 
-      #searchbar:not(:active, :focus) {
-        border-color: rgb(24, 24, 24);
       }
-
-      hr {
-        border-color: black;
-      }
-      .news-item {
-        width: 100%;
-        padding-top: 10px;
-        border-radius: 5px;
-      }
-      .news-titlebar {
-        display: inline-block;
-        overflow-y: hidden;
-        height: 1.3em;
-      }
-
+      /* Chanut @ flaticon */
     </style>
-  </body>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/kelpui@1/js/kelp.js"></script>
+    <script>
+      // searchbar.onmouseover = ()=>{searchbar.placeholder=''}
+      // searchbar.onmouseout = ()=>{
+      //   if (document.activeElement.id != 'searchbar') {
+      //     searchbar.placeholder='🔎'
+      //   }
+      // }
+    </script>
+	</body>
 </html>
