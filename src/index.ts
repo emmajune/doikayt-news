@@ -94,15 +94,15 @@ app.get('/news', async (req:any, res) => {
       let source = sources[i]
       sources[i] = sourcesObj[source]
     }
+    var htmlNews = await fetchNews(query, sources ? sources : sourcesUrlArr)
   }
-  const htmlNews = await fetchNews(query, sources ? sources : sourcesUrlArr)
   var disclosureHTML = disclosureHtml(sourceNames, sourcesObj)
   var pageHTML:any = await readFile(path.join(__dirname, '..', 'components', 'news.html'))
   pageHTML = pageHTML.toString().replace('SOURCES_GO_HERE', disclosureHTML)
-  var isAllSources = (sources.length === sourcesUrlArr.length)
+  var isAllSources = (sources?.length === sourcesUrlArr.length)
   pageHTML = pageHTML.toString().replace(' maybe-super-checked', isAllSources ? ' checked' : '')
   pageHTML = pageHTML.toString().replace('QUERY_GOES_HERE', query ? query : '')
-  pageHTML = pageHTML.toString().replace('THE_NEWS_GOES_HERE', htmlNews)
+  pageHTML = pageHTML.toString().replace('THE_NEWS_GOES_HERE', htmlNews ? htmlNews : 'Search for something!')
   pageHTML = pageHTML.replace('/favicon.png', '/favicon.png?'+rando(9999))//attempts to trick browsers into refreshing favicon cache
   res.type('html').send(pageHTML)
 })
