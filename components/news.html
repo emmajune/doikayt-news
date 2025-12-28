@@ -14,11 +14,18 @@
       <kelp-disclosure is-dropdown>
         <button type="button">Sources</button>
         <ul>
-          SOURCES_GO_HERE
+          <kelp-select-all target="#disclosed-sources input[type='checkbox']">
+            <label for="super-select-all">
+              <input type="checkbox" role="switch" id="super-select-all" maybe-super-checked/>select all
+            </label>
+          </kelp-select-all>
+          <div id="disclosed-sources">
+            SOURCES_GO_HERE
+          </div>
         </ul>
       </kelp-disclosure>
-      <input type="text" id="searchbar" class="inline-block" name="q"></input>
-      <button id="submit-button" class="inline-block" autocomplete="off">Go</button>
+      <input type="text" id="searchbar" class="inline-block" name="q" value="QUERY_GOES_HERE" autocomplete="off"></input>
+      <button id="submit-button" class="inline-block">Go</button>
     </form>
 		<main class="container-xl">
 			<h1>The News:</h1>
@@ -69,9 +76,5 @@
       /* Chanut @ flaticon */
     </style>
     <script type="module" src="https://cdn.jsdelivr.net/npm/kelpui@1/js/kelp.js"></script>
-    <script>
-      var query = location.href.split('q=')[1]
-      searchbar.value = query ? query : ''
-    </script>
 	</body>
 </html>
