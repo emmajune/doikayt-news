@@ -5,8 +5,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
 		<title>Kelp</title>
-		<meta name="description" content="The HTML-first UI library">
-		
+    <link rel="icon" type="image/png" href="/favicon.png">
+
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/kelpui@1/css/kelp.css">
 	</head>
 	<body>
@@ -14,20 +14,7 @@
       <kelp-disclosure is-dropdown>
         <button type="button">Sources</button>
         <ul>
-          <li>
-            <details>
-              <summary>Global South Perspectives</summary>
-              <label for="the_electronic_intifada">
-                <input id="the_electronic_intifada" type="checkbox" name="the_electronic_intifada" /> Electronic Intifada
-              </label>
-            </details>
-            <details>
-              <summary>Global North Perspectives</summary>
-              <label for="truthout">
-                <input id="truthout" type="checkbox" name="truthout"/> Truthout
-              </label>
-            </details>
-          </li>
+          SOURCES_GO_HERE
         </ul>
       </kelp-disclosure>
       <input type="text" id="searchbar" class="inline-block" name="q"></input>
@@ -83,12 +70,8 @@
     </style>
     <script type="module" src="https://cdn.jsdelivr.net/npm/kelpui@1/js/kelp.js"></script>
     <script>
-      // searchbar.onmouseover = ()=>{searchbar.placeholder=''}
-      // searchbar.onmouseout = ()=>{
-      //   if (document.activeElement.id != 'searchbar') {
-      //     searchbar.placeholder='🔎'
-      //   }
-      // }
+      var query = location.href.split('q=')[1]
+      searchbar.value = query ? query : ''
     </script>
 	</body>
 </html>
