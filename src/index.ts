@@ -83,7 +83,8 @@ app.get('/pantry-test', (req, res) => {
 
 
 app.get('/news', async (req:any, res) => {
-  const query = req.url.split('q=')[1]
+  let query = req.url.split('q=')[1]
+  query = query.replaceAll('+', ' ')
   var sources:any = Object.keys(req.query);
   sources.pop()
   sources = sources.length ? sources : undefined

@@ -10,6 +10,15 @@ export async function fetchNews(query, sources) {
     if (query) {
         newsItems = searchNews(query, newsItems)
     }
+    else {
+        newsItems.sort((a, b) => {
+        a = new Date(a.pubDate)
+        a = a.getTime()
+        b = new Date(b.pubDate)
+        b = b.getTime()
+        return b - a
+    })
+    }
     var newsButHTML = compileNews(newsItems, sources)
     return new Promise(resolve=>resolve(newsButHTML))
 }

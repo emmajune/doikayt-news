@@ -4,7 +4,7 @@ export async function compileNews(newsItems) {
     var compiledHTML = ''
 
     for (let i = 0; i < newsItems.length; i++) {
-    let { title, pubDate, link, description } = newsItems[i]
+    let { title, pubDate, score, link, description, matches } = newsItems[i]
     let source = link.split('://')[1].split('/')[0]
     if (source.split('.').length === 2) {
         source = source.split('.')[0]
@@ -35,10 +35,10 @@ export async function compileNews(newsItems) {
     }
     compiledHTML += `
     <div title="${description}" class="news-item">
-        <span class="news-titlebar">${source}, ${pubDate}:
+        <span class="news-titlebar">${source}, ${pubDate}, ${score}:
             <a href="${link}">${title}</a>
         </span>
-        <p class="description">${shortDescription}</p>
+        <p class="description">${shortDescription}<!--<br/>${matches}--></p>
     </div>
     <br />`
     }
