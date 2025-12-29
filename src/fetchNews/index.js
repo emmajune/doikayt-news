@@ -19,7 +19,7 @@ export async function fetchNews(query, sources) {
         return b - a
     })
     }
-    var newsButHTML = compileNews(newsItems, sources)
+    var newsButHTML = compileNews(newsItems)
     return new Promise(resolve=>resolve(newsButHTML))
 }
 

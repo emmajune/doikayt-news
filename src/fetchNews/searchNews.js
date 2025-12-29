@@ -26,7 +26,7 @@ export function searchNews (query, newsItems) {
     var newsResults = []
     results.forEach(result=>{
         var newsItem = newsItems[+result.ref]
-        newsItem.score = '#' + Math.round(result.score * 100)
+        newsItem.score = Math.round(result.score * 100)
         newsItem.matches = 'Matches: ' + Object.keys(result.matchData.metadata)
         newsResults.push(newsItem)
     })

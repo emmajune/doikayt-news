@@ -34,8 +34,8 @@ export async function compileNews(newsItems) {
         shortDescription = description.substring(0, 307) + '...' 
     }
     compiledHTML += `
-    <div title="${description}" class="news-item">
-        <span class="news-titlebar">${source}, ${pubDate}, ${score}:
+    <div class="news-item">
+        <span class="news-titlebar">${source}, ${pubDate}, +${score}:
             <a href="${link}">${title}</a>
         </span>
         <p class="description">${shortDescription}<!--<br/>${matches}--></p>
