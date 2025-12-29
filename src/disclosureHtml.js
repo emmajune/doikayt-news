@@ -15,7 +15,7 @@ export function disclosureHtml(sourceNames, sourcesObj) {
     for (let i = 0; i < VPsKeys.length; i++) {
         disclosureHTML += `<li style="padding-top: 0; padding-bottom: 0;"><details>
     <summary style="padding: var(--size-m) !important">${VPsKeys[i]}</summary>
-    <kelp-select-all target="#${VPsKeys[i]}-div [type='checkbox']">
+    <kelp-select-all id="ss-${VPsKeys[i]}-c" target="#${VPsKeys[i]}-div [type='checkbox']">
 		<label for="select-all-${VPsKeys[i]}">
 			<input type="checkbox" id="select-all-${VPsKeys[i]}" am-i-checked-${VPsKeys[i]}>
 			select all

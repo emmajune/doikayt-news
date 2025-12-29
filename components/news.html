@@ -13,8 +13,8 @@
     <form role="search" action="">
       <kelp-disclosure is-dropdown>
         <button type="button">Sources</button>
-        <ul>
-          <kelp-select-all target="#disclosed-sources input[type='checkbox']">
+        <ul id="selection-container">
+          <kelp-select-all id="ssa-container" target="#disclosed-sources input[type='checkbox']">
             <label for="super-select-all">
               <input type="checkbox" role="switch" id="super-select-all" maybe-super-checked/>select all
             </label>
@@ -77,9 +77,19 @@
     </style>
     <script type="module" src="https://cdn.jsdelivr.net/npm/kelpui@1/js/kelp.js"></script>
     <script>
-      document.addEventListener('kelp-select-all:toggle', (event) => {
-        console.log(`That ${event.target} is checked is ${event.detail.isChecked}`);
-      });
+      var selectionContainer = document.getElementById('selection-container')
+      selectionContainer.addEventListener('change', (e)=>{
+        if(e.target.checked){
+          const isCheckbox = 'input[type="checkbox"]'
+          const numCheckbox = document.querySelectorAll(isCheckbox).length
+          const isChecked = 'input[type="checkbox"]:checked'
+          const numChecked = document.querySelectorAll(isChecked).length
+          if (numCheckbox === numChecked + 1) {
+            var superSelectAll = document.getElementById('super-select-all')
+            superSelectAll.checked = true;
+          }
+        }
+      })
     </script>
   </body>
 </html>

@@ -99,7 +99,7 @@ app.get('/news', async (req:any, res) => {
   var disclosureHTML = disclosureHtml(sourceNames, sourcesObj)
   var pageHTML:any = await readFile(path.join(__dirname, '..', 'components', 'news.html'))
   pageHTML = pageHTML.toString().replace('SOURCES_GO_HERE', disclosureHTML)
-  var isAllSources = (sources?.length === sourcesUrlArr.length)
+  var isAllSources = (!sources || (sources?.length === sourcesUrlArr.length))
   pageHTML = pageHTML.toString().replace(' maybe-super-checked', isAllSources ? ' checked' : '')
   pageHTML = pageHTML.toString().replace('QUERY_GOES_HERE', query ? query : '')
   pageHTML = pageHTML.toString().replace('THE_NEWS_GOES_HERE', htmlNews ? htmlNews : 'Search for something!')
