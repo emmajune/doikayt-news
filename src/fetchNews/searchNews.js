@@ -8,15 +8,16 @@
 import lunr from 'lunr'
 
 export function searchNews (query, newsItems) {
-
     for (let i = 0; i < newsItems.length; i++) {
         newsItems[i].id = i
     }
 
     var index = lunr(function () {
         this.ref('id')
-        this.field('text')
+        this.field('title')
         this.field('description')
+        this.field('content:encoded')
+        this.field('category')
 
         newsItems.forEach(function (newsItem) {
             this.add(newsItem)
@@ -27,7 +28,7 @@ export function searchNews (query, newsItems) {
     results.forEach(result=>{
         var newsItem = newsItems[+result.ref]
         newsItem.score = Math.round(result.score * 100)
-        newsItem.matches = 'Matches: ' + Object.keys(result.matchData.metadata)
+        newsItem.matches = result.matchData.metadata
         newsResults.push(newsItem)
     })
     return newsResults

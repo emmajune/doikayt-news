@@ -7,3 +7,6 @@ body {
     margin-right: 1rem;
   }
   
+  .news-item {
+    filter: blur
+  }

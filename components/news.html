@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- TODO: spruce up frontend - only show relevant portion(s) of description(/title?); find a simple tooltip library -->
 <html lang="en-us">
 	<head>
 		<meta charset="utf-8">
@@ -14,7 +13,7 @@
 	<body>
     <form role="search" action="">
       <kelp-disclosure is-dropdown>
-        <button type="button">Sources</button>
+        <button type="button" tabindex="1">Sources</button>
         <ul id="selection-container">
           <kelp-select-all id="ssa-container" target="#disclosed-sources input[type='checkbox']">
             <label for="super-select-all">
@@ -26,24 +25,23 @@
           </div>
         </ul>
       </kelp-disclosure>
-      <input type="text" id="searchbar" class="inline-block" name="q" value="QUERY_GOES_HERE" autocomplete="off"></input>
-      <button id="submit-button" class="inline-block">Go</button>
+      <input type="text" id="searchbar" class="inline-block" name="q" value="QUERY_GOES_HERE" autocomplete="off" tabindex="2"></input>
+      <button id="submit-button" class="inline-block" tabindex="3">Go</button>
     </form>
-		<main class="container-xl">
-			<h1>The News:</h1>
-      THE_NEWS_GOES_HERE
+		<main>
+      <section>
+        <div id="search-content" class="flex justify-center direction-row wrap gap-s">
+          THE_NEWS_GOES_HERE
+        </div>
+      </section>
 		</main>
     <style>
-      /* form[role="search"] {
-        width: 100vw;
-      } */
 
       kelp-disclosure {
         margin-left: 3px;
       }
-      nav {
-        height: calc(2.3em - 3px);
-        background-color: orange;
+      #selection-container {
+        background-color: rgba(255, 255, 255, 0.97);
       }
       #searchbar {
         width: min(20ch, 90vw);
@@ -70,15 +68,190 @@
       input[type="submit"]:focus {
         z-index: 1;
       }
-      .logo {
-        margin-top: 0.35em;
-        height: 1em;
 
+      #search-content {
+        border-style: solid;
+        /* overflow: auto; */
       }
+      .news-item {
+        width: 18em;
+        max-height: 17ch;
+        display: inline-block;
+        overflow: hidden;
+        flex-basis: fit-content;
+      }
+      .news-item a {
+        text-align: justify;
+        text-align-last: justify;
+        display: inline-block;
+        max-height: 4.5ch;
+        overflow: hidden;
+      }
+      .news-infobar {
+        color: hotpink;
+        display: inline-block;
+        text-align: right;
+      }
+      .description {
+        max-height: 9.5ch;
+        text-align: justify;
+      }
+      /* #search-content {
+        margin-left: 4em;
+      } */
       /* Chanut @ flaticon */
     </style>
     <script type="module" src="https://cdn.jsdelivr.net/npm/kelpui@1/js/kelp.js"></script>
     <script>
+      /*
+      PROBLEM: remainder is handled "too columny" rn
+      IDEA: lop off last column; turn remainder into (not flex) row on the bottom
+      STRATEGY: wrap each element on end of line in a div; append respective overflow items to line-end divs
+        STEP 1: calculate relationship between visual and semantic order
+        (Math.floor(bO/nCols) - 1)*nRows + bO%nCols 
+
+      */
+      var sCon = document.querySelector('#search-content')
+      var sConS = getComputedStyle(sCon)
+      var newsItem1 = document.querySelector('.news-item')
+      var nItem1S = getComputedStyle(newsItem1)
+      // search-content -> {height, nCols, nRows}
+
+      const em = +nItem1S.getPropertyValue('font-size').slice(0,-2)
+
+      style_sheet = document.styleSheets[document.styleSheets.length-1];
+            CSS_Rules = style_sheet.cssRules;
+
+            for (const rule of CSS_Rules) {
+              if (rule.cssText.includes('.news-item {')) {
+                var nItemStyleS = rule.cssText
+              }
+            }
+
+				const emWidth = +nItemStyleS.split('width: ')[1].split('em')[0]
+
+      function sConHCR(nNewsI) {
+        if (!nNewsI) {
+          return 'no news items?'
+        }
+        
+        var nItem1W = em*emWidth
+        var sConW = +sConS.getPropertyValue('width').slice(0,-2)
+        var gap = +sConS.getPropertyValue('gap').slice(0,-2)
+        nItem1W += gap
+
+        var nCols = Math.floor(sConW/nItem1W)
+
+        var nRows = Math.ceil(nNewsI/nCols)
+
+        if (nRows === 1) {
+          nCols = nNewsI
+        }
+        
+        var mNewsH = +nItem1S.getPropertyValue('max-height').slice(0,-2)
+
+        var height = Math.ceil(nRows * (mNewsH + gap)) + 'px'
+
+        return {height, nCols, nRows}
+      }
+      //from https://dev.to/teaganga/understanding-debounce-in-javascript-a-guide-with-examples-3cm4
+      
+      var nNewsI = nNewsI_GOES_HERE
+
+      const swapElements = (array, index1, index2) => {
+        array[index1] = array.splice(index2, 1, array[index1])[0];
+      };
+
+      
+      
+      function debounce(func, wait) {
+        let timeout;
+        return function (...args) {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => func.apply(this, args), wait);
+        };
+      }
+      var nItems = Array.from(document.querySelectorAll('.news-item'))
+      
+      if (!newsItems) {
+        var newsItems = Array.from(sCon.cloneNode(true).children)
+      }
+
+      
+
+      var nItemsB = Array.from(document.querySelectorAll('.news-item'))
+      
+      
+
+      
+      updateGrid()
+
+
+      function updateGrid() {
+        var test = []
+        let sConD = sConHCR(newsItems.length)
+        sCon.replaceChildren(...gridify(sConD.nRows, sConD.nCols, newsItems))
+      }
+
+      function gridify(rows, cols, gridlings) {
+        // var minLength = (rows - 1)*cols + 1 
+        
+        // if (gridlings.length < minLength) {
+        //   throw('gridlings < minLength (fix "cols" & "rows")')
+        // }
+        
+        // var maxLength = rows*cols
+        
+        // if (gridlings.length > maxLength) {
+        //   throw('gridlings > minLength (fix "cols" & "rows")')
+        // }
+        
+        const remainder = gridlings.length % cols
+        
+        if (remainder) {
+          rows--
+        }
+        
+        var columns = []
+        
+        for (let c = 1; c < cols+1; c++) {
+          columns[c] = document.createElement('div')
+          columns[c].className = "flex direction-column"
+          const column = columns[c]
+          for (let r = 1; r < rows+1; r++) {
+            const gridIndex = (r - 1)*cols + c
+            const elem = gridlings[gridIndex-1]
+            if (elem) {
+              //a element within newsItem
+              elem.firstChild.children[1].tabIndex = gridIndex + 3
+            }
+            column.append(elem)
+          }
+        }
+        
+        if (remainder) {
+          const offset = cols*rows
+          const leftovers = gridlings.slice(-remainder)
+          for (let c = 1; c < remainder+1; c++) {
+            const column = columns[c]
+            const elem = leftovers[c-1]
+            if (elem) {
+              if (elem.firstChild) {
+                elem.firstChild.children[1].tabIndex = offset + c + 3
+              }
+            }
+            column.append(elem)
+          }
+          
+        }
+        return columns.slice(1)
+      }
+
+      const uGridD = debounce(updateGrid, 250);
+      // Create a debounced version of updateGrid with a 250ms delay
+      
+      window.addEventListener('resize', uGridD);
+
       var selectionContainer = document.getElementById('selection-container')
       selectionContainer.addEventListener('change', (e)=>{
         if(e.target.checked){

@@ -20,7 +20,7 @@ const pantryClient = new pantry(pantryID)
 const sourcesObj:any = {
   the_nation: {url: 'https://thenation.com/feed/?post_type=article', vp: 'GN'},
   npr: {url: 'https://feeds.npr.org/1001/rss.xml', vp: 'GN'},
-  the_guardian: {url: 'https://theguardian.com/us/rss', vp: 'GN'},
+  // the_guardian: {url: 'https://www.theguardian.com/world/rss', vp: 'GN'},
   the_electronic_intifada: {url: 'https://electronicintifada.net/rss.xml', vp:'GS'},
   drop_site_news: {url: 'https://www.dropsitenews.com/feed', vp: 'GN'},
   in_these_times: {url: 'https://inthesetimes.com/rss', vp: 'GN'},
@@ -32,8 +32,10 @@ const sourcesObj:any = {
   its_going_down: {url: 'https://itsgoingdown.org/feed/', vp: 'GS'},
   human_rights_watch: {url: 'https://www.hrw.org/rss/news', vp: 'GS'},
   haitian_times: {url: 'http://haitiantimes.com/feed/', vp: 'GS'},
-  woy_magazine: {url: 'https://woymagazine.com/feed/', vp: 'GN'},
-  truthout: {url: 'https://truthout.org/latest/feed/', vp: 'GN'}
+  woy_magazine: {url: 'https://woymagazine.com/feed/', vp: 'GS'},
+  truthout: {url: 'https://truthout.org/latest/feed/', vp: 'GN'},
+  democracy_now: {url: 'https://www.democracynow.org/democracynow.rss', vp: 'GN'},
+  the_intercept: {url: 'https://theintercept.com/feed/', vp: 'GN'}
 }
 const sourcesUrlArr = Object.values(sourcesObj)
 
@@ -83,8 +85,9 @@ app.get('/pantry-test', (req, res) => {
 
 
 app.get('/news', async (req:any, res) => {
+  console.log('CHECK')
   let query = req.url.split('q=')[1]
-  query = query.replaceAll('+', ' ')
+  query = query ? query.replaceAll('+', ' ') : undefined
   query = decodeURIComponent(query)
   var sources:any = Object.keys(req.query);
   sources.pop()
@@ -96,15 +99,18 @@ app.get('/news', async (req:any, res) => {
       let source = sources[i]
       sources[i] = sourcesObj[source]
     }
-    var htmlNews = await fetchNews(query, sources ? sources : sourcesUrlArr)
   }
+  var theNews = await fetchNews(query, sources ? sources : sourcesUrlArr)
+  var htmlNews = await theNews.html
+  var nNewsI = await theNews.length
   var disclosureHTML = disclosureHtml(sourceNames, sourcesObj)
   var pageHTML:any = await readFile(path.join(__dirname, '..', 'components', 'news.html'))
   pageHTML = pageHTML.toString().replace('SOURCES_GO_HERE', disclosureHTML)
   var isAllSources = (!sources || (sources?.length === sourcesUrlArr.length))
-  pageHTML = pageHTML.toString().replace(' maybe-super-checked', isAllSources ? ' checked' : '')
-  pageHTML = pageHTML.toString().replace('QUERY_GOES_HERE', query ? query : '')
-  pageHTML = pageHTML.toString().replace('THE_NEWS_GOES_HERE', htmlNews ? htmlNews : 'Search for something!')
+  pageHTML = pageHTML.replace(' maybe-super-checked', isAllSources ? ' checked' : '')
+  pageHTML = pageHTML.replace('QUERY_GOES_HERE', (query != 'undefined') ? query : '')
+  pageHTML = pageHTML.replace('nNewsI_GOES_HERE', nNewsI ? nNewsI : '1')
+  pageHTML = pageHTML.replaceAll('THE_NEWS_GOES_HERE', htmlNews ? htmlNews : 'Search for something!')
   pageHTML = pageHTML.replace('/favicon.png', '/favicon.png?'+rando(9999))//attempts to trick browsers into refreshing favicon cache
   res.type('html').send(pageHTML)
 })
