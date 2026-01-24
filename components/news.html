@@ -90,7 +90,7 @@
         text-align: justify;
         text-align-last: justify;
         display: inline-block;
-        max-height: 4.5ch;
+        max-height: 4.3em;
         overflow: hidden;
       }
       .news-infobar {
@@ -109,14 +109,7 @@
     </style>
     <script type="module" src="https://cdn.jsdelivr.net/npm/kelpui@1/js/kelp.js"></script>
     <script>
-      /*
-      PROBLEM: remainder is handled "too columny" rn
-      IDEA: lop off last column; turn remainder into (not flex) row on the bottom
-      STRATEGY: wrap each element on end of line in a div; append respective overflow items to line-end divs
-        STEP 1: calculate relationship between visual and semantic order
-        (Math.floor(bO/nCols) - 1)*nRows + bO%nCols 
 
-      */
       var sCon = document.querySelector('#search-content')
       var sConS = getComputedStyle(sCon)
       var newsItem1 = document.querySelector('.news-item')

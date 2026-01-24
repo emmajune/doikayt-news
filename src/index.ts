@@ -32,12 +32,16 @@ const sourcesObj:any = {
   its_going_down: {url: 'https://itsgoingdown.org/feed/', vp: 'GS'},
   human_rights_watch: {url: 'https://www.hrw.org/rss/news', vp: 'GS'},
   haitian_times: {url: 'http://haitiantimes.com/feed/', vp: 'GS'},
-  woy_magazine: {url: 'https://woymagazine.com/feed/', vp: 'GS'},
+  woy_magazine: {url: 'https://rss.app/feeds/oD3q0jTyFEeGNlIL.xml', vp: 'GS'},
   truthout: {url: 'https://truthout.org/latest/feed/', vp: 'GN'},
   democracy_now: {url: 'https://www.democracynow.org/democracynow.rss', vp: 'GN'},
-  the_intercept: {url: 'https://theintercept.com/feed/', vp: 'GN'}
+  the_intercept: {url: 'https://theintercept.com/feed/', vp: 'GN'},
+  p972_mag: {url: 'https://rss.app/feeds/aNuThbWh76dCx90s.xml', vp: 'GN'},
+  jewish_currents: {url: 'https://jewishcurrents.org/feed', vp: 'GN'},
+  jacobin: {url: 'http://jacobin.com/rss', vp: 'GN'}
 }
 const sourcesUrlArr = Object.values(sourcesObj)
+
 
 // Home route - HTML
 app.get('/', (req, res) => {
@@ -85,7 +89,7 @@ app.get('/pantry-test', (req, res) => {
 
 
 app.get('/news', async (req:any, res) => {
-  console.log('CHECK')
+  var time1 = Date.now()
   let query = req.url.split('q=')[1]
   query = query ? query.replaceAll('+', ' ') : undefined
   query = decodeURIComponent(query)
@@ -101,6 +105,8 @@ app.get('/news', async (req:any, res) => {
     }
   }
   var theNews = await fetchNews(query, sources ? sources : sourcesUrlArr)
+  var time2 = Date.now()
+  console.log('Overall, took ' + (time2-time1) + 'ms')
   var htmlNews = await theNews.html
   var nNewsI = await theNews.length
   var disclosureHTML = disclosureHtml(sourceNames, sourcesObj)

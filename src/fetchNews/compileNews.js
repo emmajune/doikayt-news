@@ -6,8 +6,14 @@ export async function compileNews(newsItems) {
     var compiledHTML = ''
 
     for (let i = 0; i < newsItems.length; i++) {
-        let { title, pubDate, score, link, category, description, matches } = newsItems[i]
-        let contentEncoded = newsItems[i]['content:encoded']
+        try {
+            var { title, pubDate, score, link, category, description, matches } = newsItems[i].item
+            var contentEncoded = newsItems[i].item['content:encoded']
+        }
+        catch {
+            var { title, pubDate, score, link, category, description, matches } = newsItems[i]
+        }   var contentEncoded = newsItems[i]['content:encoded']
+        
         let source = link.split('://')[1].split('/')[0]
             if (source.split('.').length === 2) {
                 source = source.split('.')[0]
@@ -30,6 +36,8 @@ export async function compileNews(newsItems) {
             str = str.replaceAll(/&[^\s]+?;/g, ' ')
             str = str.replace(/&[^\s]*?;/g, ' ')
             str = str.replaceAll('  ', ' ')
+            str = str.replaceAll(' s ', "'s ")
+
             return str
         }
         description = description + (contentEncoded ? ' '+contentEncoded : '')
@@ -140,11 +148,9 @@ export async function compileNews(newsItems) {
             return looseJoin(merge(...mainArr), '...').replaceAll('....', '...').replaceAll('... ', '...')
         }
 
-        console.log(isolateMatches(newsItems[i].matches, description))
-
         compiledHTML += `
     <div class="news-item" id="${i}"><span class="news-infobar">
-             (${source}, ${pubDate ? pubDate+',' : ''})<br />
+             (${source}, ${pubDate ? pubDate : ''})<br />
              <a href="${link}">${title}</a>
         </span>
         <p class="description">${shortDescription}</p>

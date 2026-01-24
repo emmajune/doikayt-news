@@ -52,4 +52,3 @@ miniSearch.addAll(documents)
 // Search with default options
 let results = miniSearch.search('A coalition of')
 
-console.log(JSON.stringify(results))

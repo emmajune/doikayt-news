@@ -1,37 +1,25 @@
-/**
- * Minified by jsDelivr using Terser v5.39.0.
- * Original file: /npm/minisearch@7.2.0/dist/umd/index.js
- *
- * Do NOT use SRI with dynamically generated files! More information: https://www.jsdelivr.com/using-sri-with-dynamic-files
- */
+import {stemmer} from 'stemmer'
+import Fuse from 'fuse.js'
 
-import lunr from 'lunr'
 
 export function searchNews (query, newsItems) {
-    for (let i = 0; i < newsItems.length; i++) {
-        newsItems[i].id = i
+
+    if (!query) {
+        return newsItems.sort((a,b)=>{
+            let diff = +Date.parse(a.pubDate) - +Date.parse(b.pubDate)
+            if (!diff) {
+                diff = 0
+            }
+            return diff
+        })
     }
-
-    var index = lunr(function () {
-        this.ref('id')
-        this.field('title')
-        this.field('description')
-        this.field('content:encoded')
-        this.field('category')
-
-        newsItems.forEach(function (newsItem) {
-            this.add(newsItem)
-        }, this)
+    //fancy dynamic category selection??
+    const fuse = new Fuse(newsItems, {
+        keys: ['title', 'description', 'categories'],
+        ignoreLocation: true//,
+        //useExtendedSearch: true
     })
-    var results = index.search(query)
-    var newsResults = []
-    results.forEach(result=>{
-        var newsItem = newsItems[+result.ref]
-        newsItem.score = Math.round(result.score * 100)
-        newsItem.matches = result.matchData.metadata
-        newsResults.push(newsItem)
-    })
-    return newsResults
+    return fuse.search(stemmer(query))
 }
 
 export default searchNews
