@@ -20,7 +20,7 @@ export async function compileNews(newsItems) {
 
         pubDate = pubDate?.substring(5, 16)
 
-        if (title.length > 87) {
+        if (title.length > 150) {
             title = title.substring(0, 87) + '...' 
         }
 
@@ -32,14 +32,14 @@ export async function compileNews(newsItems) {
             str = str.replaceAll('  ', ' ')
             return str
         }
-        description = description + ' ' + contentEncoded
+        description = description + (contentEncoded ? ' '+contentEncoded : '')
         description = unHtml(description)
         description = description.replace(/\n/g, '')
 
         let shortDescription = description
-        if (description.length > 307) {
-            shortDescription = description.substring(0, 307) + '...' 
-        }
+        // if (description.length > 307) {
+        //     shortDescription = description.substring(0, 307) + '...' 
+        // }
         function isolateMatches(matches, description) {
             let parsedMatches = {}
             let obj = matches
@@ -144,7 +144,7 @@ export async function compileNews(newsItems) {
 
         compiledHTML += `
     <div class="news-item" id="${i}"><span class="news-infobar">
-             (${source}, ${pubDate}, ${i})<br />
+             (${source}, ${pubDate ? pubDate+',' : ''})<br />
              <a href="${link}">${title}</a>
         </span>
         <p class="description">${shortDescription}</p>

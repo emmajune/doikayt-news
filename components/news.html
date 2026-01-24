@@ -73,12 +73,18 @@
         border-style: solid;
         /* overflow: auto; */
       }
+
+      #search-content > div {
+        justify-content: space-between;
+      }
+
       .news-item {
         width: 18em;
-        max-height: 17ch;
+        --max-height: 11em;
         display: inline-block;
         overflow: hidden;
         flex-basis: fit-content;
+        margin-top: calc(var(--size-s) / 2)
       }
       .news-item a {
         text-align: justify;
@@ -130,15 +136,19 @@
 
 				const emWidth = +nItemStyleS.split('width: ')[1].split('em')[0]
 
+        const mHeightEm = +nItemStyleS.split('max-height: ')[1].split('em')[0]
+
       function sConHCR(nNewsI) {
         if (!nNewsI) {
           return 'no news items?'
         }
-        
+
         var nItem1W = em*emWidth
         var sConW = +sConS.getPropertyValue('width').slice(0,-2)
         var gap = +sConS.getPropertyValue('gap').slice(0,-2)
         nItem1W += gap
+
+        var height = getComputedStyle(newsItem1).height
 
         var nCols = Math.floor(sConW/nItem1W)
 
@@ -148,9 +158,7 @@
           nCols = nNewsI
         }
         
-        var mNewsH = +nItem1S.getPropertyValue('max-height').slice(0,-2)
-
-        var height = Math.ceil(nRows * (mNewsH + gap)) + 'px'
+        var height = height*nRows
 
         return {height, nCols, nRows}
       }
@@ -190,7 +198,9 @@
       function updateGrid() {
         var test = []
         let sConD = sConHCR(newsItems.length)
+        sCon.style.height = sConD.height + 'px'
         sCon.replaceChildren(...gridify(sConD.nRows, sConD.nCols, newsItems))
+        
       }
 
       function gridify(rows, cols, gridlings) {
@@ -233,7 +243,7 @@
           const offset = cols*rows
           const leftovers = gridlings.slice(-remainder)
           for (let c = 1; c < remainder+1; c++) {
-            const column = columns[c]
+            const column = columns[cols-remainder+c]
             const elem = leftovers[c-1]
             if (elem) {
               if (elem.firstChild) {
