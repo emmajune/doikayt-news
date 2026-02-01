@@ -2,12 +2,16 @@ import express from 'express'
 import path, { dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { readFile } from 'fs/promises'
-import {rando, randoSequence} from '@nastyox/rando.js';
+import { rando } from '@nastyox/rando.js'
+import * as jdenticon from 'jdenticon'
 
 import pantry from 'pantry-node'
 
 import fetchNews from './fetchNews/index.js'
 import disclosureHtml from './disclosureHtml.js'
+
+import constellateRSS from './fetchNews/constellateRSS.js'
+
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -31,7 +35,7 @@ const sourcesObj:any = {
   international_viewpoint: {url: 'https://internationalviewpoint.org/spip.php?page=backend', vp: 'GS'},
   its_going_down: {url: 'https://itsgoingdown.org/feed/', vp: 'GS'},
   human_rights_watch: {url: 'https://www.hrw.org/rss/news', vp: 'GS'},
-  haitian_times: {url: 'http://haitiantimes.com/feed/', vp: 'GS'},
+  haitian_times: {url: 'https://haitiantimes.com/feed/', vp: 'GS'},
   woy_magazine: {url: 'https://rss.app/feeds/oD3q0jTyFEeGNlIL.xml', vp: 'GS'},
   truthout: {url: 'https://truthout.org/latest/feed/', vp: 'GN'},
   democracy_now: {url: 'https://www.democracynow.org/democracynow.rss', vp: 'GN'},
@@ -54,12 +58,12 @@ app.get('/about', function (req, res) {
 })
 
 app.get('/favicon.png', async function (req, res) {
-  const randoFavicon = rando(1000000)
-  const response = await fetch(`http://www.strangebanana.com/api/icon/${randoFavicon}`);
-  const favicon = await response.arrayBuffer();
-    
+  const size = 64;
+  const value = rando(999)
+  jdenticon.configure({ backColor: '#000'});
+  const png = jdenticon.toPng(value, size);
   res.setHeader('Content-Type', 'image/png');
-  res.send(Buffer.from(favicon));
+  res.send(png)
 })
 
 // Example API endpoint - JSON
@@ -83,7 +87,7 @@ app.get('/pantry-test', (req, res) => {
 
   pantryClient.basket
       //get, create, delete
-      .update('test', payload)
+      .update('news-cache', {payload})
       .then((response:any) => res.send(response))
 })
 
@@ -96,15 +100,14 @@ app.get('/news', async (req:any, res) => {
   var sources:any = Object.keys(req.query);
   sources.pop()
   sources = sources.length ? sources : undefined
-  var sourceNames
   if (sources) {
-    sourceNames = Array.from(sources)
     for (let i = 0; i < sources.length; i++) {
       let source = sources[i]
       sources[i] = sourcesObj[source]
     }
   }
-  var theNews = await fetchNews(query, sources ? sources : sourcesUrlArr)
+  var sourceNames:any = Object.keys(sourcesObj)
+  var theNews = await fetchNews(query, sources ? sources : sourcesUrlArr, sourceNames)
   var time2 = Date.now()
   console.log('Overall, took ' + (time2-time1) + 'ms')
   var htmlNews = await theNews.html
@@ -119,6 +122,7 @@ app.get('/news', async (req:any, res) => {
   pageHTML = pageHTML.replaceAll('THE_NEWS_GOES_HERE', htmlNews ? htmlNews : 'Search for something!')
   pageHTML = pageHTML.replace('/favicon.png', '/favicon.png?'+rando(9999))//attempts to trick browsers into refreshing favicon cache
   res.type('html').send(pageHTML)
+  //constellateRSS(sources, sourceNames)
 })
 
 

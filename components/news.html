@@ -4,11 +4,12 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<title>Kelp</title>
+		<title>doikayt</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/kelpui@1/css/kelp.css">
-    <link rel="stylesheet" href="/balloon.css">
+
+    <script async type="module" src="https://cdn.jsdelivr.net/npm/kelpui@1/js/kelp.js"></script>
   </head>
 	<body>
     <form role="search" action="">
@@ -29,8 +30,8 @@
       <button id="submit-button" class="inline-block" tabindex="3">Go</button>
     </form>
 		<main>
-      <section>
-        <div id="search-content" class="flex justify-center direction-row wrap gap-s">
+      <section> 
+        <div id="search-content" class="flex justify-center direction-row wrap gap-l">
           THE_NEWS_GOES_HERE
         </div>
       </section>
@@ -84,32 +85,35 @@
         display: inline-block;
         overflow: hidden;
         flex-basis: fit-content;
-        margin-top: calc(var(--size-s) / 2)
-      }
-      .news-item a {
-        text-align: justify;
-        text-align-last: justify;
-        display: inline-block;
-        max-height: 4.3em;
-        overflow: hidden;
+        margin-top: calc(var(--size-l));
+        border-style: solid;
       }
       .news-infobar {
         color: hotpink;
         display: inline-block;
-        text-align: right;
+      }
+      .news-infobar p {
+        display: inline-block;
+        margin-bottom: 0;
+      }
+      .news-infobar a {
+        /* text-wrap: balance; */
+        display: inline-block;
+        max-height: 4.3em;
+        overflow: hidden;
+        width: 100%;
+        hyphens: auto;
       }
       .description {
         max-height: 9.5ch;
-        text-align: justify;
+        /* text-wrap: balance; */
       }
       /* #search-content {
         margin-left: 4em;
       } */
       /* Chanut @ flaticon */
     </style>
-    <script type="module" src="https://cdn.jsdelivr.net/npm/kelpui@1/js/kelp.js"></script>
     <script>
-
       var sCon = document.querySelector('#search-content')
       var sConS = getComputedStyle(sCon)
       var newsItem1 = document.querySelector('.news-item')
@@ -137,11 +141,14 @@
         }
 
         var nItem1W = em*emWidth
+        
         var sConW = +sConS.getPropertyValue('width').slice(0,-2)
-        var gap = +sConS.getPropertyValue('gap').slice(0,-2)
-        nItem1W += gap
+        
+        var gap = +sConS.getPropertyValue('gap').split('px')[0]
 
+        nItem1W += gap
         var height = getComputedStyle(newsItem1).height
+        height = height ? height : 'auto'
 
         var nCols = Math.floor(sConW/nItem1W)
 
@@ -193,7 +200,6 @@
         let sConD = sConHCR(newsItems.length)
         sCon.style.height = sConD.height + 'px'
         sCon.replaceChildren(...gridify(sConD.nRows, sConD.nCols, newsItems))
-        
       }
 
       function gridify(rows, cols, gridlings) {
@@ -226,7 +232,13 @@
             const elem = gridlings[gridIndex-1]
             if (elem) {
               //a element within newsItem
-              elem.firstChild.children[1].tabIndex = gridIndex + 3
+              try {
+                elem.firstChild.children[1].tabIndex = gridIndex + 3
+              }
+              catch {
+                console.log(elem)
+              }
+              
             }
             column.append(elem)
           }

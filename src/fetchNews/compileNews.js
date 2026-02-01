@@ -7,12 +7,13 @@ export async function compileNews(newsItems) {
 
     for (let i = 0; i < newsItems.length; i++) {
         try {
-            var { title, pubDate, score, link, category, description, matches } = newsItems[i].item
-            var contentEncoded = newsItems[i].item['content:encoded']
+            var { title, pubDate, link, description } = newsItems[i].item
+            //var contentEncoded = newsItems[i].item['content:encoded']
         }
         catch {
-            var { title, pubDate, score, link, category, description, matches } = newsItems[i]
-        }   var contentEncoded = newsItems[i]['content:encoded']
+            var { title, pubDate, link, description } = newsItems[i]
+        }   //var contentEncoded = newsItems[i]['content:encoded']
+
         
         let source = link.split('://')[1].split('/')[0]
             if (source.split('.').length === 2) {
@@ -37,11 +38,10 @@ export async function compileNews(newsItems) {
             str = str.replace(/&[^\s]*?;/g, ' ')
             str = str.replaceAll('  ', ' ')
             str = str.replaceAll(' s ', "'s ")
-
-            return str
+            return str.split('<')[0]
         }
-        description = description + (contentEncoded ? ' '+contentEncoded : '')
-        description = unHtml(description)
+        //description = description + (contentEncoded ? ' '+contentEncoded : '')
+        description = unHtml(description + '')
         description = description.replace(/\n/g, '')
 
         let shortDescription = description
@@ -150,14 +150,18 @@ export async function compileNews(newsItems) {
 
         compiledHTML += `
     <div class="news-item" id="${i}"><span class="news-infobar">
-             (${source}, ${pubDate ? pubDate : ''})<br />
+             (${source} ${', '+pubDate ? pubDate : ''})<br />
              <a href="${link}">${title}</a>
         </span>
-        <p class="description">${shortDescription}</p>
+        <p class="description">${description.replace(/(0 undefined$)|(undefined$)/, '')}</p>
     </div>`
+            // newsItems[i] = { title, pubDate, link, description }
         }
+        
 
     return compiledHTML.replaceAll(' ()', '')
+
+    // return newsItems
 
 }
 

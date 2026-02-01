@@ -1,10 +1,12 @@
-import { XMLParser, XMLBuilder, XMLValidator} from "fast-xml-parser"
+import { XMLParser } from "fast-xml-parser"
+
+import { writeFile } from "fs/promises"
 
 
-export async function constellateRSS(sourcesArr) {
+export async function constellateRSS(sourcesArr, sourceNames) {
   //+972mag and jewishcurrents and jacobin don't work
 
-  let collectedRSS = [] //the grand list of rss items
+  let collectedRSS = {} //the grand list of rss items
 
   var promises = []
   for (let i = 0; i < sourcesArr.length; i++) {
@@ -30,6 +32,7 @@ export async function constellateRSS(sourcesArr) {
   for (let i = 0; i < sourcesArr.length; i++) {
 
       var source = sourcesArr[i]
+      var sourceName = sourceNames[i]
 
       if (!source) {
         collectedRSS = undefined
@@ -43,13 +46,46 @@ export async function constellateRSS(sourcesArr) {
       if (jObj?.rss?.channel) {
         let sourceObject = jObj.rss.channel
         const sourceItemsArr = sourceObject.item
-        collectedRSS = collectedRSS.concat(sourceItemsArr)
+
+        for (let i = 0; i < sourceItemsArr.length; i++) {
+          var {description, title, link, pubDate} = sourceItemsArr[i]
+          var contentEncoded = sourceItemsArr[i]['content-encoded']
+          if (description) {
+            description = unHtml(description)
+            //description = description.slice(0, 400)
+            if (description == '0') {
+              description = ''
+            }
+          }
+          else if (contentEncoded){
+            if (contentEncoded == '0') {
+              contentEncoded = ''
+            }
+            contentEncoded = unHtml(contentEncoded)
+          }
+          description += ' ' + contentEncoded
+          sourceItemsArr[i] = {description, title, link, pubDate}
+        }
+
+        collectedRSS[sourceName] = sourceItemsArr
       }
       else {
         console.log('Error parsing ' + JSON.stringify(source.url))
       }
     }
+    function unHtml(str) {
+      str = str.replace(/(<[\s\S]*?>)+/g, ' ')
+      str = str.replaceAll('\\n', ' ')
+      str = str.replaceAll(/&[^\s]+?;/g, ' ')
+      str = str.replace(/&[^\s]*?;/g, ' ')
+      str = str.replaceAll('  ', ' ')
+      str = str.replaceAll(/ s | s$/g, "'s ")
+      str = str.replaceAll(/ t | t$/g, "'t ")
+      str = str.replaceAll(/ ve | ve$/g, "'ve ")
+      return str.split('<')[0]
+  }
 
+  writeFile('../public/newsCache.json', JSON.stringify(collectedRSS), 'utf8')
   return collectedRSS
 }
 

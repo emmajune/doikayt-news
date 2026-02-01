@@ -1,10 +1,25 @@
-import constellateRSS from './constellateRSS.js'
 import searchNews from './searchNews.js'
 import compileNews from './compileNews.js'
+import { readFile, writeFile } from 'fs/promises'
 
-export async function fetchNews(query, sources) {
-    var newsItems = await constellateRSS(sources)
-    if (!newsItems) {
+
+export async function fetchNews(query, sources, sourceNames) {
+    
+    var newsItems = await readFile('../public/newsCache.json', { encoding: 'utf8' })
+    var newsItems = JSON.parse(newsItems)
+    var fNewsI = {}
+    
+    for (let i = 0; i < sourceNames.length; i++) {
+        fNewsI[sourceNames[i]] = newsItems[sourceNames[i]]
+    }
+    newsItems = Object.values(fNewsI).flat()
+
+    // constellateRSS(sources, sourceNames)
+    
+    if (newsItems) {
+        console.log(JSON.stringify(newsItems).length)
+    }
+    else {
         return 'Invalid Sources!!!'
     }
     if (query && (query != 'undefined')) {
