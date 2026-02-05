@@ -17,7 +17,7 @@ export async function fetchNews(query, sources, sourceNames, update=false) {
     // newsItems = Object.values(fNewsI).flat()
 
 
-    //should i add some cache rejiggering to handle fetch errors on specific new sites?
+    //should i add some cache rejiggering to handle fetch errors on individual news sites?
 
     var newsItems
 
