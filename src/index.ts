@@ -13,6 +13,64 @@ import disclosureHtml from './disclosureHtml.js'
 import constellateRSS from './fetchNews/constellateRSS.js'
 
 
+import { createClient } from "@supabase/supabase-js";
+
+// Create Supabase client
+const supabase = createClient(
+  "https://gtlobmekbicbhkctqaky.supabase.co",
+  "sb_secret_VnysgCOq1-gJXlGHlAmOTg_9-Vkgunx",
+);
+
+async function updateBucket(data:any) {
+  const date = Date.now() + ".txt";
+
+  var uploadData = await supabase.storage
+    .from("doikayt_cache")
+    .upload(date, data);
+  if (uploadData.error) {
+    return uploadData.error
+  }
+  const bucketList:any = await supabase.storage.from("doikayt_cache").list("", {
+    limit: 100,
+    offset: 0,
+    sortBy: { column: "updated_at", order: "desc" },
+  });
+
+  var trashArr = []
+  for (let i = 1; i < bucketList.data.length; i++) {
+    trashArr.push(bucketList.data[i].name)
+  }
+  
+  await supabase.storage.from('doikayt_cache').remove(trashArr)
+
+  return uploadData.data
+}
+
+
+async function readBucket() {
+  const bucketList = await supabase.storage.from("doikayt_cache").list("", {
+    limit: 100,
+    offset: 0,
+    sortBy: { column: "updated_at", order: "asc" },
+  });
+
+  const name:any = bucketList!.data![0].name;
+  const url =
+    "https://gtlobmekbicbhkctqaky.supabase.co/storage/v1/object/public/doikayt_cache/" +
+    name;
+
+  var response = await fetch(url);
+  response = await response.json();
+  
+  return response;
+}
+
+console.log(await updateBucket('{"puck": "inA"}'))
+
+console.log(await readBucket())
+
+
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 

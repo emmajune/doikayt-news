@@ -85,7 +85,6 @@ export async function constellateRSS(sourcesArr, sourceNames) {
       return str.split('<')[0]
   }
 
-  writeFile('../public/newsCache.json', JSON.stringify(collectedRSS), 'utf8')
   return collectedRSS
 }
 
