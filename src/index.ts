@@ -13,61 +13,61 @@ import disclosureHtml from './disclosureHtml.js'
 import constellateRSS from './fetchNews/constellateRSS.js'
 
 
-import { createClient } from "@supabase/supabase-js";
+// import { createClient } from "@supabase/supabase-js";
 
-// Create Supabase client
-const supabase = createClient(
-  "https://gtlobmekbicbhkctqaky.supabase.co",
-  "sb_secret_VnysgCOq1-gJXlGHlAmOTg_9-Vkgunx",
-);
+// // Create Supabase client
+// const supabase = createClient(
+//   "https://gtlobmekbicbhkctqaky.supabase.co",
+//   "sb_secret_VnysgCOq1-gJXlGHlAmOTg_9-Vkgunx",
+// );
 
-async function updateBucket(data:any) {
-  const date = Date.now() + ".txt";
+// async function updateBucket(data:any) {
+//   const date = Date.now() + ".txt";
 
-  var uploadData = await supabase.storage
-    .from("doikayt_cache")
-    .upload(date, data);
-  if (uploadData.error) {
-    return uploadData.error
-  }
-  const bucketList:any = await supabase.storage.from("doikayt_cache").list("", {
-    limit: 100,
-    offset: 0,
-    sortBy: { column: "updated_at", order: "desc" },
-  });
+//   var uploadData = await supabase.storage
+//     .from("doikayt_cache")
+//     .upload(date, data);
+//   if (uploadData.error) {
+//     return uploadData.error
+//   }
+//   const bucketList:any = await supabase.storage.from("doikayt_cache").list("", {
+//     limit: 100,
+//     offset: 0,
+//     sortBy: { column: "updated_at", order: "desc" },
+//   });
 
-  var trashArr = []
-  for (let i = 1; i < bucketList.data.length; i++) {
-    trashArr.push(bucketList.data[i].name)
-  }
+//   var trashArr = []
+//   for (let i = 1; i < bucketList.data.length; i++) {
+//     trashArr.push(bucketList.data[i].name)
+//   }
   
-  await supabase.storage.from('doikayt_cache').remove(trashArr)
+//   await supabase.storage.from('doikayt_cache').remove(trashArr)
 
-  return uploadData.data
-}
+//   return uploadData.data
+// }
 
 
-async function readBucket() {
-  const bucketList = await supabase.storage.from("doikayt_cache").list("", {
-    limit: 100,
-    offset: 0,
-    sortBy: { column: "updated_at", order: "asc" },
-  });
+// async function readBucket() {
+//   const bucketList = await supabase.storage.from("doikayt_cache").list("", {
+//     limit: 100,
+//     offset: 0,
+//     sortBy: { column: "updated_at", order: "asc" },
+//   });
 
-  const name:any = bucketList!.data![0].name;
-  const url =
-    "https://gtlobmekbicbhkctqaky.supabase.co/storage/v1/object/public/doikayt_cache/" +
-    name;
+//   const name:any = bucketList!.data![0].name;
+//   const url =
+//     "https://gtlobmekbicbhkctqaky.supabase.co/storage/v1/object/public/doikayt_cache/" +
+//     name;
 
-  var response = await fetch(url);
-  response = await response.json();
+//   var response = await fetch(url);
+//   response = await response.json();
   
-  return response;
-}
+//   return response;
+// }
 
-console.log(await updateBucket('{"puck": "inA"}'))
+// console.log(await updateBucket('{"puck": "inA"}'))
 
-console.log(await readBucket())
+// console.log(await readBucket())
 
 
 
@@ -149,8 +149,8 @@ app.get('/pantry-test', (req, res) => {
       .then((response:any) => res.send(response))
 })
 
-
 app.get('/news', async (req:any, res) => {
+  console.log('HEY')
   var time1 = Date.now()
   let query = req.url.split('q=')[1]
   query = query ? query.replaceAll('+', ' ') : undefined

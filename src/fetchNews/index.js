@@ -5,8 +5,8 @@ import { readFile, writeFile } from 'fs/promises'
 import constellateRSS from './constellateRSS.js'
 
 
-export async function fetchNews(query, sources, sourceNames) {
-    
+export async function fetchNews(query, sources, sourceNames, update=false) {
+    console.log('asdfasdfasdf')
     // var newsItems = await readFile('../public/newsCache.json', { encoding: 'utf8' })
     // var newsItems = JSON.parse(newsItems)
     // var fNewsI = {}
@@ -16,7 +16,19 @@ export async function fetchNews(query, sources, sourceNames) {
     // }
     // newsItems = Object.values(fNewsI).flat()
 
-    var newsItems = await constellateRSS(sources, sourceNames)
+
+    //should i add some cache rejiggering to handle fetch errors on specific new sites?
+
+    var newsItems
+
+    if (!global?.newsItemCache || update) {
+        newsItems = await constellateRSS(sources, sourceNames)
+        global.newsItemCache = newsItems
+        console.log('HRM')
+    }
+    else {
+        newsItems = global.newsItemCache
+    }
     
     if (newsItems) {
         console.log(JSON.stringify(newsItems).length)
