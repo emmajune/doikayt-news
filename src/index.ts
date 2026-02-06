@@ -5,7 +5,7 @@ import { readFile } from 'fs/promises'
 import { rando } from '@nastyox/rando.js'
 import * as jdenticon from 'jdenticon'
 
-import pantry from 'pantry-node'
+//import pantry from 'pantry-node'
 
 import fetchNews from './fetchNews/index.js'
 import disclosureHtml from './disclosureHtml.js'
@@ -74,8 +74,8 @@ const __dirname = path.dirname(__filename)
 
 const app = express()
 
-const pantryID = "4b8eeebc-b2e8-404b-808d-da8a45297b77"
-const pantryClient = new pantry(pantryID)
+// const pantryID = "4b8eeebc-b2e8-404b-808d-da8a45297b77"
+// const pantryClient = new pantry(pantryID)
 
 const sourcesObj:any = {
   the_nation: {url: 'https://thenation.com/feed/?post_type=article', vp: 'GN'},
@@ -131,21 +131,21 @@ app.get('/api-data', (req, res) => {
 })
 
 // pantry test - JSON
-app.get('/pantry-test', (req, res) => {
-  const payload = {
-  animalSounds: {
-    goose: 'honk!',
-    // dragon: 'RAWRR',
-    // kitty: 'mraow',
-    // bug: 'chitter'
-  }
-}
+// app.get('/pantry-test', (req, res) => {
+//   const payload = {
+//   animalSounds: {
+//     goose: 'honk!',
+//     // dragon: 'RAWRR',
+//     // kitty: 'mraow',
+//     // bug: 'chitter'
+//   }
+// }
 
-  pantryClient.basket
-      //get, create, delete
-      .update('news-cache', {payload})
-      .then((response:any) => res.send(response))
-})
+//   pantryClient.basket
+//       //get, create, delete
+//       .update('news-cache', {payload})
+//       .then((response:any) => res.send(response))
+// })
 
 app.get('/news', async (req:any, res) => {
   console.log('HEY')
