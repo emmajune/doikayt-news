@@ -65,7 +65,7 @@ async function readBucket() {
   return response;
 }
 
-
+// @ts-ignore
 global.newsItemCache = await readBucket() //not a problem I think
 
 
@@ -178,7 +178,7 @@ app.get('/news', async (req:any, res) => {
   pageHTML = pageHTML.replaceAll('THE_NEWS_GOES_HERE', htmlNews ? htmlNews : 'Search for something!')
   pageHTML = pageHTML.replace('/favicon.png', '/favicon.png?'+rando(9999))//attempts to trick browsers into refreshing favicon cache
   res.type('html').send(pageHTML)
-
+  //@ts-ignore
   updateBucket(JSON.stringify(global.newsItemCache)) //non-issue I think
 })
 
