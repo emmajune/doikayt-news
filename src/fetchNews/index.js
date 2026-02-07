@@ -6,25 +6,12 @@ import constellateRSS from './constellateRSS.js'
 
 
 export async function fetchNews(query, sources, sourceNames, update=false) {
-    console.log('asdfasdfasdf')
-    // var newsItems = await readFile('../public/newsCache.json', { encoding: 'utf8' })
-    // var newsItems = JSON.parse(newsItems)
-    // var fNewsI = {}
-    
-    // for (let i = 0; i < sourceNames.length; i++) {
-    //     fNewsI[sourceNames[i]] = newsItems[sourceNames[i]]
-    // }
-    // newsItems = Object.values(fNewsI).flat()
-
-
-    //should i add some cache rejiggering to handle fetch errors on individual news sites?
 
     var newsItems
 
     if (!global?.newsItemCache || update) {
         newsItems = await constellateRSS(sources, sourceNames)
         global.newsItemCache = newsItems
-        console.log('HRM')
     }
     else {
         newsItems = global.newsItemCache
@@ -40,7 +27,7 @@ export async function fetchNews(query, sources, sourceNames, update=false) {
         newsItems = searchNews(query, Object.values(newsItems).flat(2))
     }
     if (query == 'undefined') {
-        newsItems = searchNews('', newsItems)
+        newsItems = searchNews('', newsItems)//messy..... prolly slowing shit down hella
     }
     if (query == '*') {
         return 'INVALID QUERY'

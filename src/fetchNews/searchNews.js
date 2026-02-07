@@ -16,8 +16,9 @@ export function searchNews (query, newsItems) {
     }
     //fancy dynamic category selection??
     const fuse = new Fuse(newsItems, {
-        keys: ['title', 'description', 'categories'],
-        ignoreLocation: true//,
+        keys: ['title', 'description', 'categories', 'content:encoded'],
+        ignoreLocation: true,
+        includeScore: true
         //useExtendedSearch: true
     })
     return fuse.search(stemmer(query))

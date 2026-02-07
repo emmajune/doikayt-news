@@ -17,14 +17,19 @@ export function compileNews(newsItems) {
     
     for (let i = 0; i < newsItems.length; i++) {
         try {
-            var { title, pubDate, link, description } = newsItems[i].item
+            var score = newsItems[i].score
+            var { title, pubDate, link, description } = newsItems[i].item    
             //var contentEncoded = newsItems[i].item['content:encoded']
         }
         catch {
             var { title, pubDate, link, description } = newsItems[i]
+            var score = newsItems[i]?.score
         }   //var contentEncoded = newsItems[i]['content:encoded']
+        score = 1 - score
+        if (score < 0.5) {
+            continue
+        }
 
-        
         let source = link.split('://')[1].split('/')[0]
             if (source.split('.').length === 2) {
                 source = source.split('.')[0]
@@ -51,7 +56,7 @@ export function compileNews(newsItems) {
         // }
         
         compiledHTML += `
-    <div class="news-item" id="${i}"><span class="news-infobar">
+    <div class="news-item" id="${i}" title="${score}"><span class="news-infobar">
              (${source} ${', '+pubDate ? pubDate : ''})<br />
              <a href="${link}">${title}</a>
         </span>

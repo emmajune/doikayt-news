@@ -92,7 +92,7 @@ const sourcesObj:any = {
   its_going_down: {url: 'https://itsgoingdown.org/feed/', vp: 'GS'},
   human_rights_watch: {url: 'https://www.hrw.org/rss/news', vp: 'GS'},
   haitian_times: {url: 'https://haitiantimes.com/feed/', vp: 'GS'},
-  woy_magazine: {url: 'https://rss.app/feeds/oD3q0jTyFEeGNlIL.xml', vp: 'GS'},
+  // woy_magazine: {url: 'https://rss.app/feeds/oD3q0jTyFEeGNlIL.xml', vp: 'GS'},
   truthout: {url: 'https://truthout.org/latest/feed/', vp: 'GN'},
   democracy_now: {url: 'https://www.democracynow.org/democracynow.rss', vp: 'GN'},
   the_intercept: {url: 'https://theintercept.com/feed/', vp: 'GN'},
@@ -148,7 +148,6 @@ app.get('/api-data', (req, res) => {
 // })
 
 app.get('/news', async (req:any, res) => {
-  console.log('HEY')
   var time1 = Date.now()
   let query = req.url.split('q=')[1]
   query = query ? query.replaceAll('+', ' ') : undefined
@@ -179,7 +178,7 @@ app.get('/news', async (req:any, res) => {
   pageHTML = pageHTML.replace('/favicon.png', '/favicon.png?'+rando(9999))//attempts to trick browsers into refreshing favicon cache
   res.type('html').send(pageHTML)
   //@ts-ignore
-  updateBucket(JSON.stringify(global.newsItemCache)) //non-issue I think
+  updateBucket(JSON.stringify(global.newsItemCache))
 })
 
 
