@@ -1,3 +1,4 @@
 {
-    "devCommand": "bun src/index.ts"
+    "devCommand": "bun src/index.ts",
+    "bunVersion": "1.x"
 }
