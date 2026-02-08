@@ -70,10 +70,10 @@
         z-index: 1;
       }
 
-      #search-content {
+      /* #search-content {
         border-style: solid;
         /* overflow: auto; */
-      }
+      /* } */
 
       #search-content > div {
         justify-content: space-between;
@@ -87,6 +87,8 @@
         flex-basis: fit-content;
         margin-top: calc(var(--size-l));
         border-style: solid;
+        padding: var(--size-xs);
+        padding-bottom: 0;
       }
       .news-infobar {
         color: hotpink;
@@ -105,7 +107,9 @@
         hyphens: auto;
       }
       .description {
-        max-height: 9.5ch;
+        max-height: 10ch;
+        margin-bottom: var(--size-xs);
+        overflow: hidden;
         /* text-wrap: balance; */
       }
       /* #search-content {
