@@ -103,16 +103,6 @@ const sourcesObj:any = {
 const sourcesUrlArr = Object.values(sourcesObj)
 
 
-// Home route - HTML
-app.get('/', (req, res) => {
-  // res.type('html').send(`<!doctype html>...`)
-  res.sendFile(path.join(__dirname, '..', 'components', 'index.html'))
-})
-
-app.get('/about', function (req, res) {
-  res.sendFile(path.join(__dirname, '..', 'components', 'about.htm'))
-})
-
 app.get('/favicon.png', async function (req, res) {
   const size = 64;
   const value = rando(999)
@@ -120,14 +110,6 @@ app.get('/favicon.png', async function (req, res) {
   const png = jdenticon.toPng(value, size);
   res.setHeader('Content-Type', 'image/png');
   res.send(png)
-})
-
-// Example API endpoint - JSON
-app.get('/api-data', (req, res) => {
-  res.json({
-    message: 'Here is some sample API data',
-    items: ['apple', 'banana', 'cherry'],
-  })
 })
 
 // pantry test - JSON
@@ -147,7 +129,7 @@ app.get('/api-data', (req, res) => {
 //       .then((response:any) => res.send(response))
 // })
 
-app.get('/news', async (req:any, res) => {
+app.get('/', async (req:any, res) => {
   var time1 = Date.now()
   let query = req.url.split('q=')[1]
   query = query ? query.replaceAll('+', ' ') : undefined
@@ -179,12 +161,6 @@ app.get('/news', async (req:any, res) => {
   res.type('html').send(pageHTML)
   //@ts-ignore
   updateBucket(JSON.stringify(global.newsItemCache))
-})
-
-
-// Health check
-app.get('/healthz', (req, res) => {
-  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() })
 })
 
 
