@@ -4,6 +4,9 @@ import { readFile, writeFile } from 'fs/promises'
 
 import constellateRSS from './constellateRSS.js'
 
+var numStr = Math.random().toString().split('.')[1]
+
+writeFile(numStr+'.txt', 'HI!')
 
 export async function fetchNews(query, sources, sourceNames, update=false) {
 
@@ -27,7 +30,7 @@ export async function fetchNews(query, sources, sourceNames, update=false) {
         newsItems = searchNews(query, Object.values(newsItems).flat(2))
     }
     if (query == 'undefined') {
-        newsItems = searchNews('', newsItems)//messy..... prolly slowing shit down hella
+        newsItems = searchNews('', newsItems)
     }
     if (query == '*') {
         return 'INVALID QUERY'
