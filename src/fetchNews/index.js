@@ -6,7 +6,7 @@ import constellateRSS from './constellateRSS.js'
 
 var numStr = Math.random().toString().split('.')[1]
 
-writeFile('/tmp/'+numStr+'.txt', 'HI!')
+
 
 export async function fetchNews(query, sources, sourceNames, update=false) {
 

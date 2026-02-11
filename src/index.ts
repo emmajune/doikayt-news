@@ -1,7 +1,7 @@
 import express from 'express'
 import path, { dirname } from 'path'
 import { fileURLToPath } from 'url'
-import { readFile } from 'fs/promises'
+import { readFile, writeFile } from 'fs/promises'
 import { rando } from '@nastyox/rando.js'
 import * as jdenticon from 'jdenticon'
 
@@ -163,6 +163,15 @@ app.get('/', async (req:any, res) => {
   updateBucket(JSON.stringify(global.newsItemCache))
 })
 
+
+app.get('/test', async (req,res)=>{
+  var fileName = Math.random().toString().split('.')[1]
+  var path = '/tmp/' + fileName
+  await writeFile(path, 'hi!!')
+  var data = await readFile(path)
+  res.type('html')
+  res.send(data)
+})
 
 app.listen(1080)
 
