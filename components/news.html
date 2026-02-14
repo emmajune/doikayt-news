@@ -9,6 +9,8 @@
 
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/kelpui@1/css/kelp.css">
 
+    <link rel="stylesheet" href="https://svrss.neocities.org/cache.css">
+
     <script async type="module" src="https://cdn.jsdelivr.net/npm/kelpui@1/js/kelp.js"></script>
   </head>
 	<body>
@@ -119,6 +121,15 @@
       /* Chanut @ flaticon */
     </style>
     <script>
+      var neoJson = JSON.parse(
+            document.styleSheets[0]
+            .cssRules[0].style.content
+            .slice(1,-1).replaceAll('\\"', '"')
+            .replaceAll(/[\\][\\]/g, '\\')
+          )
+      console.log(neoJson)
+
+
       var sCon = document.querySelector('#search-content')
       var sConS = getComputedStyle(sCon)
       var newsItem1 = document.querySelector('.news-item')
