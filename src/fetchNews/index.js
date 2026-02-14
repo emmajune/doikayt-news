@@ -1,15 +1,12 @@
 import searchNews from './searchNews.js'
 import compileNews from './compileNews.js'
-import { readFile, writeFile } from 'fs/promises'
 
 import constellateRSS from './constellateRSS.js'
 
-var numStr = Math.random().toString().split('.')[1]
 
 
-
-export async function fetchNews(query, sources, sourceNames, update=false) {
-
+export async function fetchNews(query, sources, sourceNames, update=true) {
+    
     var newsItems
 
     if (!global?.newsItemCache || update) {
@@ -21,29 +18,35 @@ export async function fetchNews(query, sources, sourceNames, update=false) {
     }
     
     if (newsItems) {
-        console.log(JSON.stringify(newsItems).length)
+        console.log(newsItems.length)
     }
     else {
         return 'Invalid Sources!!!'
     }
     if (query && (query != 'undefined')) {
         newsItems = searchNews(query, Object.values(newsItems).flat(2))
+        newsItems.sort((a, b) => {
+            a = new Date(a.item.pubDate)
+            a = a.getTime()
+            b = new Date(b.item.pubDate)
+            b = b.getTime()
+            return b - a
+        })
     }
     if (query == 'undefined') {
         newsItems = searchNews('', newsItems)
+        newsItems.sort((a, b) => {
+            a = new Date(a.pubDate)
+            a = a.getTime()
+            b = new Date(b.pubDate)
+            b = b.getTime()
+            return b - a
+        })
     }
     if (query == '*') {
         return 'INVALID QUERY'
     }
-    if (Array.isArray(newsItems)) {
-        newsItems.sort((a, b) => {
-        a = new Date(a.pubDate)
-        a = a.getTime()
-        b = new Date(b.pubDate)
-        b = b.getTime()
-        return b - a
-    })
-    }
+    
     var newsButHTML = compileNews(newsItems)
     return new Promise(resolve=>resolve({html: newsButHTML, length: newsItems.length}))
 }

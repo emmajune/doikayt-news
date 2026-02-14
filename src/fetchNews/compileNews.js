@@ -18,13 +18,20 @@ export function compileNews(newsItems) {
     for (let i = 0; i < newsItems.length; i++) {
         try {
             var score = newsItems[i].score
-            var { title, pubDate, link, description } = newsItems[i].item    
-            //var contentEncoded = newsItems[i].item['content:encoded']
+            var { title, pubDate, link, description } = newsItems[i].item
+            var contentEncoded = newsItems[i].item['content:encoded']
+            if (contentEncoded) {
+                description += ' '+contentEncoded
+            }
         }
         catch {
             var { title, pubDate, link, description } = newsItems[i]
             var score = newsItems[i]?.score
-        }   //var contentEncoded = newsItems[i]['content:encoded']
+            var contentEncoded = newsItems[i]['content:encoded']
+            if (contentEncoded) {
+                description += ' '+contentEncoded
+            }
+        }   
         score = 1 - score
         if (score < 0.5) {
             continue
@@ -46,21 +53,31 @@ export function compileNews(newsItems) {
             title = title.substring(0, 87) + '...' 
         }
 
-        //description = description + (contentEncoded ? ' '+contentEncoded : '')
-        description = unHtml(description + '')
+        //description = unHtml(description + '')
         description = description.replace(/\n/g, '')
 
-        let shortDescription = description
-        // if (description.length > 307) {
-        //     shortDescription = description.substring(0, 307) + '...' 
-        // }
-        
+        if (source === 'JEWISHCURRENTS') {
+            description = title.split(' - ')[1]
+            title = title.split(' - ')[0]
+        }
+        if (description) {
+            if (description.length > 1000) {
+                description = description.slice(0, 1000)
+            }
+            description = description.replace('undefined', '')
+        }
+        else {
+            description = ''
+        }
+        if (!score) {
+            score = ''
+        }
         compiledHTML += `
     <div class="news-item" id="${i}" title="${score}"><span class="news-infobar">
              (${source} ${', '+pubDate ? pubDate : ''})<br />
              <a href="${link}">${title}</a>
         </span>
-        <p class="description">${description.replace(/(0 undefined$)|(undefined$)/, '')}</p>
+        <p class="description">${description}</p>
     </div>`
             // newsItems[i] = { title, pubDate, link, description }
         }

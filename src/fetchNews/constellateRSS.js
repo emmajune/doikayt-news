@@ -1,7 +1,5 @@
 import { XMLParser } from "fast-xml-parser"
 
-import { writeFile } from "fs/promises"
-
 
 export async function constellateRSS(sourcesArr, sourceNames) {
   //+972mag and jewishcurrents and jacobin don't work
@@ -49,10 +47,8 @@ export async function constellateRSS(sourcesArr, sourceNames) {
 
         for (let i = 0; i < sourceItemsArr.length; i++) {
           var {description, title, link, pubDate} = sourceItemsArr[i]
-          var contentEncoded = sourceItemsArr[i]['content-encoded']
+          var contentEncoded = sourceItemsArr[i]['content:encoded']
           if (description) {
-            description = unHtml(description)
-            //description = description.slice(0, 400)
             if (description == '0') {
               description = ''
             }
@@ -61,9 +57,11 @@ export async function constellateRSS(sourcesArr, sourceNames) {
             if (contentEncoded == '0') {
               contentEncoded = ''
             }
-            contentEncoded = unHtml(contentEncoded)
+            //contentEncoded = unHtml(contentEncoded)
           }
           description += ' ' + contentEncoded
+          description = description.split('The post')[0]
+          description = unHtml(description)
           sourceItemsArr[i] = {description, title, link, pubDate}
         }
 

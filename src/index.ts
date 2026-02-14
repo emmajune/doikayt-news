@@ -5,74 +5,39 @@ import { readFile, writeFile } from 'fs/promises'
 import { rando } from '@nastyox/rando.js'
 import * as jdenticon from 'jdenticon'
 
+import cors from 'cors'
+
 //import pantry from 'pantry-node'
 
 import fetchNews from './fetchNews/index.js'
 import disclosureHtml from './disclosureHtml.js'
 
+import neoCache from './cache/neoCache.js'
+import {updateBucket, readBucket} from './cache/supaCache.js'
+
 import constellateRSS from './fetchNews/constellateRSS.js'
 
 
-import { createClient } from "@supabase/supabase-js";
-
-// Create Supabase client
-const supabase = createClient(
-  "https://gtlobmekbicbhkctqaky.supabase.co",
-  "sb_secret_VnysgCOq1-gJXlGHlAmOTg_9-Vkgunx",
-);
-
-async function updateBucket(data:any) {
-  const date = Date.now() + ".txt";
-
-  var uploadData = await supabase.storage
-    .from("doikayt_cache")
-    .upload(date, data);
-  if (uploadData.error) {
-    return uploadData.error
-  }
-  const bucketList:any = await supabase.storage.from("doikayt_cache").list("", {
-    limit: 100,
-    offset: 0,
-    sortBy: { column: "updated_at", order: "desc" },
-  });
-
-  var trashArr = []
-  for (let i = 1; i < bucketList.data.length; i++) {
-    trashArr.push(bucketList.data[i].name)
-  }
-  
-  await supabase.storage.from('doikayt_cache').remove(trashArr)
-
-  return uploadData.data
-}
-
-
-async function readBucket() {
-  const bucketList = await supabase.storage.from("doikayt_cache").list("", {
-    limit: 100,
-    offset: 0,
-    sortBy: { column: "updated_at", order: "asc" },
-  });
-
-  const name:any = bucketList!.data![0].name;
-  const url =
-    "https://gtlobmekbicbhkctqaky.supabase.co/storage/v1/object/public/doikayt_cache/" +
-    name;
-
-  var response = await fetch(url);
-  response = await response.json();
-  
-  return response;
-}
 
 // @ts-ignore
 global.newsItemCache = await readBucket() //not a problem I think
-
+//@ts-ignore
+global.updateBool = true
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const app = express()
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Vary", "*");
+  res.header('Content-Security-Policy', `default-src * 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src *; style-src * 'unsafe-inline';`)
+  next();
+})
+
+app.use(cors());
 
 // const pantryID = "4b8eeebc-b2e8-404b-808d-da8a45297b77"
 // const pantryClient = new pantry(pantryID)
@@ -101,7 +66,7 @@ const sourcesObj:any = {
   jacobin: {url: 'http://jacobin.com/rss', vp: 'GN'}
 }
 const sourcesUrlArr = Object.values(sourcesObj)
-
+const sourceNames:any = Object.keys(sourcesObj)
 
 app.get('/favicon.png', async function (req, res) {
   const size = 64;
@@ -129,7 +94,7 @@ app.get('/favicon.png', async function (req, res) {
 //       .then((response:any) => res.send(response))
 // })
 
-app.get('/', async (req:any, res) => {
+app.get('/', cors(), async (req:any, res) => {
   var time1 = Date.now()
   let query = req.url.split('q=')[1]
   query = query ? query.replaceAll('+', ' ') : undefined
@@ -143,8 +108,14 @@ app.get('/', async (req:any, res) => {
       sources[i] = sourcesObj[source]
     }
   }
-  var sourceNames:any = Object.keys(sourcesObj)
-  var theNews = await fetchNews(query, sources ? sources : sourcesUrlArr, sourceNames)
+  // set timeout before first update
+  // @ts-ignore
+  var theNews = await fetchNews(query, sources ? sources : sourcesUrlArr, sourceNames, global.updateBool)
+  // @ts-ignore
+  if (global.updateBool) {
+    // @ts-ignore
+    global.updateBool = false
+  }
   var time2 = Date.now()
   console.log('Overall, took ' + (time2-time1) + 'ms')
   var htmlNews = await theNews.html
@@ -158,22 +129,27 @@ app.get('/', async (req:any, res) => {
   pageHTML = pageHTML.replace('nNewsI_GOES_HERE', nNewsI ? nNewsI : '1')
   pageHTML = pageHTML.replaceAll('THE_NEWS_GOES_HERE', htmlNews ? htmlNews : 'Search for something!')
   pageHTML = pageHTML.replace('/favicon.png', '/favicon.png?'+rando(9999))//attempts to trick browsers into refreshing favicon cache
-  res.type('html').send(pageHTML)
+  res.type('html')
+  res.send(pageHTML)
   //@ts-ignore
   updateBucket(JSON.stringify(global.newsItemCache))
 })
 
 
-app.get('/test', async (req,res)=>{
-  var fileName = Math.random().toString().split('.')[1]
-  var path = '/tmp/' + fileName
-  await writeFile(path, 'hi!!')
-  var data = await readFile(path)
-  res.type('html')
-  res.send(data)
-})
+
+async function updateNeo() {
+  var newsObj = await constellateRSS(sourcesUrlArr, sourceNames)
+  var newsJson = JSON.stringify(newsObj)
+  await neoCache(newsJson)
+  var jsonProm = await fetch('https://svrss.neocities.org/cache.json')
+  var json = await jsonProm.text()
+  return json
+}
 
 app.listen(1080)
+
+await updateNeo()
+setInterval(updateNeo, 60000)
 
 export default app
 
@@ -181,4 +157,4 @@ export default app
 // svo.bz/123 (or abc) (or xyz)
 
 
-// todo: categorize and include each source in the kelp-disclosure; work on kelp gui
+// todo: categorize and each source in the kelp-disclosure; work on kelp gui

@@ -89,6 +89,7 @@
         border-style: solid;
         padding: var(--size-xs);
         padding-bottom: 0;
+        flex-grow: 1;
       }
       .news-infobar {
         color: hotpink;
@@ -204,6 +205,7 @@
         let sConD = sConHCR(newsItems.length)
         sCon.style.height = sConD.height + 'px'
         sCon.replaceChildren(...gridify(sConD.nRows, sConD.nCols, newsItems))
+        fixTabIndex()
       }
 
       function gridify(rows, cols, gridlings) {
@@ -264,6 +266,35 @@
           
         }
         return columns.slice(1)
+      }
+
+      function fixTabIndex() {
+        var heightsObj = {}
+        var sC = document.getElementById('search-content')
+        for (let c = 0; c < sC.children.length; c++) {
+          var col = sC.children[c]
+          var totalHeight = 0
+          for (let r = 0; r < col.children.length; r++) {
+            var elem = col.children[r]
+            var elemStyle = getComputedStyle(elem)
+            var height = +elemStyle.height.split('px')[0]
+            heightsObj[c+'-'+r] = totalHeight
+            totalHeight += height
+          }
+        }
+        heightsArr = Object.entries(heightsObj)
+
+        heightsArr = heightsArr.sort((a,b)=>{
+          return b[1] - a[1]
+        })
+
+        var length = document.querySelectorAll('.news-item').length
+
+        for (let i = 0; i < length; i++) {
+          let c = heightsArr[i][0].split('-')[0]
+          let r = heightsArr[i][0].split('-')[1]
+          sC.children[c].children[r].children[0].children[1].tabIndex = 40 + length - i
+        }
       }
 
       const uGridD = debounce(updateGrid, 250);
