@@ -38,6 +38,7 @@
         </div>
       </section>
 		</main>
+    <iframe src="https://svrss.neocities.org/icache" style="display: none"></iframe>
     <style>
 
       kelp-disclosure {
@@ -121,6 +122,11 @@
       /* Chanut @ flaticon */
     </style>
     <script>
+      window.addEventListener("message", (event) => {
+        console.log(event.data)
+      });
+
+
       var neoJson = JSON.parse(
             document.styleSheets[0]
             .cssRules[0].style.content
