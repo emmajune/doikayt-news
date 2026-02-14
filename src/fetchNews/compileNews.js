@@ -72,6 +72,7 @@ export function compileNews(newsItems) {
         if (!score) {
             score = ''
         }
+        
         compiledHTML += `
     <div class="news-item" id="${i}" title="${score}"><span class="news-infobar">
              (${source} ${', '+pubDate ? pubDate : ''})<br />

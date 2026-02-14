@@ -106,7 +106,6 @@
         max-height: 4.3em;
         overflow: hidden;
         width: 100%;
-        hyphens: auto;
       }
       .description {
         max-height: 10ch;
@@ -120,10 +119,10 @@
       /* Chanut @ flaticon */
     </style>
     <script>
+      
       window.addEventListener("message", (event) => {
         console.log(event.data)
       });
-
 
       var sCon = document.querySelector('#search-content')
       var sConS = getComputedStyle(sCon)
@@ -273,7 +272,7 @@
         }
         return columns.slice(1)
       }
-
+      //untabindex the above?
       function fixTabIndex() {
         var heightsObj = {}
         var sC = document.getElementById('search-content')
@@ -294,13 +293,9 @@
           return b[1] - a[1]
         })
 
-        var length = document.querySelectorAll('.news-item').length
 
-        for (let i = 0; i < length; i++) {
-          let c = heightsArr[i][0].split('-')[0]
-          let r = heightsArr[i][0].split('-')[1]
-          sC.children[c].children[r].children[0].children[1].tabIndex = 40 + length - i
-        }
+        var length = document.querySelectorAll('.news-item').length
+        
       }
 
       const uGridD = debounce(updateGrid, 250);

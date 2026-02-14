@@ -18,8 +18,8 @@ export function searchNews (query, newsItems) {
     const fuse = new Fuse(newsItems, {
         keys: ['title', 'description', 'categories', 'content:encoded'],
         ignoreLocation: true,
-        includeScore: true
-        //useExtendedSearch: true
+        includeScore: true,
+        useExtendedSearch: true
     })
     return fuse.search(stemmer(query))
 }
