@@ -5,7 +5,7 @@ import constellateRSS from './constellateRSS.js'
 
 
 
-export async function fetchNews(query, sources, sourceNames, update=true) {
+export async function fetchNews(query, sources, sourceNames, update=false) {
     
     var newsItems
 
