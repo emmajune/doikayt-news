@@ -2,9 +2,9 @@
 //remove duplicate description x contentEncoded pairs
 
 export function compileNews(newsItems) {
+    
     //newsItems = Object.values(newsItems).flat(2)
     var compiledHTML = ''
-
     function unHtml(str) {
         str = str.replace(/(<[\s\S]*?>)+/g, ' ')
         str = str.replaceAll('\\n', ' ')
@@ -16,6 +16,7 @@ export function compileNews(newsItems) {
     }
     
     for (let i = 0; i < newsItems.length; i++) {
+        
         try {
             var score = newsItems[i].score
             var { title, pubDate, link, description } = newsItems[i].item
@@ -32,20 +33,20 @@ export function compileNews(newsItems) {
                 description += ' '+contentEncoded
             }
         }   
+        
+        let source = link.split('://')[1].split('/')[0]
+        source = source.toUpperCase()
+        if (source.split('.').length === 2) {
+            source = source.split('.')[0]
+        }
+        else {
+            source = source.split('.')[1].split('.')[0]
+        }
         score = 1 - score
         if (score < 0.5) {
             continue
         }
 
-        let source = link.split('://')[1].split('/')[0]
-            if (source.split('.').length === 2) {
-                source = source.split('.')[0]
-            }
-            else {
-                source = source.split('.')[1].split('.')[0]
-            }
-
-        source = source.toUpperCase()
 
         pubDate = pubDate?.substring(5, 16)
 
@@ -60,6 +61,7 @@ export function compileNews(newsItems) {
             description = title.split(' - ')[1]
             title = title.split(' - ')[0]
         }
+        
         if (description) {
             if (description.length > 1000) {
                 description = description.slice(0, 1000)
@@ -72,7 +74,12 @@ export function compileNews(newsItems) {
         if (!score) {
             score = ''
         }
+        if (typeof title === 'string') {
+            title = title.split(' ')
+            title = title.slice(0,-1).join(' ') + '&nbsp;' + title[title.length-1]
+        }
         
+
         compiledHTML += `
     <div class="news-item" id="${i}" title="${score}"><span class="news-infobar">
              (${source} ${', '+pubDate ? pubDate : ''})<br />

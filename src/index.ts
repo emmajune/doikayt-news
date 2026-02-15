@@ -1,11 +1,19 @@
+// TODO: make search more accurate for shorter terms;
+// show matches in results;
+// migrate search.js and compile.js to frontend (add sexy caching too, ofc!);
+// fix tab-navigation scrolling;
+// integrate search and source-selection into frontend aesthetics
+// frontend images..?
+// optimize loading time; mayhaps remove unnecessary words?
+
+//custom rss scraper, mayhaps?
+
 import express from 'express'
 import path, { dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { readFile, writeFile } from 'fs/promises'
 import { rando } from '@nastyox/rando.js'
 import * as jdenticon from 'jdenticon'
-
-import cors from 'cors'
 
 //import pantry from 'pantry-node'
 
@@ -47,13 +55,13 @@ const sourcesObj:any = {
   its_going_down: {url: 'https://itsgoingdown.org/feed/', vp: 'GS'},
   human_rights_watch: {url: 'https://www.hrw.org/rss/news', vp: 'GS'},
   haitian_times: {url: 'https://haitiantimes.com/feed/', vp: 'GS'},
-  // woy_magazine: {url: 'https://rss.app/feeds/oD3q0jTyFEeGNlIL.xml', vp: 'GS'},
   truthout: {url: 'https://truthout.org/latest/feed/', vp: 'GN'},
   democracy_now: {url: 'https://www.democracynow.org/democracynow.rss', vp: 'GN'},
   the_intercept: {url: 'https://theintercept.com/feed/', vp: 'GN'},
   p972_mag: {url: 'https://rss.app/feeds/aNuThbWh76dCx90s.xml', vp: 'GN'},
   jewish_currents: {url: 'https://jewishcurrents.org/feed', vp: 'GN'},
-  jacobin: {url: 'http://jacobin.com/rss', vp: 'GN'}
+  jacobin: {url: 'http://jacobin.com/rss', vp: 'GN'},
+  propublica: {url: 'https://www.propublica.org/rss', vp: 'GN'}
 }
 const sourcesUrlArr = Object.values(sourcesObj)
 const sourceNames:any = Object.keys(sourcesObj)
@@ -84,23 +92,12 @@ app.get('/favicon.png', async function (req, res) {
 //       .then((response:any) => res.send(response))
 // })
 
-app.get('/', cors(), async (req:any, res) => {
+app.get('/api', async (req:any, res) => {
   var time1 = Date.now()
-  let query = req.url.split('q=')[1]
-  query = query ? query.replaceAll('+', ' ') : undefined
-  query = decodeURIComponent(query)
-  var sources:any = Object.keys(req.query);
-  sources.pop()
-  sources = sources.length ? sources : undefined
-  if (sources) {
-    for (let i = 0; i < sources.length; i++) {
-      let source = sources[i]
-      sources[i] = sourcesObj[source]
-    }
-  }
+  
   // set timeout before first update
   // @ts-ignore
-  var theNews = await fetchNews(query, sources ? sources : sourcesUrlArr, sourceNames, global.updateBool)
+  var newsJson = await fetchNews(sourcesUrlArr, sourceNames, global.updateBool)
   // @ts-ignore
   if (global.updateBool) {
     // @ts-ignore
@@ -108,38 +105,29 @@ app.get('/', cors(), async (req:any, res) => {
   }
   var time2 = Date.now()
   console.log('Overall, took ' + (time2-time1) + 'ms')
-  var htmlNews = await theNews.html
-  var nNewsI = await theNews.length
-  var disclosureHTML = disclosureHtml(sourceNames, sourcesObj)
-  var pageHTML:any = await readFile(path.join(__dirname, '..', 'components', 'news.html'))
-  pageHTML = pageHTML.toString().replace('SOURCES_GO_HERE', disclosureHTML)
-  var isAllSources = (!sources || (sources?.length === sourcesUrlArr.length))
-  pageHTML = pageHTML.replace(' maybe-super-checked', isAllSources ? ' checked' : '')
-  pageHTML = pageHTML.replace('QUERY_GOES_HERE', (query != 'undefined') ? query : '')
-  pageHTML = pageHTML.replace('nNewsI_GOES_HERE', nNewsI ? nNewsI : '1')
-  pageHTML = pageHTML.replaceAll('THE_NEWS_GOES_HERE', htmlNews ? htmlNews : 'Search for something!')
-  pageHTML = pageHTML.replace('/favicon.png', '/favicon.png?'+rando(9999))//attempts to trick browsers into refreshing favicon cache
-  res.type('html')
-  res.send(pageHTML)
+  
+
+  // pageHTML = pageHTML.replace('/favicon.png', '/favicon.png?'+rando(9999))//attempts to trick browsers into refreshing favicon cache
+  // res.type('html')
+  // res.send(pageHTML)
+  res.type('json')
+  res.send(newsJson)
   //@ts-ignore
   updateBucket(JSON.stringify(global.newsItemCache))
 })
 
-
+app.get('/test', async (req:any, res:any)=>{
+  res.sendFile(path.join(__dirname, '..', 'components', 'local_news.html'))
+})
 
 async function updateNeo() {
   var newsObj = await constellateRSS(sourcesUrlArr, sourceNames)
   var newsJson = JSON.stringify(newsObj)
-  await neoCache(newsJson)
-  var jsonProm = await fetch('https://svrss.neocities.org/cache.json')
-  var json = await jsonProm.text()
-  return json
+  return await neoCache(newsJson)
 }
 
 app.listen(1080)
-
-await updateNeo()
-setInterval(updateNeo, 60000)
+setInterval(updateNeo, 62000)
 
 export default app
 

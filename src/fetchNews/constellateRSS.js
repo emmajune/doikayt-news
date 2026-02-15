@@ -9,6 +9,7 @@ export async function constellateRSS(sourcesArr, sourceNames) {
   var promises = []
   for (let i = 0; i < sourcesArr.length; i++) {
     var source = sourcesArr[i]
+
     if (!source) {
       collectedRSS = undefined
       break
@@ -28,9 +29,7 @@ export async function constellateRSS(sourcesArr, sourceNames) {
   var time2 = Date.now()
   console.log('it took '+(time2 - time1)+'ms')
   for (let i = 0; i < sourcesArr.length; i++) {
-
       var source = sourcesArr[i]
-      var sourceName = sourceNames[i]
 
       if (!source) {
         collectedRSS = undefined
@@ -44,7 +43,7 @@ export async function constellateRSS(sourcesArr, sourceNames) {
       if (jObj?.rss?.channel) {
         let sourceObject = jObj.rss.channel
         const sourceItemsArr = sourceObject.item
-
+        var sourceName = jObj.rss.channel.title
         for (let i = 0; i < sourceItemsArr.length; i++) {
           var {description, title, link, pubDate} = sourceItemsArr[i]
           var contentEncoded = sourceItemsArr[i]['content:encoded']
@@ -60,14 +59,17 @@ export async function constellateRSS(sourcesArr, sourceNames) {
             //contentEncoded = unHtml(contentEncoded)
           }
           description += ' ' + contentEncoded
-          description = description.split('The post')[0]
+          if (sourceName === 'ProPublica') {
+            description = contentEncoded
+          }
+          //TODO: isloate first match....
           description = unHtml(description)
           sourceItemsArr[i] = {description, title, link, pubDate}
         }
-
         collectedRSS[sourceName] = sourceItemsArr
       }
       else {
+        console.log(jObj)
         console.log('Error parsing ' + JSON.stringify(source.url))
       }
     }

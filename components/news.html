@@ -32,7 +32,6 @@
 		<main>
       <section> 
         <div id="search-content" class="flex justify-center direction-row wrap gap-l">
-          THE_NEWS_GOES_HERE
         </div>
       </section>
 		</main>
@@ -119,7 +118,7 @@
       /* Chanut @ flaticon */
     </style>
     <script>
-      
+
       window.addEventListener("message", (event) => {
         console.log(event.data)
       });
@@ -151,9 +150,9 @@
         }
 
         var nItem1W = em*emWidth
-        
+
         var sConW = +sConS.getPropertyValue('width').slice(0,-2)
-        
+
         var gap = +sConS.getPropertyValue('gap').split('px')[0]
 
         nItem1W += gap
@@ -167,21 +166,21 @@
         if (nRows === 1) {
           nCols = nNewsI
         }
-        
+
         var height = height*nRows
 
         return {height, nCols, nRows}
       }
       //from https://dev.to/teaganga/understanding-debounce-in-javascript-a-guide-with-examples-3cm4
-      
+
       var nNewsI = nNewsI_GOES_HERE
 
       const swapElements = (array, index1, index2) => {
         array[index1] = array.splice(index2, 1, array[index1])[0];
       };
 
-      
-      
+
+
       function debounce(func, wait) {
         let timeout;
         return function (...args) {
@@ -195,13 +194,13 @@
         var newsItems = Array.from(sCon.cloneNode(true).children)
       }
 
-      
+
 
       var nItemsB = Array.from(document.querySelectorAll('.news-item'))
-      
-      
 
-      
+  
+
+  
       updateGrid()
 
 
@@ -215,25 +214,25 @@
 
       function gridify(rows, cols, gridlings) {
         // var minLength = (rows - 1)*cols + 1 
-        
+
         // if (gridlings.length < minLength) {
         //   throw('gridlings < minLength (fix "cols" & "rows")')
         // }
-        
+
         // var maxLength = rows*cols
-        
+
         // if (gridlings.length > maxLength) {
         //   throw('gridlings > minLength (fix "cols" & "rows")')
         // }
-        
+
         const remainder = gridlings.length % cols
-        
+
         if (remainder) {
           rows--
         }
-        
+
         var columns = []
-        
+
         for (let c = 1; c < cols+1; c++) {
           columns[c] = document.createElement('div')
           columns[c].className = "flex direction-column"
@@ -249,12 +248,12 @@
               catch {
                 console.log(elem)
               }
-              
+
             }
             column.append(elem)
           }
         }
-        
+
         if (remainder) {
           const offset = cols*rows
           const leftovers = gridlings.slice(-remainder)
@@ -268,7 +267,7 @@
             }
             column.append(elem)
           }
-          
+
         }
         return columns.slice(1)
       }
@@ -295,12 +294,12 @@
 
 
         var length = document.querySelectorAll('.news-item').length
-        
+
       }
 
       const uGridD = debounce(updateGrid, 250);
       // Create a debounced version of updateGrid with a 250ms delay
-      
+
       window.addEventListener('resize', uGridD);
 
       var selectionContainer = document.getElementById('selection-container')
