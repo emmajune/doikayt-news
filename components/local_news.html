@@ -7,9 +7,13 @@
         <link rel="icon" type="image/png" href="/favicon.png">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/kelpui@1/css/kelp.css">
         <script async type="module" src="https://cdn.jsdelivr.net/npm/kelpui@1/js/kelp.js"></script>
+        <script type="module">
+            import {stemmer} from 'https://esm.sh/stemmer@2?bundle'
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
     </head>
     <body>
-        <form role="search" action="">
+        <form role="search">
             <kelp-disclosure is-dropdown>
               <button type="button" tabindex="1">Sources</button>
               <ul id="selection-container">
@@ -114,41 +118,25 @@
             } */
             /* Chanut @ flaticon */
         </style>
-        <iframe src="https://svrss.neocities.org/icache" style="display: none"></iframe>
         <script>
             (async ()=>{
 
-                let jsonP = Promise.withResolvers();
-                window.addEventListener('message', function (event) {
-                    jsonP.resolve(event.data)
-                    window.removeEventListener('message', this)
-                })
-
-                // let jsonP2 = await fetch('/api')
-                // jsonP2 = await jsonP2.text()
-
-                var newsJson = await jsonP.promise
-
-                var newsItemsJ = JSON.parse(newsJson)
-
-                
-
-                newsItemsJ = Object.values(newsItemsJ).flat(2)
-                    .sort((a,b)=>{
-                        let diff = +Date.parse(a.pubDate) - +Date.parse(b.pubDate)
-                        if (!diff) {
-                            diff = 0
-                        }
-                        return diff
-                })
-
-
-
-
+                async function updateNews() {
+                    let jsonP = await fetch('/api')
+                    jsonT = await jsonP.text()
+                    let newsItems = JSON.parse(jsonT)
+                    newsItems = Object.values(newsItems).flat(2)
+                        .sort((a,b)=>{
+                            let diff = +Date.parse(a.pubDate) - +Date.parse(b.pubDate)
+                            if (!diff) {
+                                diff = 0
+                            }
+                            return diff
+                        })
+                    return newsItems
+                }
 
                 function compileNews(newsItems) {
-    
-                    //newsItems = Object.values(newsItems).flat(2)
                     var compiledHTML = ''
                     function unHtml(str) {
                         str = str.replace(/(<[\s\S]*?>)+/g, ' ')
@@ -159,9 +147,7 @@
                         str = str.replaceAll(' s ', "'s ")
                         return str.split('<')[0]
                     }
-                    
                     for (let i = 0; i < newsItems.length; i++) {
-                        
                         try {
                             var score = newsItems[i].score
                             var { title, pubDate, link, description } = newsItems[i].item
@@ -191,22 +177,16 @@
                         if (score < 0.5) {
                             continue
                         }
-
-
                         pubDate = pubDate?.substring(5, 16)
-
                         if (title.length > 150) {
                             title = title.substring(0, 87) + '...' 
                         }
-
-                        //description = unHtml(description + '')
                         description = description.replace(/\n/g, '')
 
                         if (source === 'JEWISHCURRENTS') {
                             description = title.split(' - ')[1]
                             title = title.split(' - ')[0]
                         }
-                        
                         if (description) {
                             if (description.length > 1000) {
                                 description = description.slice(0, 1000)
@@ -223,8 +203,6 @@
                             title = title.split(' ')
                             title = title.slice(0,-1).join(' ') + '&nbsp;' + title[title.length-1]
                         }
-                        
-
                         compiledHTML += `
                     <div class="news-item" id="${i}" title="${score}"><span class="news-infobar">
                             (${source} ${', '+pubDate ? pubDate : ''})<br />
@@ -232,23 +210,35 @@
                         </span>
                         <p class="description">${description}</p>
                     </div>`
-                            // newsItems[i] = { title, pubDate, link, description }
                         }
-                        
-
                     return compiledHTML.replaceAll(' ()', '')
-
-                    // return newsItems
-
                 }
 
-                const newsHtml = compileNews(newsItemsJ)
+                function searchNews (query, newsItems) {
+                    const fuse = new Fuse(newsItems, {
+                        keys: ['title', 'description', 'categories', 'content:encoded'],
+                        ignoreLocation: true,
+                        includeScore: true,
+                        useExtendedSearch: true
+                    })
+                    if (query.length > 4) {
+                        query = stemmer(query)
+                    }
+                    return fuse.search(query)
+                }
+                
+                function displayNews(query, newsItems) {
+                    if (query) {
+                        newsItemsJ = searchNews(query, newsItemsJ)
+                    }
+                    const newsHtml = compileNews(newsItemsJ)
+                    const sC = document.getElementById('search-content')
+                    sC.innerHTML = newsHtml
+                }
 
-                const sC = document.getElementById('search-content')
-
-                sC.innerHTML = newsHtml
-
-
+                var newsItemsJ = await updateNews()
+                const params = new URL(location.href).searchParams
+                displayNews(params.get('q'), newsItemsJ)
 
 
                 var sCon = document.querySelector('#search-content')
@@ -429,8 +419,6 @@
                 // Create a debounced version of updateGrid with a 250ms delay
 
                 window.addEventListener('resize', uGridD);
-
-
 
 
             })()

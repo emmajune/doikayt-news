@@ -38,8 +38,8 @@ app.get('/', async (req:any, res:any)=>{
 })
 
 
-// @ts-ignore
-global.newsItemCache = await readBucket() //not a problem I think
+//@ts-ignore
+// global.newsItemCache = await readBucket() //not a problem I think
 //@ts-ignore
 global.updateBool = true
 
@@ -73,15 +73,6 @@ const sourcesObj:any = {
 }
 const sourcesUrlArr = Object.values(sourcesObj)
 const sourceNames:any = Object.keys(sourcesObj)
-
-app.get('/favicon.png', async function (req, res) {
-  const size = 64;
-  const value = rando(999)
-  jdenticon.configure({ backColor: '#000'});
-  const png = jdenticon.toPng(value, size);
-  res.setHeader('Content-Type', 'image/png');
-  res.send(png)
-})
 
 // pantry test - JSON
 // app.get('/pantry-test', (req, res) => {
@@ -118,20 +109,33 @@ app.get('/api', async (req:any, res) => {
   // pageHTML = pageHTML.replace('/favicon.png', '/favicon.png?'+rando(9999))//attempts to trick browsers into refreshing favicon cache
   // res.type('html')
   // res.send(pageHTML)
+  res.set({
+    'Cache-Control': 's-maxage=1, stale-while-revalidate=59'
+  })
+
   res.type('json')
   res.send(newsJson)
   //@ts-ignore
   updateBucket(JSON.stringify(global.newsItemCache))
 })
 
-async function updateNeo() {
-  var newsObj = await constellateRSS(sourcesUrlArr, sourceNames)
-  var newsJson = JSON.stringify(newsObj)
-  return await neoCache(newsJson)
-}
+// async function updateNeo() {
+//   var newsObj = await constellateRSS(sourcesUrlArr, sourceNames)
+//   var newsJson = JSON.stringify(newsObj)
+//   return await neoCache(newsJson)
+// }
+
+app.get('/favicon.png', async function (req, res) {
+  const size = 64;
+  const value = rando(999)
+  jdenticon.configure({ backColor: '#000'});
+  const png = jdenticon.toPng(value, size);
+  res.setHeader('Content-Type', 'image/png');
+  res.send(png)
+})
 
 app.listen(1080)
-setInterval(updateNeo, 62000)
+// setInterval(updateNeo, 62000)
 
 export default app
 
