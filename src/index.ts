@@ -27,6 +27,14 @@ import constellateRSS from './fetchNews/constellateRSS.js'
 
 
 
+
+const app = express()
+
+app.get('/test', async (req:any, res:any)=>{
+  res.sendFile(path.join(__dirname, '..', 'components', 'local_news.html'))
+})
+
+
 // @ts-ignore
 global.newsItemCache = await readBucket() //not a problem I think
 //@ts-ignore
@@ -34,9 +42,6 @@ global.updateBool = true
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-
-const app = express()
-
 // const pantryID = "4b8eeebc-b2e8-404b-808d-da8a45297b77"
 // const pantryClient = new pantry(pantryID)
 
@@ -114,10 +119,6 @@ app.get('/api', async (req:any, res) => {
   res.send(newsJson)
   //@ts-ignore
   updateBucket(JSON.stringify(global.newsItemCache))
-})
-
-app.get('/test', async (req:any, res:any)=>{
-  res.sendFile(path.join(__dirname, '..', 'components', 'local_news.html'))
 })
 
 async function updateNeo() {
