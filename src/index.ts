@@ -30,7 +30,10 @@ import constellateRSS from './fetchNews/constellateRSS.js'
 
 const app = express()
 
-app.get('/test', async (req:any, res:any)=>{
+app.get('/', async (req:any, res:any)=>{
+  res.set({
+    'CDN-Cache-Control': 'max-age=604800'
+  });
   res.sendFile(path.join(__dirname, '..', 'components', 'local_news.html'))
 })
 
