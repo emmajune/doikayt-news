@@ -11,7 +11,7 @@
         <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
     </head>
     <body>
-        <form role="search">
+        <form role="search" action="#">
             <kelp-disclosure is-dropdown>
               <button type="button" tabindex="1">Sources</button>
               <ul id="selection-container">
@@ -37,7 +37,7 @@
                                 <input type="checkbox" id="the_nation" name="Article | The Nation" checked /> the_nation
                             </label>
                             <label for="npr">
-                                <input type="checkbox" id="npr" name="NPR Topics: News" checked /> npr
+                                <input type="checkbox" id="npr" name="NPR Topics: Politics" checked /> npr
                             </label>
                             <label for="drop_site_news">
                                 <input type="checkbox" id="drop_site_news" name="Drop Site News" checked /> drop_site_news
@@ -102,6 +102,9 @@
                             </label>
                             <label for="haitian_times">
                                 <input type="checkbox" id="haitian_times" name="The Haitian Times" checked /> haitian_times
+                            </label>
+                            <label for="dabanga">
+                                <input type="checkbox" id="dabanga" name="Dabanga Radio TV Online" checked /> dabanga
                             </label>
                     </div></li></details>
                     
@@ -223,14 +226,13 @@
                     if (sources.length > 0) {
                         for (const [key, value] of Object.entries(newsItems)) {
                             if (!sources.includes(key)) {
-                                console.log(key)
                                 delete newsItems[key]
                             }
                         }
                     }
                     newsItems = Object.values(newsItems).flat(2)
                         .sort((a,b)=>{
-                            let diff = +Date.parse(a.pubDate) - +Date.parse(b.pubDate)
+                            let diff = +Date.parse(b.pubDate) - +Date.parse(a.pubDate)
                             if (!diff) {
                                 diff = 0
                             }
@@ -322,7 +324,6 @@
 
 
                 function searchNews (query, newsItems) {
-                    console.log(query)
                     const fuse = new Fuse(newsItems, {
                         keys: ['title', 'description', 'categories', 'content:encoded'],
                         ignoreLocation: true,
@@ -345,7 +346,7 @@
                 }
 
                 var newsItemsJ = await updateNews()
-                displayNews(params.get('q'), newsItemsJ)
+                displayNews(searchbar.value, newsItemsJ)
 
 
                 var sCon = document.querySelector('#search-content')

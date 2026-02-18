@@ -32,7 +32,7 @@ const app = express()
 
 app.get('/', async (req:any, res:any)=>{
   res.set({
-    'Cache-Control': 'max-age=6048000000000000000000'
+    'Cache-Control': 'max-age=0'
   });
   res.sendFile(path.join(__dirname, '..', 'components', 'local_news.html'))
 })
@@ -50,7 +50,7 @@ const __dirname = path.dirname(__filename)
 
 const sourcesObj:any = {
   the_nation: {url: 'https://thenation.com/feed/?post_type=article', vp: 'GN'},
-  npr: {url: 'https://feeds.npr.org/1001/rss.xml', vp: 'GN'},
+  npr: {url: 'https://feeds.npr.org/1014/rss.xml', vp: 'GN'},
   // the_guardian: {url: 'https://www.theguardian.com/world/rss', vp: 'GN'},
   the_electronic_intifada: {url: 'https://electronicintifada.net/rss.xml', vp:'GS'},
   drop_site_news: {url: 'https://www.dropsitenews.com/feed', vp: 'GN'},
@@ -69,7 +69,8 @@ const sourcesObj:any = {
   p972_mag: {url: 'https://rss.app/feeds/aNuThbWh76dCx90s.xml', vp: 'GN'},
   jewish_currents: {url: 'https://jewishcurrents.org/feed', vp: 'GN'},
   jacobin: {url: 'http://jacobin.com/rss', vp: 'GN'},
-  propublica: {url: 'https://www.propublica.org/rss', vp: 'GN'}
+  propublica: {url: 'https://www.propublica.org/rss', vp: 'GN'},
+  dabanga: {url: 'https://www.dabangasudan.org/rss', vp: 'GS'}
 }
 const sourcesUrlArr = Object.values(sourcesObj)
 const sourceNames:any = Object.keys(sourcesObj)
