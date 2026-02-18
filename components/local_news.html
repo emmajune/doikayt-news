@@ -10,14 +10,14 @@
         <script async type="module" src="https://cdn.jsdelivr.net/npm/kelpui@1/js/kelp.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
     </head>
-    <body>
-        <form role="search" action="#">
+    <body style="display: none">
+        <form role="search" onsubmit="return false">
             <kelp-disclosure is-dropdown>
               <button type="button" tabindex="1">Sources</button>
               <ul id="selection-container">
                 <kelp-select-all id="ssa-container" target="#disclosed-sources input[type='checkbox']">
                   <label for="super-select-all">
-                    <input type="checkbox" role="switch" id="super-select-all" maybe-super-checked/>select all
+                    <input type="checkbox" role="switch" id="super-select-all" checked/>select all
                   </label>
                 </kelp-select-all>
                 <div id="disclosed-sources">
@@ -27,7 +27,7 @@
                         <summary style="padding: var(--size-m) !important">GN</summary>
                         <kelp-select-all id="ss-GN-c" target="#GN-div [type='checkbox']">
                             <label for="select-all-GN">
-                                <input type="checkbox" id="select-all-GN" checked>
+                                <input type="checkbox" id="select-all-GN">
                                 select all
                             </label>
                         </kelp-select-all>
@@ -114,7 +114,7 @@
               </ul>
             </kelp-disclosure>
             <input type="text" id="searchbar" class="inline-block" name="q" autocomplete="off" tabindex="2"></input>
-            <button id="submit-button" class="inline-block" tabindex="3">Go</button>
+            <button id="submit-button" class="inline-block" onclick="everything(true)" tabindex="3">Go</button>
         </form>
         <main>
             <section> 
@@ -209,9 +209,16 @@
             
         </style>
         <script>
-            (async ()=>{
+            async function everything(saveQuery) {
+                if (saveQuery) {
+                    localStorage.setItem('query', searchbar.value)
+                }
+                const savedQuery = localStorage.getItem('query')
+                if (savedQuery) {
+                    searchbar.value = savedQuery
+                }
                 const params = new URL(location.href).searchParams
-                searchbar.value = params.get('q')
+                searchbar.value = searchbar.value ? searchbar.value : params.get('q')
                 params.delete('q')
                 window.sources = [...params.keys()]
 
@@ -337,13 +344,13 @@
                             const dateA = Date.parse(a.item.pubDate)
                             const dateB = Date.parse(b.item.pubDate)
                             let diff = dateB - dateA
-                            console.log({a: [dateA, a.item.pubDate], b: [dateB, b.item.pubDate]})
                             return dateB-dateA
                         })
                     }
                     const newsHtml = compileNews(newsItemsJ)
                     const sC = document.getElementById('search-content')
                     sC.innerHTML = newsHtml
+                    document.body.style.display = 'block'
                 }
 
                 var newsItemsJ = await updateNews()
@@ -374,9 +381,9 @@
                         CSS_Rules = style_sheet.cssRules;
 
                         for (const rule of CSS_Rules) {
-                        if (rule.cssText.includes('.news-item {')) {
-                            var nItemStyleS = rule.cssText
-                        }
+                            if (rule.cssText.includes('.news-item {')) {
+                                var nItemStyleS = rule.cssText
+                            }
                         }
 
                             const emWidth = +nItemStyleS.split('width: ')[1].split('em')[0]
@@ -385,7 +392,7 @@
 
                 function sConHCR(nNewsI) {
                     if (!nNewsI) {
-                    return 'no news items?'
+                        return 'no news items?'
                     }
 
                     var nItem1W = em*emWidth
@@ -393,7 +400,7 @@
                     var sConW = +sConS.getPropertyValue('width').slice(0,-2)
 
                     var gap = +sConS.getPropertyValue('gap').split('px')[0]
-
+ 
                     nItem1W += gap
                     var height = getComputedStyle(newsItem1).height
                     height = height ? height : 'auto'
@@ -403,7 +410,7 @@
                     var nRows = Math.ceil(nNewsI/nCols)
 
                     if (nRows === 1) {
-                    nCols = nNewsI
+                        nCols = nNewsI
                     }
 
                     var height = height*nRows
@@ -420,10 +427,10 @@
 
 
                 function debounce(func, wait) {
-                    let timeout;
-                    return function (...args) {
-                    clearTimeout(timeout);
-                    timeout = setTimeout(() => func.apply(this, args), wait);
+                        let timeout;
+                        return function (...args) {
+                        clearTimeout(timeout);
+                        timeout = setTimeout(() => func.apply(this, args), wait);
                     };
                 }
                 var nItems = Array.from(document.querySelectorAll('.news-item'))
@@ -445,7 +452,6 @@
                     let sConD = sConHCR(newsItems.length)
                     sCon.style.height = sConD.height + 'px'
                     sCon.replaceChildren(...gridify(sConD.nRows, sConD.nCols, newsItems))
-                    fixTabIndex()
                 }
 
                 function gridify(rows, cols, gridlings) {
@@ -464,30 +470,30 @@
                     const remainder = gridlings.length % cols
 
                     if (remainder) {
-                    rows--
+                        rows--
                     }
 
                     var columns = []
 
                     for (let c = 1; c < cols+1; c++) {
-                    columns[c] = document.createElement('div')
-                    columns[c].className = "flex direction-column"
-                    const column = columns[c]
-                    for (let r = 1; r < rows+1; r++) {
-                        const gridIndex = (r - 1)*cols + c
-                        const elem = gridlings[gridIndex-1]
-                        if (elem) {
-                        //a element within newsItem
-                        try {
-                            elem.firstChild.children[1].tabIndex = gridIndex + 3
-                        }
-                        catch {
-                            console.log(elem)
-                        }
+                        columns[c] = document.createElement('div')
+                        columns[c].className = "flex direction-column"
+                        const column = columns[c]
+                        for (let r = 1; r < rows+1; r++) {
+                            const gridIndex = (r - 1)*cols + c
+                            const elem = gridlings[gridIndex-1]
+                            if (elem) {
+                            //a element within newsItem
+                            try {
+                                elem.firstChild.children[1].tabIndex = gridIndex + 3
+                            }
+                            catch {
+                                console.log(elem)
+                            }
 
+                            }
+                            column.append(elem)
                         }
-                        column.append(elem)
-                    }
                     }
 
                     if (remainder) {
@@ -497,9 +503,9 @@
                             const column = columns[cols-remainder+c]
                             const elem = leftovers[c-1]
                             if (elem) {
-                            if (elem.firstChild) {
-                                elem.firstChild.children[1].tabIndex = offset + c + 3
-                            }
+                                if (elem.firstChild) {
+                                    elem.firstChild.children[1].tabIndex = offset + c + 3
+                                }
                             }
                             column.append(elem)
                         }
@@ -508,30 +514,7 @@
                     return columns.slice(1)
                 }
                 //untabindex the above?
-                function fixTabIndex() {
-                    var heightsObj = {}
-                    var sC = document.getElementById('search-content')
-                    for (let c = 0; c < sC.children.length; c++) {
-                    var col = sC.children[c]
-                    var totalHeight = 0
-                    for (let r = 0; r < col.children.length; r++) {
-                        var elem = col.children[r]
-                        var elemStyle = getComputedStyle(elem)
-                        var height = +elemStyle.height.split('px')[0]
-                        heightsObj[c+'-'+r] = totalHeight
-                        totalHeight += height
-                    }
-                    }
-                    heightsArr = Object.entries(heightsObj)
-
-                    heightsArr = heightsArr.sort((a,b)=>{
-                    return b[1] - a[1]
-                    })
-
-
-                    var length = document.querySelectorAll('.news-item').length
-
-                }
+                
 
                 const uGridD = debounce(updateGrid, 250);
                 // Create a debounced version of updateGrid with a 250ms delay
@@ -539,7 +522,25 @@
                 window.addEventListener('resize', uGridD);
 
 
-            })()
+                var selectionContainer = document.getElementById('selection-container')
+
+                var superSelectAll = document.getElementById('super-select-all')
+
+                selectionContainer.addEventListener('change', (e)=>{
+                    if(e.target.checked){
+                        const isCheckbox = 'input[type="checkbox"]'
+                        const numCheckbox = document.querySelectorAll(isCheckbox).length
+                        const isChecked = 'input[type="checkbox"]:checked'
+                        const numChecked = document.querySelectorAll(isChecked).length
+                        console.log(numChecked + ' ' + numCheckbox)
+                    if (numCheckbox === numChecked + 1) {
+                        superSelectAll.click()
+                    }
+                    }
+                })
+
+            }
+            everything()
 
         </script>
     </body>

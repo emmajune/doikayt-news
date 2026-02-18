@@ -271,31 +271,6 @@
         }
         return columns.slice(1)
       }
-      //untabindex the above?
-      function fixTabIndex() {
-        var heightsObj = {}
-        var sC = document.getElementById('search-content')
-        for (let c = 0; c < sC.children.length; c++) {
-          var col = sC.children[c]
-          var totalHeight = 0
-          for (let r = 0; r < col.children.length; r++) {
-            var elem = col.children[r]
-            var elemStyle = getComputedStyle(elem)
-            var height = +elemStyle.height.split('px')[0]
-            heightsObj[c+'-'+r] = totalHeight
-            totalHeight += height
-          }
-        }
-        heightsArr = Object.entries(heightsObj)
-
-        heightsArr = heightsArr.sort((a,b)=>{
-          return b[1] - a[1]
-        })
-
-
-        var length = document.querySelectorAll('.news-item').length
-
-      }
 
       const uGridD = debounce(updateGrid, 250);
       // Create a debounced version of updateGrid with a 250ms delay
@@ -303,6 +278,7 @@
       window.addEventListener('resize', uGridD);
 
       var selectionContainer = document.getElementById('selection-container')
+
       selectionContainer.addEventListener('change', (e)=>{
         if(e.target.checked){
           const isCheckbox = 'input[type="checkbox"]'
