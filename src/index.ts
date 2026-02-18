@@ -110,7 +110,7 @@ app.get('/api', async (req:any, res) => {
   // res.type('html')
   // res.send(pageHTML)
   res.set({
-    'Cache-Control': 's-maxage=1, stale-while-revalidate=59'
+    'Cache-Control': 's-maxage=3, stale-while-revalidate=9999999999999999999999999999999'
   })
 
   res.type('json')
