@@ -231,13 +231,7 @@
                         }
                     }
                     newsItems = Object.values(newsItems).flat(2)
-                        .sort((a,b)=>{
-                            let diff = +Date.parse(b.pubDate) - +Date.parse(a.pubDate)
-                            if (!diff) {
-                                diff = 0
-                            }
-                            return diff
-                        })
+
                     return newsItems
                 }
 
@@ -339,6 +333,13 @@
                 function displayNews(query, newsItems) {
                     if (query) {
                         newsItemsJ = searchNews(query, newsItemsJ)
+                        newsItemsJ.sort((a,b)=>{
+                            const dateA = Date.parse(a.item.pubDate)
+                            const dateB = Date.parse(b.item.pubDate)
+                            let diff = dateB - dateA
+                            console.log({a: [dateA, a.item.pubDate], b: [dateB, b.item.pubDate]})
+                            return dateB-dateA
+                        })
                     }
                     const newsHtml = compileNews(newsItemsJ)
                     const sC = document.getElementById('search-content')
@@ -346,7 +347,19 @@
                 }
 
                 var newsItemsJ = await updateNews()
+
                 displayNews(searchbar.value, newsItemsJ)
+
+
+
+
+
+
+
+
+
+
+
 
 
                 var sCon = document.querySelector('#search-content')
@@ -404,7 +417,6 @@
                 const swapElements = (array, index1, index2) => {
                     array[index1] = array.splice(index2, 1, array[index1])[0];
                 };
-
 
 
                 function debounce(func, wait) {
@@ -479,18 +491,18 @@
                     }
 
                     if (remainder) {
-                    const offset = cols*rows
-                    const leftovers = gridlings.slice(-remainder)
-                    for (let c = 1; c < remainder+1; c++) {
-                        const column = columns[cols-remainder+c]
-                        const elem = leftovers[c-1]
-                        if (elem) {
-                        if (elem.firstChild) {
-                            elem.firstChild.children[1].tabIndex = offset + c + 3
+                        const offset = cols*rows
+                        const leftovers = gridlings.slice(-remainder)
+                        for (let c = 1; c < remainder+1; c++) {
+                            const column = columns[cols-remainder+c]
+                            const elem = leftovers[c-1]
+                            if (elem) {
+                            if (elem.firstChild) {
+                                elem.firstChild.children[1].tabIndex = offset + c + 3
+                            }
+                            }
+                            column.append(elem)
                         }
-                        }
-                        column.append(elem)
-                    }
 
                     }
                     return columns.slice(1)
