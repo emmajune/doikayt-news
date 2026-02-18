@@ -7,9 +7,6 @@
         <link rel="icon" type="image/png" href="/favicon.png">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/kelpui@1/css/kelp.css">
         <script async type="module" src="https://cdn.jsdelivr.net/npm/kelpui@1/js/kelp.js"></script>
-        <script type="module">
-            import {stemmer} from 'https://esm.sh/stemmer@2?bundle'
-        </script>
         <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
     </head>
     <body>
@@ -23,7 +20,92 @@
                   </label>
                 </kelp-select-all>
                 <div id="disclosed-sources">
-                  SOURCES_GO_HERE
+                  
+
+                    <li style="padding-top: 0; padding-bottom: 0;"><details>
+                        <summary style="padding: var(--size-m) !important">GN</summary>
+                        <kelp-select-all id="ss-GN-c" target="#GN-div [type='checkbox']">
+                            <label for="select-all-GN">
+                                <input type="checkbox" id="select-all-GN" checked>
+                                select all
+                            </label>
+                        </kelp-select-all>
+                        <div id="GN-div">
+                        
+                            <label for="the_nation">
+                                <input type="checkbox" id="the_nation" name="Article | The Nation" checked /> the_nation
+                            </label>
+                            <label for="npr">
+                                <input type="checkbox" id="npr" name="NPR Topics: News" checked /> npr
+                            </label>
+                            <label for="drop_site_news">
+                                <input type="checkbox" id="drop_site_news" name="Drop Site News" checked /> drop_site_news
+                            </label>
+                            <label for="in_these_times">
+                                <input type="checkbox" id="in_these_times" name="In These Times" checked /> in_these_times
+                            </label>
+                            <label for="dissent_magazine">
+                                <input type="checkbox" id="dissent_magazine" name="Dissent Magazine" checked /> dissent_magazine
+                            </label>
+                            <label for="mother_jones">
+                                <input type="checkbox" id="mother_jones" name="Mother Jones" checked /> mother_jones
+                            </label>
+                            <label for="counterpunch">
+                                <input type="checkbox" id="counterpunch" name="CounterPunch.org" checked /> counterpunch
+                            </label>
+                            <label for="truthout">
+                                <input type="checkbox" id="truthout" name="Latest &#8211; Truthout" checked /> truthout
+                            </label>
+                            <label for="democracy_now">
+                                <input type="checkbox" id="democracy_now" name="Democracy Now!" checked /> democracy_now
+                            </label>
+                            <label for="the_intercept">
+                                <input type="checkbox" id="the_intercept" name="The Intercept" checked /> the_intercept
+                            </label>
+                            <label for="p972_mag">
+                                <input type="checkbox" id="p972_mag" name="p972_mag" checked /> p972_mag
+                            </label>
+                            <label for="jewish_currents">
+                                <input type="checkbox" id="jewish_currents" name="Jewish Currents" checked /> jewish_currents
+                            </label>
+                            <label for="jacobin">
+                                <input type="checkbox" id="jacobin" name="Jacobin" checked /> jacobin
+                            </label>
+                            <label for="propublica">
+                                <input type="checkbox" id="propublica" name="ProPublica" checked /> propublica
+                            </label>
+                    </div></li></details><li style="padding-top: 0; padding-bottom: 0;"><details>
+                        <summary style="padding: var(--size-m) !important">GS</summary>
+                        <kelp-select-all id="ss-GS-c" target="#GS-div [type='checkbox']">
+                            <label for="select-all-GS">
+                                <input type="checkbox" id="select-all-GS" checked>
+                                select all
+                            </label>
+                        </kelp-select-all>
+                        <div id="GS-div">
+                        
+                            <label for="the_electronic_intifada">
+                                <input type="checkbox" id="the_electronic_intifada" name="The Electronic Intifada" checked /> the_electronic_intifada
+                            </label>
+                            <label for="al_jazeera">
+                                <input type="checkbox" id="al_jazeera" name="Al Jazeera &#8211; Breaking News, World News and Video from Al Jazeera" checked /> al_jazeera
+                            </label>
+                            <label for="international_viewpoint">
+                                <input type="checkbox" id="international_viewpoint" name="International Viewpoint - online socialist magazine" checked /> international_viewpoint
+                            </label>
+                            <label for="its_going_down">
+                                <input type="checkbox" id="its_going_down" name="It&#039;s Going Down" checked /> its_going_down
+                            </label>
+                            <label for="human_rights_watch">
+                                <input type="checkbox" id="human_rights_watch" name="Human Rights Watch News" checked /> human_rights_watch
+                            </label>
+                            <label for="haitian_times">
+                                <input type="checkbox" id="haitian_times" name="The Haitian Times" checked /> haitian_times
+                            </label>
+                    </div></li></details>
+                    
+                      
+
                 </div>
               </ul>
             </kelp-disclosure>
@@ -31,6 +113,7 @@
             <button id="submit-button" class="inline-block" tabindex="3">Go</button>
         </form>
         <main>
+            <div class="loader"></div> 
             <section> 
               <div id="search-content" class="flex justify-center direction-row wrap gap-l">
                 <!--skeletonsss-->
@@ -117,14 +200,66 @@
               margin-left: 4em;
             } */
             /* Chanut @ flaticon */
+
+            /* HTML: <div class="loader"></div> */
+.loader {
+  display: inline-flex;
+  gap: 10px;
+}
+.loader:before,
+.loader:after {
+  content: "";
+  height: 200px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border-style: solid;
+  border-width: 2px;
+  background:
+    linear-gradient(#222 0 0) top/100% 40% no-repeat,
+    radial-gradient(farthest-side,#000 95%,#0000) 50%/16px 16px no-repeat
+    #fff;
+  animation: 6s infinite ;
+  animation-name: l8-1, e8-2;
+}
+@keyframes l8-1 {
+  0%,
+  40%,
+  100%{background-size:100% 40%,16px 16px}
+  50%,
+  80% {background-size:100% 0% ,16px 16px}
+}
+@keyframes l8-2 {
+  0%,
+  50% {background-position:top,50% 50%}
+  60%,
+  65%{background-position:top,70% 50%}
+  70%,
+  75%{background-position:top,30% 50%}
+  90%,
+  100%{background-position:top,50% 50%}
+}
+
+            
         </style>
         <script>
             (async ()=>{
+                const params = new URL(location.href).searchParams
+                searchbar.value = params.get('q')
+                params.delete('q')
+                window.sources = [...params.keys()]
 
                 async function updateNews() {
                     let jsonP = await fetch('/api')
                     jsonT = await jsonP.text()
                     let newsItems = JSON.parse(jsonT)
+                    if (sources.length > 0) {
+                        for (const [key, value] of Object.entries(newsItems)) {
+                            if (!sources.includes(key)) {
+                                console.log(key)
+                                delete newsItems[key]
+                            }
+                        }
+                    }
                     newsItems = Object.values(newsItems).flat(2)
                         .sort((a,b)=>{
                             let diff = +Date.parse(a.pubDate) - +Date.parse(b.pubDate)
@@ -214,7 +349,12 @@
                     return compiledHTML.replaceAll(' ()', '')
                 }
 
+                //stemmer code from "words" on github
+                var x={ational:"ate",tional:"tion",enci:"ence",anci:"ance",izer:"ize",bli:"ble",alli:"al",entli:"ent",eli:"e",ousli:"ous",ization:"ize",ation:"ate",ator:"ate",alism:"al",iveness:"ive",fulness:"ful",ousness:"ous",aliti:"al",iviti:"ive",biliti:"ble",logi:"log"},r={icate:"ic",ative:"",alize:"al",iciti:"ic",ical:"ic",ful:"",ness:""},$="[^aeiou]",o="[aeiouy]",i="("+$+"[^aeiouy]*)",n="("+o+"[aeiou]*)",l=new RegExp("^"+i+"?"+n+i),g=new RegExp("^"+i+"?"+n+i+n+"?$"),s=new RegExp("^"+i+"?("+n+i+"){2,}"),a=new RegExp("^"+i+"?"+o),f=new RegExp("^"+i+o+"[^aeiouwxy]$"),v=/ll$/,z=/^(.+?)e$/,p=/^(.+?)y$/,w=/^(.+?(s|t))(ion)$/,b=/^(.+?)(ed|ing)$/,m=/(at|bl|iz)$/,E=/^(.+?)eed$/,y=/^.+?[^s]s$/,I=/^.+?(ss|i)es$/,L=/([^aeiouylsz])\1$/,R=/^(.+?)(ational|tional|enci|anci|izer|bli|alli|entli|eli|ousli|ization|ation|ator|alism|iveness|fulness|ousness|aliti|iviti|biliti|logi)$/,d=/^(.+?)(icate|ative|alize|iciti|ical|ful|ness)$/,C=/^(.+?)(al|ance|ence|er|ic|able|ible|ant|ement|ment|ent|ou|ism|ate|iti|ous|ive|ize)$/;function stemmer(u){let e=String(u).toLowerCase();if(e.length<3)return e;let c=!1;e.codePointAt(0)===121&&(c=!0,e="Y"+e.slice(1)),I.test(e)?e=e.slice(0,-2):y.test(e)&&(e=e.slice(0,-1));let t;return(t=E.exec(e))?l.test(t[1])&&(e=e.slice(0,-1)):(t=b.exec(e))&&a.test(t[1])&&(e=t[1],m.test(e)?e+="e":L.test(e)?e=e.slice(0,-1):f.test(e)&&(e+="e")),(t=p.exec(e))&&a.test(t[1])&&(e=t[1]+"i"),(t=R.exec(e))&&l.test(t[1])&&(e=t[1]+x[t[2]]),(t=d.exec(e))&&l.test(t[1])&&(e=t[1]+r[t[2]]),(t=C.exec(e))?s.test(t[1])&&(e=t[1]):(t=w.exec(e))&&s.test(t[1])&&(e=t[1]),(t=z.exec(e))&&(s.test(t[1])||g.test(t[1])&&!f.test(t[1]))&&(e=t[1]),v.test(e)&&s.test(e)&&(e=e.slice(0,-1)),c&&(e="y"+e.slice(1)),e}
+
+
                 function searchNews (query, newsItems) {
+                    console.log(query)
                     const fuse = new Fuse(newsItems, {
                         keys: ['title', 'description', 'categories', 'content:encoded'],
                         ignoreLocation: true,
@@ -237,7 +377,6 @@
                 }
 
                 var newsItemsJ = await updateNews()
-                const params = new URL(location.href).searchParams
                 displayNews(params.get('q'), newsItemsJ)
 
 
@@ -315,8 +454,6 @@
 
 
                 var nItemsB = Array.from(document.querySelectorAll('.news-item'))
-
-            
 
             
                 updateGrid()
@@ -422,41 +559,7 @@
 
 
             })()
-            
 
-
-            
-
-
-
-            /*
-            let query = req.url.split('q=')[1]
-  query = query ? query.replaceAll('+', ' ') : undefined
-  query = decodeURIComponent(query)
-  var sources:any = Object.keys(req.query);
-  sources.pop()
-  sources = sources.length ? sources : undefined
-  if (sources) {
-    for (let i = 0; i < sources.length; i++) {
-      let source = sources[i]
-      sources[i] = sourcesObj[source]
-    }
-  }
-            */
-
-
-            /*
-            var htmlNews = await theNews.html
-  var nNewsI = await theNews.length
-  var disclosureHTML = disclosureHtml(sourceNames, sourcesObj)
-  var pageHTML:any = await readFile(path.join(__dirname, '..', 'components', 'news.html'))
-  pageHTML = pageHTML.toString().replace('SOURCES_GO_HERE', disclosureHTML)
-  var isAllSources = (!sources || (sources?.length === sourcesUrlArr.length))
-  pageHTML = pageHTML.replace(' maybe-super-checked', isAllSources ? ' checked' : '')
-  pageHTML = pageHTML.replace('QUERY_GOES_HERE', (query != 'undefined') ? query : '')
-  pageHTML = pageHTML.replace('nNewsI_GOES_HERE', nNewsI ? nNewsI : '1')
-  pageHTML = pageHTML.replaceAll('THE_NEWS_GOES_HERE', htmlNews ? htmlNews : 'Search for something!')
-            */
         </script>
     </body>
 </html>

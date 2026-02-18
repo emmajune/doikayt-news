@@ -32,7 +32,7 @@ const app = express()
 
 app.get('/', async (req:any, res:any)=>{
   res.set({
-    'CDN-Cache-Control': 'max-age=604800'
+    'Cache-Control': 'max-age=6048000000000000000000'
   });
   res.sendFile(path.join(__dirname, '..', 'components', 'local_news.html'))
 })
