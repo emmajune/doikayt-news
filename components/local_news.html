@@ -21,7 +21,7 @@
                   </label>
                 </kelp-select-all>
                 <div id="disclosed-sources">
-                  
+
 
                     <li style="padding-top: 0; padding-bottom: 0;"><details>
                         <summary style="padding: var(--size-m) !important">GN</summary>
@@ -212,15 +212,25 @@
             async function everything(saveQuery) {
                 if (saveQuery) {
                     localStorage.setItem('query', searchbar.value)
+                    localStorage.setItem('sources', JSON.stringify(window.sources.flat()))
                 }
                 const savedQuery = localStorage.getItem('query')
                 if (savedQuery) {
                     searchbar.value = savedQuery
                 }
+                
                 const params = new URL(location.href).searchParams
-                searchbar.value = searchbar.value ? searchbar.value : params.get('q')
-                params.delete('q')
-                window.sources = [...params.keys()]
+                searchbar.value = searchbar.value ? searchbar.value : params.get('q')//?
+                var sourceInputs = sourceInputs = [...document.querySelectorAll('#disclosed-sources div input')]
+                for (let i = 0; i < sourceInputs.length; i++) {
+                    if (sourceInputs[i].checked) {
+                        sourceInputs[i] = sourceInputs[i].name
+                    }
+                    else {
+                        delete sourceInputs[i]
+                    }
+                }
+                window.sources = sourceInputs
 
                 async function updateNews() {
                     let jsonP = await fetch('/api', {
