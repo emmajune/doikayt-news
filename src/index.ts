@@ -112,7 +112,11 @@ app.get('/api', async (req:any, res) => {
   // res.send(pageHTML)
   res.set({
     'Cache-Control': 's-maxage=5, stale-while-revalidate=999999999999999',
-    'CDN-Cache-Control': 's-maxage=3, stale-while-revalidate=9999999999999999'
+    'CDN-Cache-Control': 's-maxage=3, stale-while-revalidate=9999999999999999',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': '*',
+    'Access-Control-Allow-Credentials': 'false'
   })
 
   res.type('json')
