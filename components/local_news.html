@@ -290,7 +290,7 @@
                             source = source.split('.')[1].split('.')[0]
                         }
                         score = 1 - score
-                        if (score < 0.5) {
+                        if (score < 0.3) {
                             continue
                         }
                         pubDate = pubDate?.substring(5, 16)
@@ -321,7 +321,7 @@
                         }
                         compiledHTML += `
                     <div class="news-item" id="${i}" title="${score}"><span class="news-infobar">
-                            (${source} ${', '+pubDate ? pubDate : ''})<br />
+                            (${source}${pubDate ? `, ${pubDate}` : ''})<br />
                             <a href="${link}">${title}</a>
                         </span>
                         <p class="description">${description}</p>
@@ -349,15 +349,23 @@
                 
                 function displayNews(query, newsItems) {
                     if (query) {
-                        newsItemsJ = searchNews(query, newsItemsJ)
-                        newsItemsJ.sort((a,b)=>{
+                        newsItems = searchNews(query, newsItems)
+                        newsItems.sort((a,b)=>{
                             const dateA = Date.parse(a.item.pubDate)
                             const dateB = Date.parse(b.item.pubDate)
                             let diff = dateB - dateA
                             return dateB-dateA
                         })
                     }
-                    const newsHtml = compileNews(newsItemsJ)
+                    else {
+                        newsItems.sort((a,b)=>{
+                            const dateA = Date.parse(a.pubDate)
+                            const dateB = Date.parse(b.pubDate)
+                            let diff = dateB - dateA
+                            return dateB-dateA
+                        })
+                    }
+                    const newsHtml = compileNews(newsItems)
                     const sC = document.getElementById('search-content')
                     sC.innerHTML = newsHtml
                     document.body.style.display = 'block'
