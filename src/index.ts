@@ -49,10 +49,12 @@ const __dirname = path.dirname(__filename)
 // const pantryID = "4b8eeebc-b2e8-404b-808d-da8a45297b77"
 // const pantryClient = new pantry(pantryID)
 
+//TODO: implement timeout for fetchh
+
 const sourcesObj:any = {
   the_nation: {url: 'https://thenation.com/feed/?post_type=article', vp: 'GN'},
   npr: {url: 'https://feeds.npr.org/1014/rss.xml', vp: 'GN'},
-  // the_guardian: {url: 'https://www.theguardian.com/world/rss', vp: 'GN'},
+  the_guardian: {url: 'https://www.theguardian.com/world/rss', vp: 'GN'},
   the_electronic_intifada: {url: 'https://electronicintifada.net/rss.xml', vp:'GS'},
   drop_site_news: {url: 'https://www.dropsitenews.com/feed', vp: 'GN'},
   in_these_times: {url: 'https://inthesetimes.com/rss', vp: 'GN'},
@@ -60,7 +62,7 @@ const sourcesObj:any = {
   mother_jones: {url: 'https://www.motherjones.com/feed', vp: 'GN'},
   al_jazeera: {url: 'https://www.aljazeera.com/xml/rss/all.xml', vp: 'GS'},
   counterpunch: {url: 'https://counterpunch.org/feed', vp: 'GN'},
-  international_viewpoint: {url: 'https://internationalviewpoint.org/spip.php?page=backend', vp: 'GS'},
+  // international_viewpoint: {url: 'https://internationalviewpoint.org/spip.php?page=backend', vp: 'GS'},
   its_going_down: {url: 'https://itsgoingdown.org/feed/', vp: 'GS'},
   human_rights_watch: {url: 'https://www.hrw.org/rss/news', vp: 'GS'},
   haitian_times: {url: 'https://haitiantimes.com/feed/', vp: 'GS'},
