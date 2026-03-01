@@ -7,7 +7,7 @@ export async function neoCache(jsonStr) {
   var api = new NeoCities('d0ikayt', '=sp2eRLmigs^kPi')
   api.upload([
     {name: 'cache.json', path: '/tmp/cache.json'}
-  ], function(resp) {
+  ], function(resp) { 
     return resp
   })
 }
