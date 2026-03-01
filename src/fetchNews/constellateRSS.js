@@ -9,7 +9,6 @@ export async function constellateRSS(sourcesArr, sourceNames) {
   var promises = []
   for (let i = 0; i < sourcesArr.length; i++) {
     var source = sourcesArr[i]
-    console.log(source.url)
     if (!source) {
       collectedRSS = undefined
       break
