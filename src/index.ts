@@ -69,7 +69,7 @@ const sourcesObj:any = {
   truthout: {url: 'https://truthout.org/latest/feed/', vp: 'GN'},
   democracy_now: {url: 'https://www.democracynow.org/democracynow.rss', vp: 'GN'},
   the_intercept: {url: 'https://theintercept.com/feed/', vp: 'GN'},
-  p972_mag: {url: 'https://rss.app/feeds/aNuThbWh76dCx90s.xml', vp: 'GN'},
+  // p972_mag: {url: 'https://rss.app/feeds/aNuThbWh76dCx90s.xml', vp: 'GN'},
   jewish_currents: {url: 'https://jewishcurrents.org/feed', vp: 'GN'},
   jacobin: {url: 'http://jacobin.com/rss', vp: 'GN'},
   propublica: {url: 'https://www.propublica.org/rss', vp: 'GN'},
@@ -95,7 +95,8 @@ const sourceNames:any = Object.keys(sourcesObj)
 //       .then((response:any) => res.send(response))
 // })
 
-app.get('/api', async (req:any, res) => {
+
+async function api(res:any) {
   var time1 = Date.now()
   
   // set timeout before first update
@@ -124,8 +125,12 @@ app.get('/api', async (req:any, res) => {
 
   res.type('json')
   res.send(newsJson)
+}
+
+app.get('/api', async (req:any, res) => {
+  api(res)
   //@ts-ignore
-  updateBucket(JSON.stringify(global.newsItemCache))
+  //updateBucket(JSON.stringify(global.newsItemCache))
 })
 
 // async function updateNeo() {
