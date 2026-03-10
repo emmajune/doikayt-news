@@ -96,7 +96,7 @@ const sourceNames:any = Object.keys(sourcesObj)
 // })
 
 
-async function api(res:any) {
+async function api(res:any, textOnly=false) {
   var time1 = Date.now()
   
   // set timeout before first update
@@ -122,13 +122,36 @@ async function api(res:any) {
     'Access-Control-Allow-Headers': '*',
     'Access-Control-Allow-Credentials': 'false'
   })
-
-  res.type('json')
-  res.send(newsJson)
+  if (textOnly) {
+    var wordsoup = ''
+    if (newsJson) {
+      var objArr = Object.values(newsJson).flat(2);
+      for (let i = 0; i < objArr.length; i++) {
+        // @ts-ignore
+        let title: string = objArr[i]?.title;
+        if (!title) {
+          continue;
+        }
+        wordsoup += title + '. ';
+      }
+    }
+    res.type('text')
+    res.send(wordsoup)
+  }
+  else {
+    res.type('json')
+    res.send(newsJson)
+  }
 }
 
 app.get('/api', async (req:any, res) => {
   api(res)
+  //@ts-ignore
+  //updateBucket(JSON.stringify(global.newsItemCache))
+})
+
+app.get('/api_text', async (req:any, res) => {
+  api(res, true)
   //@ts-ignore
   //updateBucket(JSON.stringify(global.newsItemCache))
 })
