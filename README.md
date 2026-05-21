@@ -1,1 +1,1 @@
-news sources: dabanga, haitian times, human rights watch, npr, the guardian, truthout, electronic intifada, the intercept, counterpunch, mother jones, dissent magazine, 
+news sources: The Nation, NPR, Drop Site News, In These Times, Dissent Magazine, Mother Jones, Counterpunch, Truthout, Democracy Now, The Intercept, +972 Magazine, Jewish Currents, Jacobin, Propublica, EI, Al Jazeera, It\\'s Going Down, Human Rights Watch, Haitian Times, and Dabanga
