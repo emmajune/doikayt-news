@@ -31,10 +31,6 @@ import constellateRSS from './fetchNews/constellateRSS.js'
 const app = express()
 
 app.get('/', async (req:any, res:any)=>{
-  res.set({
-    'Cache-Control': 'max-age=9999999999',
-    'CDN-Cache-Control': 'max-age=999999999999'
-  });
   var html = await readFile(path.join(__dirname, '..', 'components', 'local_news.html'), 'utf-8')
   res.type('html')
   res.send(html.replace('?RANDOM', '?'+rando()))
