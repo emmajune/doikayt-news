@@ -150,24 +150,18 @@
             }
             form button {
               position: relative;
-              /* left: -6px; */
               top: -2px;
             }
             input[type="submit"]:focus {
               z-index: 1;
             }
       
-            /* #search-content {
-              border-style: solid;
-              /* overflow: auto; */
-            /* } */
-      
             #search-content > div {
               justify-content: space-between;
             }
       
             .news-item {
-              width: 18em;
+              width: 14em;
               --max-height: 11em;
               display: inline-block;
               overflow: hidden;
@@ -176,7 +170,7 @@
               border-style: solid;
               padding: var(--size-xs);
               padding-bottom: 0;
-              flex-grow: 1;
+              flex-shrink: 1;
             }
             .news-infobar {
               color: hotpink;
@@ -197,18 +191,10 @@
               text-decoration-skip-ink: auto;
             }
             .description {
-              max-height: 10ch;
+              max-height: 12ch;
               margin-bottom: var(--size-xs);
               overflow: hidden;
-              /* text-wrap: balance; */
             }
-            /* #search-content {
-              margin-left: 4em;
-            } */
-            /* Chanut @ flaticon */
-
-            /* HTML: <div class="loader"></div> */
-
             
         </style>
         <script>
@@ -243,6 +229,7 @@
                     })
                     jsonT = await jsonP.text()
                     let newsItems = JSON.parse(jsonT)
+                    console.log(newsItems)
                     if (sources.length > 0) {
                         for (const [key, value] of Object.entries(newsItems)) {
                             if (!sources.includes(key)) {
@@ -251,10 +238,9 @@
                         }
                     }
                     newsItems = Object.values(newsItems).flat(2)
-
                     return newsItems
                 }
-
+                
                 function compileNews(newsItems) {
                     var compiledHTML = ''
                     function unHtml(str) {
@@ -267,25 +253,19 @@
                         return str.split('<')[0]
                     }
                     for (let i = 0; i < newsItems.length; i++) {
-                        try {
-                            var score = newsItems[i].score
-                            var { title, pubDate, link, description } = newsItems[i].item
-                            var contentEncoded = newsItems[i].item['content:encoded']
-                            if (contentEncoded) {
-                                description += ' '+contentEncoded
-                            }
+                        const newsItem = newsItems[i]
+                        var { title, pubDate, link, description } = newsItem?.item || newsItem
+                        var score = newsItem?.score
+                        const contentEncoded = newsItem['content:encoded']
+                        var imgUrl = newsItem?.image?.url
+                        console.log(newsItem)
+                        if (contentEncoded) {
+                            description += ' '+contentEncoded
                         }
-                        catch {
-                            var { title, pubDate, link, description } = newsItems[i]
-                            var score = newsItems[i]?.score
-                            var contentEncoded = newsItems[i]['content:encoded']
-                            if (contentEncoded) {
-                                description += ' '+contentEncoded
-                            }
-                        }   
-                        
                         let source = link.split('://')[1].split('/')[0]
                         source = source.toUpperCase()
+                        let longTitle = ''
+                        let longDesc = ''
                         if (source.split('.').length === 2) {
                             source = source.split('.')[0]
                         }
@@ -298,6 +278,7 @@
                         }
                         pubDate = pubDate?.substring(5, 16)
                         if (title.length > 150) {
+                            longTitle = title
                             title = title.substring(0, 87) + '...' 
                         }
                         description = description.replace(/\n/g, '')
@@ -307,12 +288,14 @@
                             title = title.split(' - ')[0]
                         }
                         if (description) {
-                            if (description.length > 1000) {
-                                description = description.slice(0, 1000)
-                            }
                             description = description.replace('undefined', '')
+                            if (description.length > 140) {
+                                longDesc = description
+                                description = longDesc.slice(0, longDesc.indexOf(' ', 110) + 1)
+                            }
+                            
                         }
-                        else {
+                        else {//upon indifference
                             description = ''
                         }
                         if (!score) {
@@ -322,8 +305,15 @@
                             title = title.split(' ')
                             title = title.slice(0,-1).join(' ') + '&nbsp;' + title[title.length-1]
                         }
+                        if (longDesc) {
+                            description = `<details>
+                                            <summary style="margin: 0; padding: 0;">${description}</summary>
+                                            ${longDesc.split(description)[1]}
+                                        </details>`
+                        }
                         compiledHTML += `
                     <div class="news-item" id="${i}" title="${score}"><span class="news-infobar">
+                            ${imgUrl ? `<img src="${imgURl}" />` : ''}
                             (${source}${pubDate ? `, ${pubDate}` : ''})<br />
                             <a href="${link}">${title}</a>
                         </span>
@@ -339,7 +329,7 @@
 
                 function searchNews (query, newsItems) {
                     const fuse = new Fuse(newsItems, {
-                        keys: ['title', 'description', 'categories', 'content:encoded'],
+                        keys: ['title', 'description', 'categories', 'content:encoded', 'image'],
                         ignoreLocation: true,
                         includeScore: true,
                         useExtendedSearch: true
@@ -377,17 +367,6 @@
                 var newsItemsJ = await updateNews()
 
                 displayNews(searchbar.value, newsItemsJ)
-
-
-
-
-
-
-
-
-
-
-
 
 
                 var sCon = document.querySelector('#search-content')
@@ -476,17 +455,6 @@
                 }
 
                 function gridify(rows, cols, gridlings) {
-                    // var minLength = (rows - 1)*cols + 1 
-
-                    // if (gridlings.length < minLength) {
-                    //   throw('gridlings < minLength (fix "cols" & "rows")')
-                    // }
-
-                    // var maxLength = rows*cols
-
-                    // if (gridlings.length > maxLength) {
-                    //   throw('gridlings > minLength (fix "cols" & "rows")')
-                    // }
 
                     const remainder = gridlings.length % cols
 
@@ -517,24 +485,8 @@
                         }
                     }
 
-                    if (remainder) {
-                        const offset = cols*rows
-                        const leftovers = gridlings.slice(-remainder)
-                        for (let c = 1; c < remainder+1; c++) {
-                            const column = columns[cols-remainder+c]
-                            const elem = leftovers[c-1]
-                            if (elem) {
-                                if (elem.firstChild) {
-                                    elem.firstChild.children[1].tabIndex = offset + c + 3
-                                }
-                            }
-                            column.append(elem)
-                        }
-
-                    }
                     return columns.slice(1)
                 }
-                //untabindex the above?
                 
 
                 const uGridD = debounce(updateGrid, 250);

@@ -16,7 +16,6 @@ export async function fetchNews(sources, sourceNames, update=false) {
     else {
         newsItems = global.newsItemCache
     }
-            
     return newsItems
 }
 

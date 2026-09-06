@@ -10,6 +10,7 @@
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "fast-xml-parser": "^5.3.4",
+    "feedsmith": "^2.9.6",
     "fuse.js": "^7.1.0",
     "jdenticon": "^3.3.0",
     "neocities": "^0.0.3",

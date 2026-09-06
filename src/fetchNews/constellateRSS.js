@@ -1,8 +1,7 @@
 import { XMLParser } from "fast-xml-parser"
 
 
-export async function constellateRSS(sourcesArr, sourceNames) {
-  //+972mag and jewishcurrents and jacobin don't work
+export async function constellateRSS(sourcesArr) {
 
   let collectedRSS = {} //the grand list of rss items
 
@@ -43,8 +42,10 @@ export async function constellateRSS(sourcesArr, sourceNames) {
         let sourceObject = jObj.rss.channel
         const sourceItemsArr = sourceObject.item
         var sourceName = jObj.rss.channel.title
+        console.log(Object.keys(sourceItemsArr[0]))
         for (let i = 0; i < sourceItemsArr.length; i++) {
           var {description, title, link, pubDate} = sourceItemsArr[i]
+          
           var contentEncoded = sourceItemsArr[i]['content:encoded']
           if (description) {
             if (description == '0') {
@@ -83,7 +84,7 @@ export async function constellateRSS(sourcesArr, sourceNames) {
       str = str.replaceAll(/ ve | ve$/g, "'ve ")
       return str.split('<')[0]
   }
-
+  // console.log(Object.keys(collectedRSS['Article | The Nation'][0]))
   return collectedRSS
 }
 
