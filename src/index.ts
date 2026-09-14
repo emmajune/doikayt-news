@@ -15,18 +15,7 @@ import { readFile, writeFile } from 'fs/promises'
 import { rando } from '@nastyox/rando.js'
 import * as jdenticon from 'jdenticon'
 
-//import pantry from 'pantry-node'
-
-import fetchNews from './fetchNews/index.js'
-// import disclosureHtml from './disclosureHtml.js'
-
-// import neoCache from './cache/neoCache.js'
-// import {updateBucket, readBucket} from './cache/supaCache.js'
-
-// import constellateRSS from './fetchNews/constellateRSS.js'
-
-
-
+import {gatherFeeds} from '../src/gatherFeeds.ts'
 
 const app = express()
 
@@ -76,35 +65,10 @@ const sourcesObj:any = {
 const sourcesUrlArr = Object.values(sourcesObj)
 const sourceNames:any = Object.keys(sourcesObj)
 
-// pantry test - JSON
-// app.get('/pantry-test', (req, res) => {
-//   const payload = {
-//   animalSounds: {
-//     goose: 'honk!',
-//     // dragon: 'RAWRR',
-//     // kitty: 'mraow',
-//     // bug: 'chitter'
-//   }
-// }
-
-//   pantryClient.basket
-//       //get, create, delete
-//       .update('news-cache', {payload})
-//       .then((response:any) => res.send(response))
-// })
-
 
 async function api(res:any, textOnly=false) {
   var time1 = Date.now()
-  
-  // set timeout before first update
-  // @ts-ignore
-  var newsJson = await fetchNews(sourcesUrlArr, sourceNames, global.updateBool)
-  // @ts-ignore
-  if (global.updateBool) {
-    // @ts-ignore
-    global.updateBool = false
-  }
+  var newsJson = await gatherFeeds();
   var time2 = Date.now()
   console.log('Overall, took ' + (time2-time1) + 'ms')
   
@@ -113,8 +77,8 @@ async function api(res:any, textOnly=false) {
   // res.type('html')
   // res.send(pageHTML)
   res.set({
-    'Cache-Control': 's-maxage=5, stale-while-revalidate=999999999999999',
-    'CDN-Cache-Control': 's-maxage=3, stale-while-revalidate=9999999999999999',
+    'Cache-Control': 's-maxage=5, stale-while-revalidate=0',
+    'CDN-Cache-Control': 's-maxage=3, stale-while-revalidate=0',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': '*',
@@ -133,6 +97,7 @@ async function api(res:any, textOnly=false) {
         wordsoup += title + '. ';
       }
     }
+
     res.type('text')
     res.send(wordsoup)
   }

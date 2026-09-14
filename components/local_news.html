@@ -23,92 +23,7 @@
                 <div id="disclosed-sources">
 
 
-                    <li style="padding-top: 0; padding-bottom: 0;"><details>
-                        <summary style="padding: var(--size-m) !important">GN</summary>
-                        <kelp-select-all id="ss-GN-c" target="#GN-div [type='checkbox']">
-                            <label for="select-all-GN">
-                                <input type="checkbox" id="select-all-GN">
-                                select all
-                            </label>
-                        </kelp-select-all>
-                        <div id="GN-div">
-                        
-                            <label for="the_nation">
-                                <input type="checkbox" id="the_nation" name="Article | The Nation" checked /> the_nation
-                            </label>
-                            <label for="npr">
-                                <input type="checkbox" id="npr" name="NPR Topics: Politics" checked /> npr
-                            </label>
-                            <label for="drop_site_news">
-                                <input type="checkbox" id="drop_site_news" name="Drop Site News" checked /> drop_site_news
-                            </label>
-                            <label for="in_these_times">
-                                <input type="checkbox" id="in_these_times" name="In These Times" checked /> in_these_times
-                            </label>
-                            <label for="dissent_magazine">
-                                <input type="checkbox" id="dissent_magazine" name="Dissent Magazine" checked /> dissent_magazine
-                            </label>
-                            <label for="mother_jones">
-                                <input type="checkbox" id="mother_jones" name="Mother Jones" checked /> mother_jones
-                            </label>
-                            <label for="counterpunch">
-                                <input type="checkbox" id="counterpunch" name="CounterPunch.org" checked /> counterpunch
-                            </label>
-                            <label for="truthout">
-                                <input type="checkbox" id="truthout" name="Latest &#8211; Truthout" checked /> truthout
-                            </label>
-                            <label for="democracy_now">
-                                <input type="checkbox" id="democracy_now" name="Democracy Now!" checked /> democracy_now
-                            </label>
-                            <label for="the_intercept">
-                                <input type="checkbox" id="the_intercept" name="The Intercept" checked /> the_intercept
-                            </label>
-                            <label for="p972_mag">
-                                <input type="checkbox" id="p972_mag" name="p972_mag" checked /> p972_mag
-                            </label>
-                            <label for="jewish_currents">
-                                <input type="checkbox" id="jewish_currents" name="Jewish Currents" checked /> jewish_currents
-                            </label>
-                            <label for="jacobin">
-                                <input type="checkbox" id="jacobin" name="Jacobin" checked /> jacobin
-                            </label>
-                            <label for="propublica">
-                                <input type="checkbox" id="propublica" name="ProPublica" checked /> propublica
-                            </label>
-                    </div></li></details><li style="padding-top: 0; padding-bottom: 0;"><details>
-                        <summary style="padding: var(--size-m) !important">GS</summary>
-                        <kelp-select-all id="ss-GS-c" target="#GS-div [type='checkbox']">
-                            <label for="select-all-GS">
-                                <input type="checkbox" id="select-all-GS" checked>
-                                select all
-                            </label>
-                        </kelp-select-all>
-                        <div id="GS-div">
-                        
-                            <label for="the_electronic_intifada">
-                                <input type="checkbox" id="the_electronic_intifada" name="The Electronic Intifada" checked /> the_electronic_intifada
-                            </label>
-                            <label for="al_jazeera">
-                                <input type="checkbox" id="al_jazeera" name="Al Jazeera &#8211; Breaking News, World News and Video from Al Jazeera" checked /> al_jazeera
-                            </label>
-                            <label for="international_viewpoint">
-                                <input type="checkbox" id="international_viewpoint" name="International Viewpoint - online socialist magazine" checked /> international_viewpoint
-                            </label>
-                            <label for="its_going_down">
-                                <input type="checkbox" id="its_going_down" name="It&#039;s Going Down" checked /> its_going_down
-                            </label>
-                            <label for="human_rights_watch">
-                                <input type="checkbox" id="human_rights_watch" name="Human Rights Watch News" checked /> human_rights_watch
-                            </label>
-                            <label for="haitian_times">
-                                <input type="checkbox" id="haitian_times" name="The Haitian Times" checked /> haitian_times
-                            </label>
-                            <label for="dabanga">
-                                <input type="checkbox" id="dabanga" name="Dabanga Radio TV Online" checked /> dabanga
-                            </label>
-                    </div></li></details>
                     
-                      
 
                 </div>
               </ul>
@@ -155,20 +70,19 @@
             input[type="submit"]:focus {
               z-index: 1;
             }
-      
             #search-content > div {
               justify-content: space-between;
             }
-      
             .news-item {
-              width: 14em;
+              width: 18.3em;
               --max-height: 11em;
               display: inline-block;
               overflow: hidden;
               flex-basis: fit-content;
               margin-top: calc(var(--size-l));
               border-style: solid;
-              padding: var(--size-xs);
+              border-width: 2px;
+              padding: 8px;
               padding-bottom: 0;
               flex-shrink: 1;
             }
@@ -179,11 +93,11 @@
             .news-infobar p {
               display: inline-block;
               margin-bottom: 0;
+              text-wrap: balance;
             }
             .news-infobar a {
-              /* text-wrap: balance; */
               display: inline-block;
-              max-height: 4.3em;
+              /* max-height: 4.3em; */
               overflow: hidden;
               width: 100%;
               text-decoration-thickness: 1px;
@@ -195,17 +109,207 @@
               margin-bottom: var(--size-xs);
               overflow: hidden;
             }
-            
+            .news-item summary:focus {
+                font-style: italic;
+            }
+            .news-item details[open] summary {
+                font-style: italic;
+            }
         </style>
         <script>
+            function sourcesToHtml(sourcesObj) {
+                let reSourcesObj = {}//fixxxx
+                for (let source in sourcesObj) {
+                    const sourceObj = sourcesObj[source];
+                    const origin = sourceObj.origin;
+                    if (!Object.hasOwn(reSourcesObj, origin)) {
+                        reSourcesObj[origin] = [];
+                    }
+                    reSourcesObj[origin].push(source);
+                }
+                let sourcesHtml = `<li style="padding-top: 0; padding-bottom: 0;">`;
+                const selectAll = `
+                                    <kelp-select-all id="ss-${origin}-c" target="#${origin}-div [type='checkbox']">
+                                            <label for="select-all-${origin}">
+                                                <input type="checkbox" id="select-all-${origin}">
+                                                select all
+                                            </label>
+                                        </kelp-select-all>
+                `
+                for (let origin in reSourcesObj) {
+                    let sourcesArr = reSourcesObj[origin];
+                    sourcesHtml += `
+                                    <li style="padding-top: 0; padding-bottom: 0;"><details>
+                                        <summary style="padding: var(--size-m) !important">${origin}</summary>
+                                        ${(sourcesArr.length > 1) ? selectAll : ''}
+                                        <div id="${origin}-div">`;
+                    for (let source of sourcesArr) {
+                        sourcesHtml += `
+                                            <label for="${source}">
+                                                <input type="checkbox" id="${source}" name="${source}" checked /> ${source}
+                                            </label>`;
+                    }
+                    sourcesHtml += `
+                                        </div></li>
+                    `;
+                };
+                return sourcesHtml;
+            }
+
+            async function updateNews() {
+                const jsonReq = await fetch('/api', {
+                    method: 'GET',
+                    credentials: 'include',
+                    mode: 'no-cors',
+                });
+                const jsonT = await jsonReq.text();
+                const sourcesObj = JSON.parse(jsonT);
+                document.getElementById('disclosed-sources').innerHTML = sourcesToHtml(sourcesObj);
+                const newsItems = [];
+                for (source in sourcesObj) {
+                    const sourceObj = sourcesObj[source];
+                    newsItems.push(sourceObj.items);
+                }
+                return newsItems.flat(2);
+            }
+            
+
+            function compileNews(newsItems) {
+                var compiledHTML = ''
+                function unHtml(str) {
+                    str = str.replace(/(<[\s\S]*?>)+/g, ' ')
+                    str = str.replaceAll('\\n', ' ')
+                    str = str.replaceAll(/&[^\s]+?;/g, ' ')
+                    str = str.replace(/&[^\s]*?;/g, ' ')
+                    str = str.replaceAll('  ', ' ')
+                    str = str.replaceAll(' s ', "'s ")
+                    return str.split('<')[0]
+                }
+                for (let i = 0; i < newsItems.length; i++) {
+                    const newsItem = newsItems[i]
+                    var { title, pubDate, link, description, imgUrl } = newsItem?.item || newsItem
+                    var score = newsItem?.score
+                    if (imgUrl) {
+                        console.log(imgUrl)
+                    }
+                    let source = link.split('://')[1].split('/')[0]
+                    source = source.toUpperCase()
+                    let longTitle = ''
+                    let longDesc = ''
+                    if (source.split('.').length === 2) {
+                        source = source.split('.')[0]
+                    }
+                    else {
+                        source = source.split('.')[1].split('.')[0]
+                    }
+                    score = 1 - score
+                    if (score < 0.3) {
+                        continue
+                    }
+                    pubDate = pubDate?.substring(5, 16)
+                    if (title.length > 150) {
+                        longTitle = title
+                        title = title.substring(0, 87) + '...' 
+                    }
+                    if (source === 'JEWISHCURRENTS') {
+                        description = title.split(' - ')[1]
+                        title = title.split(' - ')[0]
+                    }
+                    if (description) {
+                        description = description.replace(/\n/g, '')
+                        description = description.replace('undefined', '')
+                        description = description.replace(/([a-z.,'":;!?])([A-Z])/g, '$1 / $2').replaceAll('Click to expand Image', '')
+                        if (description.length > 140) {
+                            longDesc = description
+                            if (longDesc.length > 500) {
+                                longDesc = longDesc.slice(0, longDesc.indexOf(' ', 500) + 1) + '...'
+                            }
+                            description = longDesc.slice(0, longDesc.indexOf(' ', 110) + 1)
+                        }
+                        
+                    }
+                    else {
+                        description = ''
+                    }
+                    if (!score) {
+                        score = ''
+                    }
+                    if (typeof title === 'string') {
+                        title = title.split(' ')
+                        title = title.slice(0,-1).join(' ') + '&nbsp;' + title[title.length-1]
+                    }
+                    if (longDesc) {
+                        description = `<details>
+                                        <summary style="margin: 0; padding: 0;">${description}...</summary>
+                                        ${longDesc.split(description)[1]}
+                                    </details>`
+                    }
+                    compiledHTML += `
+                <div class="news-item" id="${i}" title="${score}"><span class="news-infobar">
+                        ${imgUrl ? `<img style="display:block; width: 100%" src="${imgUrl}" />` : ''}
+                        (${source}${pubDate ? `, ${pubDate}` : ''})<br />
+                        <a href="${link}">${title}</a>
+                    </span>
+                    <p class="description">${description}</p>
+                </div>`
+                    }
+                return compiledHTML.replaceAll(' ()', '')
+            }
+
+            document.body.addEventListener('keydown', (e) => {
+                if (e.target.tagName === "DETAILS" && e.key === "Enter") {
+                    e.target.children[0].focus();
+                }
+            })
+
+            //stemmer code from "words" on github
+            var x={ational:"ate",tional:"tion",enci:"ence",anci:"ance",izer:"ize",bli:"ble",alli:"al",entli:"ent",eli:"e",ousli:"ous",ization:"ize",ation:"ate",ator:"ate",alism:"al",iveness:"ive",fulness:"ful",ousness:"ous",aliti:"al",iviti:"ive",biliti:"ble",logi:"log"},r={icate:"ic",ative:"",alize:"al",iciti:"ic",ical:"ic",ful:"",ness:""},$="[^aeiou]",o="[aeiouy]",i="("+$+"[^aeiouy]*)",n="("+o+"[aeiou]*)",l=new RegExp("^"+i+"?"+n+i),g=new RegExp("^"+i+"?"+n+i+n+"?$"),s=new RegExp("^"+i+"?("+n+i+"){2,}"),a=new RegExp("^"+i+"?"+o),f=new RegExp("^"+i+o+"[^aeiouwxy]$"),v=/ll$/,z=/^(.+?)e$/,p=/^(.+?)y$/,w=/^(.+?(s|t))(ion)$/,b=/^(.+?)(ed|ing)$/,m=/(at|bl|iz)$/,E=/^(.+?)eed$/,y=/^.+?[^s]s$/,I=/^.+?(ss|i)es$/,L=/([^aeiouylsz])\1$/,R=/^(.+?)(ational|tional|enci|anci|izer|bli|alli|entli|eli|ousli|ization|ation|ator|alism|iveness|fulness|ousness|aliti|iviti|biliti|logi)$/,d=/^(.+?)(icate|ative|alize|iciti|ical|ful|ness)$/,C=/^(.+?)(al|ance|ence|er|ic|able|ible|ant|ement|ment|ent|ou|ism|ate|iti|ous|ive|ize)$/;function stemmer(u){let e=String(u).toLowerCase();if(e.length<3)return e;let c=!1;e.codePointAt(0)===121&&(c=!0,e="Y"+e.slice(1)),I.test(e)?e=e.slice(0,-2):y.test(e)&&(e=e.slice(0,-1));let t;return(t=E.exec(e))?l.test(t[1])&&(e=e.slice(0,-1)):(t=b.exec(e))&&a.test(t[1])&&(e=t[1],m.test(e)?e+="e":L.test(e)?e=e.slice(0,-1):f.test(e)&&(e+="e")),(t=p.exec(e))&&a.test(t[1])&&(e=t[1]+"i"),(t=R.exec(e))&&l.test(t[1])&&(e=t[1]+x[t[2]]),(t=d.exec(e))&&l.test(t[1])&&(e=t[1]+r[t[2]]),(t=C.exec(e))?s.test(t[1])&&(e=t[1]):(t=w.exec(e))&&s.test(t[1])&&(e=t[1]),(t=z.exec(e))&&(s.test(t[1])||g.test(t[1])&&!f.test(t[1]))&&(e=t[1]),v.test(e)&&s.test(e)&&(e=e.slice(0,-1)),c&&(e="y"+e.slice(1)),e}
+
+
+            function searchNews (query, newsItems) {
+                const fuse = new Fuse(newsItems, {
+                    keys: ['title', 'description', 'categories',],
+                    ignoreLocation: true,
+                    includeScore: true,
+                    useExtendedSearch: true
+                })
+                if (query.length > 4) {
+                    query = stemmer(query)
+                }
+                return fuse.search(query)
+            }
+            
+            function displayNews(query, newsItems) {
+                if (query) {
+                    newsItems = searchNews(query, newsItems)
+                    newsItems.sort((a,b)=>{
+                        const dateA = Date.parse(a.item.pubDate)
+                        const dateB = Date.parse(b.item.pubDate)
+                        let diff = dateB - dateA
+                        return dateB-dateA
+                    })
+                } else {
+                    newsItems.sort((a,b)=>{
+                        const dateA = Date.parse(a.pubDate);
+                        const dateB = Date.parse(b.pubDate);
+                        let diff = dateB - dateA;
+                        return dateB-dateA;
+                    })
+                }
+                const newsHtml = compileNews(newsItems);
+                const sC = document.getElementById('search-content');
+                sC.innerHTML = newsHtml;
+                document.body.style.display = 'block';
+            }d
+            
             async function everything(saveQuery) {
                 if (saveQuery) {
-                    localStorage.setItem('query', searchbar.value)
-                    localStorage.setItem('sources', JSON.stringify(window.sources.flat()))
+                    localStorage.setItem('query', searchbar.value);
+                    localStorage.setItem('sources', JSON.stringify(window.sources.flat()));
                 }
-                const savedQuery = localStorage.getItem('query')
+                const savedQuery = localStorage.getItem('query');
                 if (savedQuery) {
-                    searchbar.value = savedQuery
+                    searchbar.value = savedQuery;
                 }
                 
                 const params = new URL(location.href).searchParams
@@ -213,183 +317,42 @@
                 var sourceInputs = sourceInputs = [...document.querySelectorAll('#disclosed-sources div input')]
                 for (let i = 0; i < sourceInputs.length; i++) {
                     if (sourceInputs[i].checked) {
-                        sourceInputs[i] = sourceInputs[i].name
+                        sourceInputs[i] = sourceInputs[i].name;
                     }
                     else {
-                        delete sourceInputs[i]
+                        delete sourceInputs[i];
                     }
                 }
-                window.sources = sourceInputs
+                window.sources = sourceInputs;
+                console.log(window.sources);
 
-                async function updateNews() {
-                    let jsonP = await fetch('/api', {
-                        method: 'GET',
-                        credentials: 'include',
-                        mode: 'no-cors',
-                    })
-                    jsonT = await jsonP.text()
-                    let newsItems = JSON.parse(jsonT)
-                    console.log(newsItems)
-                    if (sources.length > 0) {
-                        for (const [key, value] of Object.entries(newsItems)) {
-                            if (!sources.includes(key)) {
-                                delete newsItems[key]
-                            }
-                        }
-                    }
-                    newsItems = Object.values(newsItems).flat(2)
-                    return newsItems
-                }
-                
-                function compileNews(newsItems) {
-                    var compiledHTML = ''
-                    function unHtml(str) {
-                        str = str.replace(/(<[\s\S]*?>)+/g, ' ')
-                        str = str.replaceAll('\\n', ' ')
-                        str = str.replaceAll(/&[^\s]+?;/g, ' ')
-                        str = str.replace(/&[^\s]*?;/g, ' ')
-                        str = str.replaceAll('  ', ' ')
-                        str = str.replaceAll(' s ', "'s ")
-                        return str.split('<')[0]
-                    }
-                    for (let i = 0; i < newsItems.length; i++) {
-                        const newsItem = newsItems[i]
-                        var { title, pubDate, link, description } = newsItem?.item || newsItem
-                        var score = newsItem?.score
-                        const contentEncoded = newsItem['content:encoded']
-                        var imgUrl = newsItem?.image?.url
-                        console.log(newsItem)
-                        if (contentEncoded) {
-                            description += ' '+contentEncoded
-                        }
-                        let source = link.split('://')[1].split('/')[0]
-                        source = source.toUpperCase()
-                        let longTitle = ''
-                        let longDesc = ''
-                        if (source.split('.').length === 2) {
-                            source = source.split('.')[0]
-                        }
-                        else {
-                            source = source.split('.')[1].split('.')[0]
-                        }
-                        score = 1 - score
-                        if (score < 0.3) {
-                            continue
-                        }
-                        pubDate = pubDate?.substring(5, 16)
-                        if (title.length > 150) {
-                            longTitle = title
-                            title = title.substring(0, 87) + '...' 
-                        }
-                        description = description.replace(/\n/g, '')
+                var newsItemsJ = await updateNews();
 
-                        if (source === 'JEWISHCURRENTS') {
-                            description = title.split(' - ')[1]
-                            title = title.split(' - ')[0]
-                        }
-                        if (description) {
-                            description = description.replace('undefined', '')
-                            if (description.length > 140) {
-                                longDesc = description
-                                description = longDesc.slice(0, longDesc.indexOf(' ', 110) + 1)
-                            }
-                            
-                        }
-                        else {//upon indifference
-                            description = ''
-                        }
-                        if (!score) {
-                            score = ''
-                        }
-                        if (typeof title === 'string') {
-                            title = title.split(' ')
-                            title = title.slice(0,-1).join(' ') + '&nbsp;' + title[title.length-1]
-                        }
-                        if (longDesc) {
-                            description = `<details>
-                                            <summary style="margin: 0; padding: 0;">${description}</summary>
-                                            ${longDesc.split(description)[1]}
-                                        </details>`
-                        }
-                        compiledHTML += `
-                    <div class="news-item" id="${i}" title="${score}"><span class="news-infobar">
-                            ${imgUrl ? `<img src="${imgURl}" />` : ''}
-                            (${source}${pubDate ? `, ${pubDate}` : ''})<br />
-                            <a href="${link}">${title}</a>
-                        </span>
-                        <p class="description">${description}</p>
-                    </div>`
-                        }
-                    return compiledHTML.replaceAll(' ()', '')
-                }
-
-                //stemmer code from "words" on github
-                var x={ational:"ate",tional:"tion",enci:"ence",anci:"ance",izer:"ize",bli:"ble",alli:"al",entli:"ent",eli:"e",ousli:"ous",ization:"ize",ation:"ate",ator:"ate",alism:"al",iveness:"ive",fulness:"ful",ousness:"ous",aliti:"al",iviti:"ive",biliti:"ble",logi:"log"},r={icate:"ic",ative:"",alize:"al",iciti:"ic",ical:"ic",ful:"",ness:""},$="[^aeiou]",o="[aeiouy]",i="("+$+"[^aeiouy]*)",n="("+o+"[aeiou]*)",l=new RegExp("^"+i+"?"+n+i),g=new RegExp("^"+i+"?"+n+i+n+"?$"),s=new RegExp("^"+i+"?("+n+i+"){2,}"),a=new RegExp("^"+i+"?"+o),f=new RegExp("^"+i+o+"[^aeiouwxy]$"),v=/ll$/,z=/^(.+?)e$/,p=/^(.+?)y$/,w=/^(.+?(s|t))(ion)$/,b=/^(.+?)(ed|ing)$/,m=/(at|bl|iz)$/,E=/^(.+?)eed$/,y=/^.+?[^s]s$/,I=/^.+?(ss|i)es$/,L=/([^aeiouylsz])\1$/,R=/^(.+?)(ational|tional|enci|anci|izer|bli|alli|entli|eli|ousli|ization|ation|ator|alism|iveness|fulness|ousness|aliti|iviti|biliti|logi)$/,d=/^(.+?)(icate|ative|alize|iciti|ical|ful|ness)$/,C=/^(.+?)(al|ance|ence|er|ic|able|ible|ant|ement|ment|ent|ou|ism|ate|iti|ous|ive|ize)$/;function stemmer(u){let e=String(u).toLowerCase();if(e.length<3)return e;let c=!1;e.codePointAt(0)===121&&(c=!0,e="Y"+e.slice(1)),I.test(e)?e=e.slice(0,-2):y.test(e)&&(e=e.slice(0,-1));let t;return(t=E.exec(e))?l.test(t[1])&&(e=e.slice(0,-1)):(t=b.exec(e))&&a.test(t[1])&&(e=t[1],m.test(e)?e+="e":L.test(e)?e=e.slice(0,-1):f.test(e)&&(e+="e")),(t=p.exec(e))&&a.test(t[1])&&(e=t[1]+"i"),(t=R.exec(e))&&l.test(t[1])&&(e=t[1]+x[t[2]]),(t=d.exec(e))&&l.test(t[1])&&(e=t[1]+r[t[2]]),(t=C.exec(e))?s.test(t[1])&&(e=t[1]):(t=w.exec(e))&&s.test(t[1])&&(e=t[1]),(t=z.exec(e))&&(s.test(t[1])||g.test(t[1])&&!f.test(t[1]))&&(e=t[1]),v.test(e)&&s.test(e)&&(e=e.slice(0,-1)),c&&(e="y"+e.slice(1)),e}
+                displayNews(searchbar.value, newsItemsJ);
 
 
-                function searchNews (query, newsItems) {
-                    const fuse = new Fuse(newsItems, {
-                        keys: ['title', 'description', 'categories', 'content:encoded', 'image'],
-                        ignoreLocation: true,
-                        includeScore: true,
-                        useExtendedSearch: true
-                    })
-                    if (query.length > 4) {
-                        query = stemmer(query)
-                    }
-                    return fuse.search(query)
-                }
-                
-                function displayNews(query, newsItems) {
-                    if (query) {
-                        newsItems = searchNews(query, newsItems)
-                        newsItems.sort((a,b)=>{
-                            const dateA = Date.parse(a.item.pubDate)
-                            const dateB = Date.parse(b.item.pubDate)
-                            let diff = dateB - dateA
-                            return dateB-dateA
-                        })
-                    }
-                    else {
-                        newsItems.sort((a,b)=>{
-                            const dateA = Date.parse(a.pubDate)
-                            const dateB = Date.parse(b.pubDate)
-                            let diff = dateB - dateA
-                            return dateB-dateA
-                        })
-                    }
-                    const newsHtml = compileNews(newsItems)
-                    const sC = document.getElementById('search-content')
-                    sC.innerHTML = newsHtml
-                    document.body.style.display = 'block'
-                }
-
-                var newsItemsJ = await updateNews()
-
-                displayNews(searchbar.value, newsItemsJ)
-
-
-                var sCon = document.querySelector('#search-content')
-                var sConS = getComputedStyle(sCon)
-                var newsItem1 = document.querySelector('.news-item')
-                var nItem1S = getComputedStyle(newsItem1)
+                var sCon = document.querySelector('#search-content');
+                var sConS = getComputedStyle(sCon);
+                var newsItem1 = document.querySelector('.news-item');
+                var nItem1S = getComputedStyle(newsItem1);
                 // search-content -> {height, nCols, nRows}
 
-                const em = +nItem1S.getPropertyValue('font-size').slice(0,-2)
+                const em = +nItem1S.getPropertyValue('font-size').slice(0,-2);
 
                 style_sheet = document.styleSheets[document.styleSheets.length-1];
-                        CSS_Rules = style_sheet.cssRules;
+                CSS_Rules = style_sheet.cssRules;
 
-                        for (const rule of CSS_Rules) {
-                            if (rule.cssText.includes('.news-item {')) {
-                                var nItemStyleS = rule.cssText
-                            }
-                        }
+                for (const rule of CSS_Rules) {
+                    if (rule.cssText.includes('.news-item {')) {
+                        var nItemStyleS = rule.cssText
+                    }
+                }
 
-                            const emWidth = +nItemStyleS.split('width: ')[1].split('em')[0]
+                const emWidth = +nItemStyleS.split('width: ')[1].split('em')[0]
 
-                    const mHeightEm = +nItemStyleS.split('max-height: ')[1].split('em')[0]
+                const mHeightEm = +nItemStyleS.split('max-height: ')[1].split('em')[0]
 
+                //search content -> {height, columns, rows}
                 function sConHCR(nNewsI) {
                     if (!nNewsI) {
                         return 'no news items?'
@@ -417,15 +380,10 @@
 
                     return {height, nCols, nRows}
                 }
-                //from https://dev.to/teaganga/understanding-debounce-in-javascript-a-guide-with-examples-3cm4
 
                 var nNewsI = newsItemsJ.length
 
-                const swapElements = (array, index1, index2) => {
-                    array[index1] = array.splice(index2, 1, array[index1])[0];
-                };
-
-
+                //from https://dev.to/teaganga/understanding-debounce-in-javascript-a-guide-with-examples-3cm4
                 function debounce(func, wait) {
                         let timeout;
                         return function (...args) {
@@ -433,27 +391,13 @@
                         timeout = setTimeout(() => func.apply(this, args), wait);
                     };
                 }
-                var nItems = Array.from(document.querySelectorAll('.news-item'))
-                
-                if (!newsItems) {
-                    var newsItems = Array.from(sCon.cloneNode(true).children)
-                }
-
-
-
-                var nItemsB = Array.from(document.querySelectorAll('.news-item'))
-
-            
-                updateGrid()
-
-
                 function updateGrid() {
                     var test = []
                     let sConD = sConHCR(newsItems.length)
                     sCon.style.height = sConD.height + 'px'
                     sCon.replaceChildren(...gridify(sConD.nRows, sConD.nCols, newsItems))
                 }
-
+                //uses flexbox columns to create a masonry-like grid
                 function gridify(rows, cols, gridlings) {
 
                     const remainder = gridlings.length % cols
@@ -472,14 +416,18 @@
                             const gridIndex = (r - 1)*cols + c
                             const elem = gridlings[gridIndex-1]
                             if (elem) {
-                            //a element within newsItem
-                            try {
-                                elem.firstChild.children[1].tabIndex = gridIndex + 3
-                            }
-                            catch {
-                                console.log(elem)
-                            }
-
+                                //a element within newsItem
+                                const hasImg = elem.firstChild.children[0].tagName === 'IMG';
+                                try {;
+                                    //todo: un-hardcode this stuff better!!
+                                    elem.firstChild.children[1 + hasImg].tabIndex = gridIndex + 3;
+                                    if (elem.children.length == 4) {
+                                        elem.children[2].tabIndex = gridIndex + 3;
+                                    }
+                                }
+                                catch {
+                                    console.log(elem)
+                                }
                             }
                             column.append(elem)
                         }
@@ -487,13 +435,20 @@
 
                     return columns.slice(1)
                 }
+                var nItems = Array.from(document.querySelectorAll('.news-item'))
                 
+                if (!newsItems) {
+                    var newsItems = Array.from(sCon.cloneNode(true).children)
+                }
 
+                var nItemsB = Array.from(document.querySelectorAll('.news-item'))
+            
+                updateGrid()
+                
                 const uGridD = debounce(updateGrid, 250);
                 // Create a debounced version of updateGrid with a 250ms delay
 
                 window.addEventListener('resize', uGridD);
-
 
                 var selectionContainer = document.getElementById('selection-container')
 
@@ -506,9 +461,9 @@
                         const isChecked = 'input[type="checkbox"]:checked'
                         const numChecked = document.querySelectorAll(isChecked).length
                         console.log(numChecked + ' ' + numCheckbox)
-                    if (numCheckbox === numChecked + 1) {
-                        superSelectAll.click()
-                    }
+                        if (numCheckbox === numChecked + 1) {
+                            superSelectAll.click()
+                        }
                     }
                 })
 
