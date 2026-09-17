@@ -76,10 +76,6 @@ app.get('/api', async (req:any, res) => {
   //updateBucket(JSON.stringify(global.newsItemCache))
 })
 
-app.get('/neotest', async (req:any, res) => {
-  res.send(await neoCache(cachedJson));
-})
-
 
 
 // async function updateNeo() {
