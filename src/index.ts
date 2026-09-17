@@ -44,7 +44,7 @@ var cachedJson = await gatherFeeds();
 
 setInterval(async ()=>{
   cachedJson = await gatherFeeds();
-  neoCache(cachedJson);
+  await neoCache(cachedJson);
 }, 120000);
 
 async function api(res:any, newsJson = '') {
@@ -70,7 +70,7 @@ app.get('/api', async (req:any, res) => {
     api(res, cachedJson);
   } else {
     cachedJson = await api(res);
-    neoCache(cachedJson);
+    await neoCache(cachedJson);
   }
   //@ts-ignore
   //updateBucket(JSON.stringify(global.newsItemCache))

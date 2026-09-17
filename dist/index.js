@@ -30,7 +30,7 @@ const __dirname = path.dirname(__filename);
 var cachedJson = await gatherFeeds();
 setInterval(async () => {
     cachedJson = await gatherFeeds();
-    neoCache(cachedJson);
+    await neoCache(cachedJson);
 }, 120000);
 async function api(res, newsJson = '') {
     var time1 = performance.now();
@@ -55,13 +55,13 @@ app.get('/api', async (req, res) => {
     }
     else {
         cachedJson = await api(res);
-        neoCache(cachedJson);
+        await neoCache(cachedJson);
     }
     //@ts-ignore
     //updateBucket(JSON.stringify(global.newsItemCache))
 });
-app.get('/lol', async (req, res) => {
-    res.send(`site: ${process.env.NEOCITIES_SITE}, pw: ${process.env.NEOCITIES_PW}`);
+app.get('/neotest', async (req, res) => {
+    res.send(await neoCache(cachedJson));
 });
 // async function updateNeo() {
 //   var newsObj = await constellateRSS(sourcesUrlArr, sourceNames)
