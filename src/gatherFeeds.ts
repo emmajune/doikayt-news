@@ -204,13 +204,7 @@ export async function gatherFeeds() {
     leftycartoons: {url: 'https://leftycartoons.com/rss', origin: 'US'},
     unicornriot: {url: "https://www.unicornriot.ninja/rss", origin: "US"},
     leftvoice: {url: 'https://www.leftvoice.org/rss', origin: 'International'},
-    newhumanitarian: {url: 'https://www.thenewhumanitarian.org/feed', origin: 'International'}
-    // hongkongfreepress: {'url': 'https://hongkongfp.com/rss', origin: 'China'} not explicitly social-justice focused    // newlefttimes -- monthlyyy
-
-    
-
-    //many sources from progressive international news wire
-    
+    newhumanitarian: {url: 'https://www.thenewhumanitarian.org/feed', origin: 'International'},
     africaisacountry: {'url': 'https://africasacountry.com/feed', origin: 'International'}
 }
     var t1 = performance.now();
