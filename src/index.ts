@@ -65,7 +65,7 @@ app.get('/api', async (req:any, res) => {
     api(res, cachedJson);
   } else {
     cachedJson = await api(res);
-    console.log(await neoCache(cachedJson));
+    neoCache(cachedJson);
   }
   //@ts-ignore
   //updateBucket(JSON.stringify(global.newsItemCache))

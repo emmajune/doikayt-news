@@ -34,6 +34,7 @@
               </div>
             </section>
         </main>
+        <p style="padding: 1em; font-weight: bold;">Copyright 2026 Emma Knisbacher. Licensed under <a href="https://www.gnu.org/licenses/gpl-3.0.html">GPL 4(+)</a> with the caveat that all reproductions/redistributions of this software may not support or advocate for (racial) capitalism, imperialism, authoritarianism, or any other form of bigotry. This clause must be included in the licenses of any reproductions or redistributions. <a href="https://github.com/emmajune/doikayt-news">Gitub Source Code</a>.</p>
         <style>
             #sources-button {
                 margin-right: .5em;
@@ -304,12 +305,14 @@
 
             function searchNews(query, newsItems) {
                 const fuse = new Fuse(newsItems, {
-                    keys: ['title', 'description', 'link'],
+                    keys: [{name: 'title', weight: 2}, {name: 'description', weight: 1}, {name: 'link', weight:1}],
                     ignoreLocation: true,
                     includeScore: true,
                     useExtendedSearch: true,
                     threshold: .3,
-                    useTokenSearch: true
+                    useTokenSearch: true,
+                    tokenMatch: 'any',
+                    findAllMatches: true
                 })
                 if (query.length > 4) {
                     query = stemmer(query)
