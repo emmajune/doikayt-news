@@ -190,15 +190,14 @@ export async function gatherFeeds() {
         // feminisminindia: {'url': 'https://feminisminindia.com/rss', origin: 'India', noimg: true}, // weird image loading
         lausancollective: { url: 'https://lausancollective.com/rss', origin: 'China' },
         junputh: { url: 'https://english.junputh.com/rss', origin: 'India' },
-        himalmag: { url: 'https://www.himalmag.com/rs', origin: 'International' },
+        himalmag: { url: 'https://www.himalmag.com/rss', origin: 'International' },
         hcn: { url: 'https://www.hcn.org/rss', origin: 'US' },
         amnesty: { url: 'https://www.amnesty.org/en/rss', origin: 'International' },
         _404media: { url: 'https://www.404media.co/rss', origin: 'US' },
         commondreams: { url: 'https://www.commondreams.org/feeds/news.rss', origin: 'US' },
         leftycartoons: { url: 'https://leftycartoons.com/rss', origin: 'US' },
         unicornriot: { url: "https://www.unicornriot.ninja/rss", origin: "US" },
-        // hongkongfreepress: {'url': 'https://hongkongfp.com/rss', origin: 'China'} not explicitly social-justice focused    // newlefttimes -- monthlyyy
-        //many sources from progressive international news wire
+        leftvoice: { url: 'https://www.leftvoice.org/rss', origin: 'International' },
         africaisacountry: { 'url': 'https://africasacountry.com/feed', origin: 'International' }
     };
     var t1 = performance.now();

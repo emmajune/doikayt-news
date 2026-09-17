@@ -10,7 +10,6 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { readFile } from 'fs/promises';
-import * as jdenticon from 'jdenticon';
 import { gatherFeeds } from '../src/gatherFeeds.js';
 import { neoCache } from '../src/cache/neoCache.js';
 const app = express();
@@ -28,7 +27,11 @@ const __dirname = path.dirname(__filename);
 // const pantryID = "4b8eeebc-b2e8-404b-808d-da8a45297b77"
 // const pantryClient = new pantry(pantryID)
 //TODO: implement timeout for fetchh
-var cachedJson = '';
+var cachedJson = await gatherFeeds();
+setInterval(async () => {
+    cachedJson = await gatherFeeds();
+    neoCache(cachedJson);
+}, 120000);
 async function api(res, newsJson = '') {
     var time1 = performance.now();
     newsJson = newsJson || await gatherFeeds();
@@ -52,24 +55,19 @@ app.get('/api', async (req, res) => {
     }
     else {
         cachedJson = await api(res);
-        console.log(await neoCache(cachedJson));
+        neoCache(cachedJson);
     }
     //@ts-ignore
     //updateBucket(JSON.stringify(global.newsItemCache))
+});
+app.get('/lol', async (req, res) => {
+    res.send(`site: ${process.env.NEOCITIES_SITE}, pw: ${process.env.NEOCITIES_PW}`);
 });
 // async function updateNeo() {
 //   var newsObj = await constellateRSS(sourcesUrlArr, sourceNames)
 //   var newsJson = JSON.stringify(newsObj)
 //   return await neoCache(newsJson)
 // }
-app.get('/favicon.png', async function (req, res) {
-    const size = 64;
-    const value = Math.random() * 999;
-    jdenticon.configure({ backColor: '#000' });
-    const png = jdenticon.toPng(value, size);
-    res.setHeader('Content-Type', 'image/png');
-    res.send(png);
-});
 app.listen(1080);
 // setInterval(updateNeo, 62000)
 export default app;

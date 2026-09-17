@@ -12,11 +12,11 @@ import express from 'express';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { readFile, writeFile } from 'fs/promises';
-import * as jdenticon from 'jdenticon';
 
 import {gatherFeeds} from '../src/gatherFeeds.js';
 
 import {neoCache} from '../src/cache/neoCache.js';
+import dotenv from 'dotenv';
 
 const app = express()
 
@@ -76,6 +76,10 @@ app.get('/api', async (req:any, res) => {
   //updateBucket(JSON.stringify(global.newsItemCache))
 })
 
+app.get('/lol', async (req:any, res) => {
+  res.send(`site: ${process.env.NEOCITIES_SITE}, pw: ${process.env.NEOCITIES_PW}`);
+})
+
 
 
 // async function updateNeo() {
@@ -83,15 +87,6 @@ app.get('/api', async (req:any, res) => {
 //   var newsJson = JSON.stringify(newsObj)
 //   return await neoCache(newsJson)
 // }
-
-app.get('/favicon.png', async function (req, res) {
-  const size = 64;
-  const value = Math.random()*999
-  jdenticon.configure({ backColor: '#000'});
-  const png = jdenticon.toPng(value, size);
-  res.setHeader('Content-Type', 'image/png');
-  res.send(png)
-})
 
 app.listen(1080)
 // setInterval(updateNeo, 62000)
