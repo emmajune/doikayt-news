@@ -77,7 +77,7 @@ app.get('/api', async (req:any, res) => {
 })
 
 app.get('/neotest', async (req:any, res) => {
-  res.send(neoCache(cachedJson));
+  res.send(await neoCache(cachedJson));
 })
 
 
