@@ -40,7 +40,12 @@ const __dirname = path.dirname(__filename)
 //TODO: implement timeout for fetchh
 
 
-var cachedJson = '';
+var cachedJson = await gatherFeeds();
+
+setInterval(async ()=>{
+  cachedJson = await gatherFeeds();
+  neoCache(cachedJson);
+}, 120000);
 
 async function api(res:any, newsJson = '') {
   var time1 = performance.now();
