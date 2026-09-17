@@ -8,14 +8,16 @@
 
 //custom rss scraper, mayhaps?
 
-import express from 'express'
-import path, { dirname } from 'path'
-import { fileURLToPath } from 'url'
-import { readFile, writeFile } from 'fs/promises'
-import { rando } from '@nastyox/rando.js'
-import * as jdenticon from 'jdenticon'
+import express from 'express';
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { readFile, writeFile } from 'fs/promises';
+import { rando } from '@nastyox/rando.js';
+import * as jdenticon from 'jdenticon';
 
-import {gatherFeeds} from '../src/gatherFeeds.ts'
+import {gatherFeeds} from '../src/gatherFeeds.ts';
+
+import {neoCache} from '../src/cache/neoCache.js';
 
 const app = express()
 
@@ -38,86 +40,39 @@ const __dirname = path.dirname(__filename)
 
 //TODO: implement timeout for fetchh
 
-const sourcesObj:any = {
-  the_nation: {url: 'https://thenation.com/feed/?post_type=article', vp: 'GN'},
-  npr: {url: 'https://feeds.npr.org/1014/rss.xml', vp: 'GN'},
-  the_guardian: {url: 'https://www.theguardian.com/world/rss', vp: 'GN'},
-  the_electronic_intifada: {url: 'https://electronicintifada.net/rss.xml', vp:'GS'},
-  drop_site_news: {url: 'https://www.dropsitenews.com/feed', vp: 'GN'},
-  in_these_times: {url: 'https://inthesetimes.com/rss', vp: 'GN'},
-  dissent_magazine: {url: 'https://dissentmagazine.org/feed/', vp: 'GN'},
-  mother_jones: {url: 'https://www.motherjones.com/feed', vp: 'GN'},
-  al_jazeera: {url: 'https://www.aljazeera.com/xml/rss/all.xml', vp: 'GS'},
-  counterpunch: {url: 'https://counterpunch.org/feed', vp: 'GN'},
-  // international_viewpoint: {url: 'https://internationalviewpoint.org/spip.php?page=backend', vp: 'GS'},
-  its_going_down: {url: 'https://itsgoingdown.org/feed/', vp: 'GS'},
-  human_rights_watch: {url: 'https://www.hrw.org/rss/news', vp: 'GS'},
-  haitian_times: {url: 'https://haitiantimes.com/feed/', vp: 'GS'},
-  truthout: {url: 'https://truthout.org/latest/feed/', vp: 'GN'},
-  democracy_now: {url: 'https://www.democracynow.org/democracynow.rss', vp: 'GN'},
-  the_intercept: {url: 'https://theintercept.com/feed/', vp: 'GN'},
-  // p972_mag: {url: 'https://rss.app/feeds/aNuThbWh76dCx90s.xml', vp: 'GN'},
-  jewish_currents: {url: 'https://jewishcurrents.org/feed', vp: 'GN'},
-  jacobin: {url: 'http://jacobin.com/rss', vp: 'GN'},
-  propublica: {url: 'https://www.propublica.org/rss', vp: 'GN'},
-  dabanga: {url: 'https://www.dabangasudan.org/rss', vp: 'GS'}
-}
-const sourcesUrlArr = Object.values(sourcesObj)
-const sourceNames:any = Object.keys(sourcesObj)
 
+var cachedJson = '';
 
-async function api(res:any, textOnly=false) {
-  var time1 = Date.now()
-  var newsJson = await gatherFeeds();
-  var time2 = Date.now()
+async function api(res:any, newsJson = '') {
+  var time1 = performance.now();
+  newsJson = newsJson || await gatherFeeds();
+  var time2 = performance.now();
   console.log('Overall, took ' + (time2-time1) + 'ms')
-  
-
-  // pageHTML = pageHTML.replace('/favicon.png', '/favicon.png?'+rando(9999))//attempts to trick browsers into refreshing favicon cache
-  // res.type('html')
-  // res.send(pageHTML)
   res.set({
-    'Cache-Control': 's-maxage=5, stale-while-revalidate=0',
-    'CDN-Cache-Control': 's-maxage=3, stale-while-revalidate=0',
+    'Cache-Control': 's-maxage=0, stale-while-revalidate=0',
+    'CDN-Cache-Control': 's-maxage=0, stale-while-revalidate=0',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': '*',
     'Access-Control-Allow-Credentials': 'false'
-  })
-  if (textOnly) {
-    var wordsoup = ''
-    if (newsJson) {
-      var objArr = Object.values(newsJson).flat(2);
-      for (let i = 0; i < objArr.length; i++) {
-        // @ts-ignore
-        let title: string = objArr[i]?.title;
-        if (!title) {
-          continue;
-        }
-        wordsoup += title + '. ';
-      }
-    }
-
-    res.type('text')
-    res.send(wordsoup)
-  }
-  else {
-    res.type('json')
-    res.send(newsJson)
-  }
+  });
+  res.type('json');
+  res.send(newsJson);
+  return newsJson;
 }
 
 app.get('/api', async (req:any, res) => {
-  api(res)
+  if (cachedJson) {
+    api(res, cachedJson);
+  } else {
+    cachedJson = await api(res);
+    console.log(await neoCache(cachedJson));
+  }
   //@ts-ignore
   //updateBucket(JSON.stringify(global.newsItemCache))
 })
 
-app.get('/api_text', async (req:any, res) => {
-  api(res, true)
-  //@ts-ignore
-  //updateBucket(JSON.stringify(global.newsItemCache))
-})
+
 
 // async function updateNeo() {
 //   var newsObj = await constellateRSS(sourcesUrlArr, sourceNames)

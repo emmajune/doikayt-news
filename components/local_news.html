@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <!-- split news items into days!! -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>doikayt</title>
@@ -11,25 +12,20 @@
         <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
     </head>
     <body style="display: none">
-        <form role="search" onsubmit="return false">
+        <form role="search" onsubmit="return false" class="flex justify-between gap-2xs">
             <kelp-disclosure is-dropdown>
-              <button type="button" tabindex="1">Sources</button>
+              <button id="sources-button" type="button" tabindex="1">Sources</button>
               <ul id="selection-container">
                 <kelp-select-all id="ssa-container" target="#disclosed-sources input[type='checkbox']">
                   <label for="super-select-all">
                     <input type="checkbox" role="switch" id="super-select-all" checked/>select all
                   </label>
                 </kelp-select-all>
-                <div id="disclosed-sources">
-
-
-                    
-
-                </div>
+                <div id="disclosed-sources"></div>
               </ul>
             </kelp-disclosure>
             <input type="text" id="searchbar" class="inline-block" name="q" autocomplete="off" tabindex="2"></input>
-            <button id="submit-button" class="inline-block" onclick="everything(true)" tabindex="3">Go</button>
+            <button id="submit_button" class="inline-block" tabindex="3">Go</button>
         </form>
         <main>
             <section> 
@@ -39,52 +35,67 @@
             </section>
         </main>
         <style>
-
-            kelp-disclosure {
-              margin-left: 3px;
+            #sources-button {
+                margin-right: .5em;
             }
             #selection-container {
               background-color: rgba(255, 255, 255, 0.97);
+              overflow: scroll;
+              height: 80vh;
+            }
+            form {
+                width: calc(100vmin - 10px);
+                margin: 0;
+                margin-left: 5px;
+                margin-top: 8px;
+                padding: 0;
+                position: sticky;
+                top: 5px;
             }
             #searchbar {
-              width: min(20ch, 90vw);
+              /* width: min(20ch, 90vw);  */
               background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAACzAAAAswBfxuVbgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAHsSURBVEiJrdW7j01RFAbw375EwzQukZiCYiReMcZ4FaNAgkSr0Gk0olEqkEgkdDr+ARGNbtSEZhIjErmChIjCOwjimZnZinOv7Htmn3vuFStZydk737e+s9bae+0QY1S2EELARmzHNmzGS9zteIzxyzxizmKMXY4R3EHs4Z9wpMzNeRq4gRP4VhM89RsY7iUQOiUKIZzB2TQ53MY0HmAltmA3liW4pxiNMX6vLBHG8Dv5s+fYk02ZJq6WMrlYWSIsav9hB/wIQ7W15VTCmcVElcChBDiDHX01jwWYSriTVQLnE9CVfoIn5ImE+y6HaWA8aclUtlHVNt3OGpaHEFaVAQ3FyejY/UGixxh/4nGytTUn8DVZLxlEIMOZzQncS9bjZUAvCyEsxepk60mdwP5BBHAg+f6BZznQLt2X5mifJ6iJNwnvUuUswrUE+Bk7a4IPYVL3RRvpJdDEa90X7gIWlwIH7MOLUtZzOFY3TQ/iV4k4g5Zi9txqZ1c1WbMi5dQ3KZrez6ieUxzxniK5+i7EacULVhX4OkaxttToeSJ/34OchRCGFU/mGD4qJm0rxvgqwazDTaxIqBHHY4yX+x5sNadqPd5mMjn8XwTaIhsyIq1GZX0GtBjjQ+zF+2T7Q88e/IuFENbgpGIInvsDyI+2L844Yv4AAAAASUVORK5CYII=");
               background-repeat: no-repeat;
               background-size: 1.2em 1.2em;
               background-position-y: center;
               background-position-x: 0.4em;
+              border-radius: 0px;
+              border-width: 2px;
+              border-color: black;
               padding-left: 2em;
-              padding-top: 5px;
-              padding-bottom: 5px;
-              border-bottom-right-radius: 0px;
-              border-top-right-radius: 0px;
-              box-sizing: content-box;
-              margin: 3px;
-              margin-right: 0;
-              margin-left: 4px;
+              /* box-sizing: content-box; */
+              margin: 0;
+              flex-grow: 5;
             }
+
             form button {
-              position: relative;
-              top: -2px;
+              border-radius: 0;
+              flex-basis: 0;
             }
-            input[type="submit"]:focus {
+            /* input[type="submit"]:focus {
               z-index: 1;
-            }
+            } */
             #search-content > div {
               justify-content: space-between;
+            }
+            *:focus {
+                z-index: 99999999999;
             }
             .news-item {
               width: 18.3em;
               --max-height: 11em;
-              display: inline-block;
+              display: flex;
+              flex-direction: column;
+              justify-content: space-around;
               overflow: hidden;
-              flex-basis: fit-content;
+              /* flex-basis: fit-content; */
               margin-top: calc(var(--size-l));
               border-style: solid;
               border-width: 2px;
               padding: 8px;
               padding-bottom: 0;
-              flex-shrink: 1;
+              flex-grow: 0.1;
+              flex-shrink: 5;
             }
             .news-infobar {
               color: hotpink;
@@ -105,18 +116,19 @@
               text-decoration-skip-ink: auto;
             }
             .description {
-              max-height: 12ch;
+              /* max-height: 20ch; */
               margin-bottom: var(--size-xs);
               overflow: hidden;
             }
             .news-item summary:focus {
-                font-style: italic;
+                font-style: oblique 20deg;
             }
             .news-item details[open] summary {
-                font-style: italic;
+                font-style: oblique 20deg;
             }
         </style>
         <script>
+            //make this shit more object-oriented!!
             function sourcesToHtml(sourcesObj) {
                 let reSourcesObj = {}//fixxxx
                 for (let source in sourcesObj) {
@@ -163,7 +175,7 @@
                     mode: 'no-cors',
                 });
                 const jsonT = await jsonReq.text();
-                const sourcesObj = JSON.parse(jsonT);
+                sourcesObj = JSON.parse(jsonT);
                 document.getElementById('disclosed-sources').innerHTML = sourcesToHtml(sourcesObj);
                 const newsItems = [];
                 for (source in sourcesObj) {
@@ -187,10 +199,11 @@
                 }
                 for (let i = 0; i < newsItems.length; i++) {
                     const newsItem = newsItems[i]
-                    var { title, pubDate, link, description, imgUrl } = newsItem?.item || newsItem
+                    var { title, pubDate, link, description, imgUrl } = newsItem?.item || newsItem;
+                    var pubDate = (new Date(pubDate)).toLocaleString(navigator.languages[0], { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone });
                     var score = newsItem?.score
                     if (imgUrl) {
-                        console.log(imgUrl)
+                        // console.log(imgUrl)
                     }
                     let source = link.split('://')[1].split('/')[0]
                     source = source.toUpperCase()
@@ -206,7 +219,6 @@
                     if (score < 0.3) {
                         continue
                     }
-                    pubDate = pubDate?.substring(5, 16)
                     if (title.length > 150) {
                         longTitle = title
                         title = title.substring(0, 87) + '...' 
@@ -226,7 +238,9 @@
                             }
                             description = longDesc.slice(0, longDesc.indexOf(' ', 110) + 1)
                         }
-                        
+                        if (longDesc && !imgUrl) {
+                            description = longDesc;
+                        }
                     }
                     else {
                         description = ''
@@ -238,7 +252,7 @@
                         title = title.split(' ')
                         title = title.slice(0,-1).join(' ') + '&nbsp;' + title[title.length-1]
                     }
-                    if (longDesc) {
+                    if (longDesc && imgUrl) {
                         description = `<details>
                                         <summary style="margin: 0; padding: 0;">${description}...</summary>
                                         ${longDesc.split(description)[1]}
@@ -250,7 +264,7 @@
                         (${source}${pubDate ? `, ${pubDate}` : ''})<br />
                         <a href="${link}">${title}</a>
                     </span>
-                    <p class="description">${description}</p>
+                    <p class="description" ${(!imgUrl && !longDesc) ? 'style="font-size: 1.2em"' : ''}>${description}${(!imgUrl && !longDesc) ? '...' : ''}</p>
                 </div>`
                     }
                 return compiledHTML.replaceAll(' ()', '')
@@ -266,32 +280,51 @@
             var x={ational:"ate",tional:"tion",enci:"ence",anci:"ance",izer:"ize",bli:"ble",alli:"al",entli:"ent",eli:"e",ousli:"ous",ization:"ize",ation:"ate",ator:"ate",alism:"al",iveness:"ive",fulness:"ful",ousness:"ous",aliti:"al",iviti:"ive",biliti:"ble",logi:"log"},r={icate:"ic",ative:"",alize:"al",iciti:"ic",ical:"ic",ful:"",ness:""},$="[^aeiou]",o="[aeiouy]",i="("+$+"[^aeiouy]*)",n="("+o+"[aeiou]*)",l=new RegExp("^"+i+"?"+n+i),g=new RegExp("^"+i+"?"+n+i+n+"?$"),s=new RegExp("^"+i+"?("+n+i+"){2,}"),a=new RegExp("^"+i+"?"+o),f=new RegExp("^"+i+o+"[^aeiouwxy]$"),v=/ll$/,z=/^(.+?)e$/,p=/^(.+?)y$/,w=/^(.+?(s|t))(ion)$/,b=/^(.+?)(ed|ing)$/,m=/(at|bl|iz)$/,E=/^(.+?)eed$/,y=/^.+?[^s]s$/,I=/^.+?(ss|i)es$/,L=/([^aeiouylsz])\1$/,R=/^(.+?)(ational|tional|enci|anci|izer|bli|alli|entli|eli|ousli|ization|ation|ator|alism|iveness|fulness|ousness|aliti|iviti|biliti|logi)$/,d=/^(.+?)(icate|ative|alize|iciti|ical|ful|ness)$/,C=/^(.+?)(al|ance|ence|er|ic|able|ible|ant|ement|ment|ent|ou|ism|ate|iti|ous|ive|ize)$/;function stemmer(u){let e=String(u).toLowerCase();if(e.length<3)return e;let c=!1;e.codePointAt(0)===121&&(c=!0,e="Y"+e.slice(1)),I.test(e)?e=e.slice(0,-2):y.test(e)&&(e=e.slice(0,-1));let t;return(t=E.exec(e))?l.test(t[1])&&(e=e.slice(0,-1)):(t=b.exec(e))&&a.test(t[1])&&(e=t[1],m.test(e)?e+="e":L.test(e)?e=e.slice(0,-1):f.test(e)&&(e+="e")),(t=p.exec(e))&&a.test(t[1])&&(e=t[1]+"i"),(t=R.exec(e))&&l.test(t[1])&&(e=t[1]+x[t[2]]),(t=d.exec(e))&&l.test(t[1])&&(e=t[1]+r[t[2]]),(t=C.exec(e))?s.test(t[1])&&(e=t[1]):(t=w.exec(e))&&s.test(t[1])&&(e=t[1]),(t=z.exec(e))&&(s.test(t[1])||g.test(t[1])&&!f.test(t[1]))&&(e=t[1]),v.test(e)&&s.test(e)&&(e=e.slice(0,-1)),c&&(e="y"+e.slice(1)),e}
 
 
-            function searchNews (query, newsItems) {
+            function filterSources(newsItems, sourcesObj, sources) {
+                const sourceUrls = [];
+                for (let i = 0; i < sources.length; i++) {
+                    sourceUrls.push(sourcesObj[sources[i].name].url.split('/')[2]);
+                }
+                const newNewsItems = [];
+                for (let newsItem of newsItems) {
+                    console.log(newsItem.link.split('/')[2])
+                    if (sourceUrls.includes(newsItem.link.split('/')[2].replace('www.', '') )) {
+                        newNewsItems.push(newsItem);
+                    }
+                }
+                console.log(newNewsItems)
+                return newNewsItems;
+            }
+
+            function searchNews(query, newsItems) {
                 const fuse = new Fuse(newsItems, {
-                    keys: ['title', 'description', 'categories',],
+                    keys: ['title', 'description', 'link'],
                     ignoreLocation: true,
                     includeScore: true,
-                    useExtendedSearch: true
+                    useExtendedSearch: true,
+                    threshold: .3,
+                    useTokenSearch: true
                 })
                 if (query.length > 4) {
                     query = stemmer(query)
                 }
                 return fuse.search(query)
             }
-            
-            function displayNews(query, newsItems) {
+
+            function dumpNews(query, newsItems) {
                 if (query) {
-                    newsItems = searchNews(query, newsItems)
+                    newsItems = searchNews(query, newsItems);
                     newsItems.sort((a,b)=>{
-                        const dateA = Date.parse(a.item.pubDate)
-                        const dateB = Date.parse(b.item.pubDate)
-                        let diff = dateB - dateA
-                        return dateB-dateA
+                        const dateA = a.item.normPubDate + a.score/100;
+                        console.log(dateA)
+                        const dateB = b.item.normPubDate + b.score/100;
+                        let diff = dateB - dateA;
+                        return dateB-dateA;
                     })
                 } else {
                     newsItems.sort((a,b)=>{
-                        const dateA = Date.parse(a.pubDate);
-                        const dateB = Date.parse(b.pubDate);
+                        const dateA = a.pubDate;
+                        const dateB = b.pubDate;
                         let diff = dateB - dateA;
                         return dateB-dateA;
                     })
@@ -300,36 +333,76 @@
                 const sC = document.getElementById('search-content');
                 sC.innerHTML = newsHtml;
                 document.body.style.display = 'block';
-            }d
+            }
             
-            async function everything(saveQuery) {
-                if (saveQuery) {
-                    localStorage.setItem('query', searchbar.value);
-                    localStorage.setItem('sources', JSON.stringify(window.sources.flat()));
-                }
-                const savedQuery = localStorage.getItem('query');
-                if (savedQuery) {
-                    searchbar.value = savedQuery;
-                }
                 
-                const params = new URL(location.href).searchParams
-                searchbar.value = searchbar.value ? searchbar.value : params.get('q')//?
-                var sourceInputs = sourceInputs = [...document.querySelectorAll('#disclosed-sources div input')]
-                for (let i = 0; i < sourceInputs.length; i++) {
-                    if (sourceInputs[i].checked) {
-                        sourceInputs[i] = sourceInputs[i].name;
+                const params = new URL(location.href).searchParams;
+                searchbar.value = searchbar.value ? searchbar.value : params.get('q');//?
+                
+                function getSelectedSources() {
+                    const sourceInputs = [...document.querySelectorAll('#disclosed-sources div input')];
+                    const sources = [];
+                    for (let i = 0; i < sourceInputs.length; i++) {
+                        if (sourceInputs[i].checked) {
+                            sources.push(sourceInputs[i]);
+                        }
                     }
-                    else {
-                        delete sourceInputs[i];
-                    }
+                    return sources;
                 }
-                window.sources = sourceInputs;
-                console.log(window.sources);
 
-                var newsItemsJ = await updateNews();
 
-                displayNews(searchbar.value, newsItemsJ);
 
+                //search content -> {height, columns, rows}
+                function sConHCR(nNewsI) {
+
+                    var sCon = document.querySelector('#search-content');
+                    var sConS = getComputedStyle(sCon);
+                    var newsItem1 = document.querySelector('.news-item');
+                    var nItem1S = getComputedStyle(newsItem1);
+
+                    const em = +nItem1S.getPropertyValue('font-size').slice(0,-2);
+
+                    style_sheet = document.styleSheets[document.styleSheets.length-1];
+                    CSS_Rules = style_sheet.cssRules;
+
+                    for (const rule of CSS_Rules) {
+                        if (rule.cssText.includes('.news-item {')) {
+                            var nItemStyleS = rule.cssText;
+                        }
+                    }
+
+                    const emWidth = +nItemStyleS.split('width: ')[1].split('em')[0];
+                    const mHeightEm = +nItemStyleS.split('max-height: ')[1].split('em')[0];
+
+                    if (!nNewsI) {
+                        return 'no news items?';
+                    }
+
+                    var nItem1W = em*emWidth;
+
+                    var sConW = +sConS.getPropertyValue('width').slice(0,-2);
+
+                    var gap = +sConS.getPropertyValue('gap').split('px')[0]
+ 
+                    nItem1W += gap
+                    var height = getComputedStyle(newsItem1).height
+                    height = height ? height : 'auto'
+
+                    var nCols = Math.floor(sConW/nItem1W)
+
+                    var nRows = Math.ceil(nNewsI/nCols)
+
+                    if (nRows === 1) {
+                        nCols = nNewsI
+                    }
+
+                    var height = height*nRows
+
+                    return {height, nCols, nRows}
+                }
+
+
+            function styleNews(newsItemsJ) {
 
                 var sCon = document.querySelector('#search-content');
                 var sConS = getComputedStyle(sCon);
@@ -352,45 +425,8 @@
 
                 const mHeightEm = +nItemStyleS.split('max-height: ')[1].split('em')[0]
 
-                //search content -> {height, columns, rows}
-                function sConHCR(nNewsI) {
-                    if (!nNewsI) {
-                        return 'no news items?'
-                    }
-
-                    var nItem1W = em*emWidth
-
-                    var sConW = +sConS.getPropertyValue('width').slice(0,-2)
-
-                    var gap = +sConS.getPropertyValue('gap').split('px')[0]
- 
-                    nItem1W += gap
-                    var height = getComputedStyle(newsItem1).height
-                    height = height ? height : 'auto'
-
-                    var nCols = Math.floor(sConW/nItem1W)
-
-                    var nRows = Math.ceil(nNewsI/nCols)
-
-                    if (nRows === 1) {
-                        nCols = nNewsI
-                    }
-
-                    var height = height*nRows
-
-                    return {height, nCols, nRows}
-                }
-
                 var nNewsI = newsItemsJ.length
 
-                //from https://dev.to/teaganga/understanding-debounce-in-javascript-a-guide-with-examples-3cm4
-                function debounce(func, wait) {
-                        let timeout;
-                        return function (...args) {
-                        clearTimeout(timeout);
-                        timeout = setTimeout(() => func.apply(this, args), wait);
-                    };
-                }
                 function updateGrid() {
                     var test = []
                     let sConD = sConHCR(newsItems.length)
@@ -400,9 +436,9 @@
                 //uses flexbox columns to create a masonry-like grid
                 function gridify(rows, cols, gridlings) {
 
-                    const remainder = gridlings.length % cols
+                    const restyleNewsder = gridlings.length % cols
 
-                    if (remainder) {
+                    if (restyleNewsder) {
                         rows--
                     }
 
@@ -445,7 +481,37 @@
             
                 updateGrid()
                 
-                const uGridD = debounce(updateGrid, 250);
+            }
+
+            async function initNews() {
+                var newsItemsJ = await updateNews();
+                dumpNews(searchbar.value, newsItemsJ);
+                styleNews(newsItemsJ);
+                submit_button.onclick = () => reSearchNews(newsItemsJ);
+                superSelectAll.click()
+                return newsItemsJ;
+            }
+
+            function reSearchNews(newsItemsJ) {
+                const sources = getSelectedSources();
+                let newsItems = filterSources(newsItemsJ, sourcesObj, sources);
+                dumpNews(searchbar.value, newsItems);
+                styleNews(newsItemsJ);
+            }
+
+            initNews();
+
+
+            //from https://dev.to/teaganga/understanding-debounce-in-javascript-a-guide-with-examples-3cm4
+            function debounce(func, wait) {
+                    let timeout;
+                    return function (...args) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(this, args), wait);
+                };
+            }
+
+            const uGridD = debounce(updateGrid, 250);
                 // Create a debounced version of updateGrid with a 250ms delay
 
                 window.addEventListener('resize', uGridD);
@@ -466,10 +532,6 @@
                         }
                     }
                 })
-
-            }
-            everything()
-
         </script>
     </body>
 </html>
