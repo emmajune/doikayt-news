@@ -199,6 +199,9 @@
                 }
                 for (let i = 0; i < newsItems.length; i++) {
                     const newsItem = newsItems[i]
+                    if (newsItem === undefined) {
+                        continue;
+                    }
                     var { title, pubDate, link, description, imgUrl } = newsItem?.item || newsItem;
                     var pubDate = (new Date(pubDate)).toLocaleString(navigator.languages[0], { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone });
                     var score = newsItem?.score

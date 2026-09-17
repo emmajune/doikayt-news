@@ -196,7 +196,7 @@ export async function gatherFeeds() {
     // feminisminindia: {'url': 'https://feminisminindia.com/rss', origin: 'India', noimg: true}, // weird image loading
     lausancollective: {url: 'https://lausancollective.com/rss', origin: 'China'},
     junputh: {url: 'https://english.junputh.com/rss', origin: 'India'},
-    himalmag: {url: 'https://www.himalmag.com/rss', origin: 'International'},
+    himalmag: {url: 'https://www.himalmag.com/rs', origin: 'International'},
     hcn: {url: 'https://www.hcn.org/rss', origin: 'US'},
     amnesty: {url: 'https://www.amnesty.org/en/rss', origin: 'International'},
     _404media: {url: 'https://www.404media.co/rss', origin: 'US'},
