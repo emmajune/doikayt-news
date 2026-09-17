@@ -10,7 +10,6 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { readFile } from 'fs/promises';
-import { rando } from '@nastyox/rando.js';
 import * as jdenticon from 'jdenticon';
 import { gatherFeeds } from '../src/gatherFeeds.js';
 import { neoCache } from '../src/cache/neoCache.js';
@@ -18,7 +17,7 @@ const app = express();
 app.get('/', async (req, res) => {
     var html = await readFile(path.join(__dirname, '..', 'components', 'local_news.html'), 'utf-8');
     res.type('html');
-    res.send(html.replace('?RANDOM', '?' + rando()));
+    res.send(html.replace('?RANDOM', '?' + Math.random()));
 });
 //@ts-ignore
 // global.newsItemCache = await readBucket() //not a problem I think
@@ -65,7 +64,7 @@ app.get('/api', async (req, res) => {
 // }
 app.get('/favicon.png', async function (req, res) {
     const size = 64;
-    const value = rando(999);
+    const value = Math.random() * 999;
     jdenticon.configure({ backColor: '#000' });
     const png = jdenticon.toPng(value, size);
     res.setHeader('Content-Type', 'image/png');
