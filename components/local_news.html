@@ -290,6 +290,9 @@
                 }
                 const newNewsItems = [];
                 for (let newsItem of newsItems) {
+                    if (newsItem === undefined) {
+                        continue;
+                    }
                     console.log(newsItem.link.split('/')[2])
                     if (sourceUrls.includes(newsItem.link.split('/')[2].replace('www.', '') )) {
                         newNewsItems.push(newsItem);
