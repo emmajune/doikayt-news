@@ -76,8 +76,8 @@ app.get('/api', async (req:any, res) => {
   //updateBucket(JSON.stringify(global.newsItemCache))
 })
 
-app.get('/lol', async (req:any, res) => {
-  res.send(`site: ${process.env.NEOCITIES_SITE}, pw: ${process.env.NEOCITIES_PW}`);
+app.get('/neotest', async (req:any, res) => {
+  res.send(neoCache(cachedJson));
 })
 
 
