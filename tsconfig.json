@@ -2,7 +2,6 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
-    "moduleResolution": "node",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -12,8 +11,6 @@
     "outDir": "dist",
     "rootDir": "src",
     "types": ["bun-types"],
-    "allowImportingTsExtensions": true,
-    "noEmit": true
   },
   "include": ["src/**/*", "src/constellateRSS"],
   "exclude": ["dist", "node_modules"]

@@ -14,7 +14,8 @@
     "fuse.js": "^7.1.0",
     "jdenticon": "^3.3.0",
     "neocities": "^0.0.3",
-    "stemmer": "^2.0.1"
+    "stemmer": "^2.0.1",
+    "typescript": "^7.0.2"
   },
   "description": "",
   "keywords": [],

@@ -15,7 +15,7 @@ import { readFile, writeFile } from 'fs/promises';
 import { rando } from '@nastyox/rando.js';
 import * as jdenticon from 'jdenticon';
 
-import {gatherFeeds} from '../src/gatherFeeds.ts';
+import {gatherFeeds} from '../src/gatherFeeds.js';
 
 import {neoCache} from '../src/cache/neoCache.js';
 

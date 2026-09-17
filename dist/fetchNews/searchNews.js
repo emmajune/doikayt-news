@@ -1,0 +1,23 @@
+import { stemmer } from 'stemmer';
+import Fuse from 'fuse.js';
+export function searchNews(query, newsItems) {
+    if (!query) {
+        return Object.values(newsItems).flat(2)
+            .sort((a, b) => {
+            let diff = +Date.parse(a.pubDate) - +Date.parse(b.pubDate);
+            if (!diff) {
+                diff = 0;
+            }
+            return diff;
+        });
+    }
+    //fancy dynamic category selection??
+    const fuse = new Fuse(newsItems, {
+        keys: ['title', 'description', 'categories', 'content:encoded'],
+        ignoreLocation: true,
+        includeScore: true,
+        useExtendedSearch: true
+    });
+    return fuse.search(stemmer(query));
+}
+export default searchNews;
