@@ -69,7 +69,7 @@ app.get('/api', async (req:any, res) => {
   // }
   const time1 = performance.now();
   cachedJson = await gatherFeeds();
-  const neoRes = await neoCache(cachedJson);
+  const neoRes = neoCache(cachedJson);
   const time2 = performance.now();
   console.log('Overall, took ' + (time2-time1) + 'ms')
   res.set({
