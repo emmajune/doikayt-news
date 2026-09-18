@@ -12,22 +12,22 @@
         }
       ],
     "functions": {
-      "/src/index.ts": {
+      "src/index.ts": {
         "maxDuration": 60
       },
-      "/src/gatherFeeds.ts": {
+      "src/gatherFeeds.ts": {
         "maxDuration": 60
       },
-      "/src/cache/neoCache.js": {
+      "src/cache/neoCache.js": {
         "maxDuration": 60
       },
-      "/dist/index.js": {
+      "dist/index.js": {
         "maxDuration": 60
       },
-      "/dist/gatherFeeds.js": {
+      "dist/gatherFeeds.js": {
         "maxDuration": 60
       },
-      "/dist/cache/neoCache.js": {
+      "dist/cache/neoCache.js": {
         "maxDuration": 60
       }
     }
