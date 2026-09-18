@@ -10,5 +10,25 @@
             { "key": "Access-Control-Allow-Credentials", "value": "false" }
           ]
         }
-      ]
+      ],
+    "functions": {
+      "/src/index.ts": {
+        "maxDuration": 60
+      },
+      "/src/gatherFeeds.ts": {
+        "maxDuration": 60
+      },
+      "/src/cache/neoCache.js": {
+        "maxDuration": 60
+      },
+      "/dist/index.js": {
+        "maxDuration": 60
+      },
+      "/dist/gatherFeeds.js": {
+        "maxDuration": 60
+      },
+      "/dist/cache/neoCache.js": {
+        "maxDuration": 60
+      }
+    }
 }
