@@ -42,11 +42,6 @@ const __dirname = path.dirname(__filename)
 
 var cachedJson = await gatherFeeds();
 
-setInterval(async ()=>{
-  cachedJson = await gatherFeeds();
-  await neoCache(cachedJson);
-}, 120000);
-
 async function api(res:any, newsJson = '') {
   var time1 = performance.now();
   newsJson = newsJson || await gatherFeeds();
@@ -72,9 +67,21 @@ app.get('/api', async (req:any, res) => {
   //   cachedJson = await api(res);
   //   await neoCache(cachedJson);
   // }
+  const time1 = performance.now();
   cachedJson = await gatherFeeds();
   const neoRes = await neoCache(cachedJson);
-  res.send(neoRes);
+  const time2 = performance.now();
+  console.log('Overall, took ' + (time2-time1) + 'ms')
+  res.set({
+    'Cache-Control': 's-maxage=0, stale-while-revalidate=0',
+    'CDN-Cache-Control': 's-maxage=0, stale-while-revalidate=0',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': '*',
+    'Access-Control-Allow-Credentials': 'false'
+  });
+  res.type('json');
+  res.send(cachedJson);
   //@ts-ignore
   //updateBucket(JSON.stringify(global.newsItemCache))
 })
