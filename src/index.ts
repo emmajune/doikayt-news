@@ -21,9 +21,10 @@ import dotenv from 'dotenv';
 const app = express()
 
 app.get('/', async (req:any, res:any)=>{
-  var html = await readFile(path.join(__dirname, '..', 'components', 'local_news.html'), 'utf-8')
-  res.type('html')
-  res.send(html.replace('?RANDOM', '?'+Math.random()))
+  // var html = await readFile(path.join(__dirname, '..', 'components', 'local_news.html'), 'utf-8')
+  // res.type('html')
+  // res.send(html.replace('?RANDOM', '?'+Math.random()))
+  res.send('this url just updates the cache for Doikayt News. the actual website\'s at tr.ee/doikayt')
 })
 
 
@@ -39,31 +40,23 @@ const __dirname = path.dirname(__filename)
 
 //TODO: implement timeout for fetchh
 
-
-var cachedJson = await gatherFeeds();
-
-setInterval(async ()=>{
-  cachedJson = await gatherFeeds();
-  await neoCache(cachedJson);
-}, 120000);
-
-async function api(res:any, newsJson = '') {
-  var time1 = performance.now();
-  newsJson = newsJson || await gatherFeeds();
-  var time2 = performance.now();
-  console.log('Overall, took ' + (time2-time1) + 'ms')
-  res.set({
-    'Cache-Control': 's-maxage=0, stale-while-revalidate=0',
-    'CDN-Cache-Control': 's-maxage=0, stale-while-revalidate=0',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': '*',
-    'Access-Control-Allow-Credentials': 'false'
-  });
-  res.type('json');
-  res.send(newsJson);
-  return newsJson;
-}
+// async function api(res:any, newsJson = '') {
+//   var time1 = performance.now();
+//   newsJson = newsJson || await gatherFeeds();
+//   var time2 = performance.now();
+//   console.log('Overall, took ' + (time2-time1) + 'ms')
+//   res.set({
+//     'Cache-Control': 's-maxage=0, stale-while-revalidate=0',
+//     'CDN-Cache-Control': 's-maxage=0, stale-while-revalidate=0',
+//     'Access-Control-Allow-Origin': '*',
+//     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+//     'Access-Control-Allow-Headers': '*',
+//     'Access-Control-Allow-Credentials': 'false'
+//   });
+//   res.type('json');
+//   res.send(newsJson);
+//   return newsJson;
+// }
 
 app.get('/cache', async (req:any, res) => {
   // if (cachedJson) {
@@ -72,7 +65,7 @@ app.get('/cache', async (req:any, res) => {
   //   cachedJson = await api(res);
   //   await neoCache(cachedJson);
   // }
-  cachedJson = await gatherFeeds();
+  const cachedJson = await gatherFeeds();
   const neoRes = await neoCache(cachedJson);
   res.send(neoRes);
   //@ts-ignore
