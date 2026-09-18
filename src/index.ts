@@ -66,12 +66,15 @@ async function api(res:any, newsJson = '') {
 }
 
 app.get('/api', async (req:any, res) => {
-  if (cachedJson) {
-    api(res, cachedJson);
-  } else {
-    cachedJson = await api(res);
-    await neoCache(cachedJson);
-  }
+  // if (cachedJson) {
+  //   api(res, cachedJson);
+  // } else {
+  //   cachedJson = await api(res);
+  //   await neoCache(cachedJson);
+  // }
+  cachedJson = await gatherFeeds();
+  const neoRes = await neoCache(cachedJson);
+  res.send(neoRes);
   //@ts-ignore
   //updateBucket(JSON.stringify(global.newsItemCache))
 })
