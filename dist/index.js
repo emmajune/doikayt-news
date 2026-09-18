@@ -9,14 +9,14 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { readFile } from 'fs/promises';
 import { gatherFeeds } from '../src/gatherFeeds.js';
 import { neoCache } from '../src/cache/neoCache.js';
 const app = express();
 app.get('/', async (req, res) => {
-    // var html = await readFile(path.join(__dirname, '..', 'components', 'local_news.html'), 'utf-8')
-    // res.type('html')
-    // res.send(html.replace('?RANDOM', '?'+Math.random()))
-    res.send('this url just updates the cache for Doikayt News. the actual website\'s at tr.ee/doikayt');
+    var html = await readFile(path.join(__dirname, '..', 'components', 'local_news.html'), 'utf-8');
+    res.type('html');
+    res.send(html.replace('?RANDOM', '?' + Math.random()));
 });
 //@ts-ignore
 // global.newsItemCache = await readBucket() //not a problem I think
@@ -24,7 +24,7 @@ app.get('/', async (req, res) => {
 global.updateBool = true;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-// const pantryID = "4b8eeebc-b2e8-404b-808d-da8a45297b77"
+// const pantryID = "4b8eea45297b77"
 // const pantryClient = new pantry(pantryID)
 //TODO: implement timeout for fetchh
 // async function api(res:any, newsJson = '') {
@@ -44,16 +44,37 @@ const __dirname = path.dirname(__filename);
 //   res.send(newsJson);
 //   return newsJson;
 // }
-app.get('/cache', async (req, res) => {
-    // if (cachedJson) {
-    //   api(res, cachedJson);
-    // } else {
-    //   cachedJson = await api(res);
-    //   await neoCache(cachedJson);
-    // }
-    const cachedJson = await gatherFeeds();
-    const neoRes = await neoCache(cachedJson);
-    res.send(neoRes);
+var cachedJson = undefined;
+async function sleep(ms) {
+    const { promise, resolve } = Promise.withResolvers();
+    setTimeout(() => resolve(undefined), ms);
+    console.log('aaaaa');
+    return promise;
+}
+async function reCache() {
+    cachedJson = await gatherFeeds();
+    await neoCache(cachedJson);
+    await sleep(60000);
+    reCache();
+}
+app.get('/api', async (req, res) => {
+    res.set({
+        'Cache-Control': 's-maxage=0, stale-while-revalidate=0',
+        'CDN-Cache-Control': 's-maxage=0, stale-while-revalidate=0',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Credentials': 'false'
+    });
+    if (cachedJson !== undefined) {
+        res.send(cachedJson);
+    }
+    else {
+        cachedJson = await gatherFeeds();
+        await neoCache(cachedJson);
+        res.send(cachedJson);
+        reCache();
+    }
     //@ts-ignore
     //updateBucket(JSON.stringify(global.newsItemCache))
 });

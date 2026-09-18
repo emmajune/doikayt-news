@@ -11,20 +11,18 @@
 import express from 'express';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { readFile, writeFile } from 'fs/promises';
+import { readFile } from 'fs/promises';
 
 import {gatherFeeds} from '../src/gatherFeeds.js';
 
 import {neoCache} from '../src/cache/neoCache.js';
-import dotenv from 'dotenv';
 
 const app = express()
 
 app.get('/', async (req:any, res:any)=>{
-  // var html = await readFile(path.join(__dirname, '..', 'components', 'local_news.html'), 'utf-8')
-  // res.type('html')
-  // res.send(html.replace('?RANDOM', '?'+Math.random()))
-  res.send('this url just updates the cache for Doikayt News. the actual website\'s at tr.ee/doikayt')
+  var html = await readFile(path.join(__dirname, '..', 'components', 'local_news.html'), 'utf-8')
+  res.type('html')
+  res.send(html.replace('?RANDOM', '?'+Math.random()))
 })
 
 
@@ -35,7 +33,7 @@ global.updateBool = true
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-// const pantryID = "4b8eeebc-b2e8-404b-808d-da8a45297b77"
+// const pantryID = "4b8eea45297b77"
 // const pantryClient = new pantry(pantryID)
 
 //TODO: implement timeout for fetchh
@@ -58,16 +56,41 @@ const __dirname = path.dirname(__filename)
 //   return newsJson;
 // }
 
-app.get('/cache', async (req:any, res) => {
-  // if (cachedJson) {
-  //   api(res, cachedJson);
-  // } else {
-  //   cachedJson = await api(res);
-  //   await neoCache(cachedJson);
-  // }
-  const cachedJson = await gatherFeeds();
-  const neoRes = await neoCache(cachedJson);
-  res.send(neoRes);
+var cachedJson: any = undefined;
+
+
+
+async function sleep(ms: number) {
+  const {promise, resolve} = Promise.withResolvers();
+  setTimeout(()=>resolve(undefined), ms);
+  console.log('aaaaa')
+  return promise;
+}
+
+async function reCache() {
+  cachedJson = await gatherFeeds();
+  await neoCache(cachedJson);
+  await sleep(60000);
+  reCache();
+}
+
+app.get('/api', async (req:any, res) => {
+  res.set({
+    'Cache-Control': 's-maxage=0, stale-while-revalidate=0',
+    'CDN-Cache-Control': 's-maxage=0, stale-while-revalidate=0',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': '*',
+    'Access-Control-Allow-Credentials': 'false'
+  });
+  if (cachedJson !== undefined) {
+    res.send(cachedJson);
+  } else {
+    cachedJson = await gatherFeeds();
+    await neoCache(cachedJson);
+    res.send(cachedJson);
+    reCache();
+  }
   //@ts-ignore
   //updateBucket(JSON.stringify(global.newsItemCache))
 })
