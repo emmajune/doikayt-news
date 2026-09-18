@@ -198,7 +198,8 @@ export async function gatherFeeds() {
         leftycartoons: { url: 'https://leftycartoons.com/rss', origin: 'US' },
         unicornriot: { url: "https://www.unicornriot.ninja/rss", origin: "US" },
         leftvoice: { url: 'https://www.leftvoice.org/rss', origin: 'International' },
-        africaisacountry: { 'url': 'https://africasacountry.com/feed', origin: 'International' }
+        africaisacountry: { 'url': 'https://africasacountry.com/feed', origin: 'International' },
+        icij: { 'url': 'https://www.icij.org/rss', origin: 'International' }
     };
     var t1 = performance.now();
     await fetchRawFeeds(sourcesObj);
