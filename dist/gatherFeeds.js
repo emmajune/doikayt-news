@@ -200,7 +200,8 @@ export async function gatherFeeds() {
         leftvoice: { url: 'https://www.leftvoice.org/rss', origin: 'International' },
         africaisacountry: { 'url': 'https://africasacountry.com/feed', origin: 'International' },
         icij: { 'url': 'https://www.icij.org/rss', origin: 'International' },
-        dailycartoon: { 'url': 'https://cmdailycartoon.substack.com/rss', origin: 'International' }
+        dailycartoon: { 'url': 'https://cmdailycartoon.substack.com/rss', origin: 'International' },
+        breakthrough: { 'url': 'https://breakthroughnews.org/rss', origin: 'International' }
     };
     var t1 = performance.now();
     await fetchRawFeeds(sourcesObj);
