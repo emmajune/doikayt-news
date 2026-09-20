@@ -35,10 +35,11 @@ function parseFeeds(sourcesObj: SourcesObj) {
         const sourceObj: SourceObj = sourcesObj[source]
         try {
             sourceObj.feedObj = parseFeed(sourceObj.rss)
+            delete sourceObj.rss;
         } catch {
+            delete sourcesObj[source];
             console.log(`unable to parse feed for ${source}!`)
         }
-        delete sourceObj.rss;
     }
 }
 

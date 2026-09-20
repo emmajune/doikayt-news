@@ -26,11 +26,12 @@ function parseFeeds(sourcesObj) {
         const sourceObj = sourcesObj[source];
         try {
             sourceObj.feedObj = parseFeed(sourceObj.rss);
+            delete sourceObj.rss;
         }
         catch {
+            delete sourcesObj[source];
             console.log(`unable to parse feed for ${source}!`);
         }
-        delete sourceObj.rss;
     }
 }
 function gatherImgUrls(sourcesObj) {
