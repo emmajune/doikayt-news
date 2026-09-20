@@ -206,7 +206,10 @@ export async function gatherFeeds() {
     leftvoice: {url: 'https://www.leftvoice.org/rss', origin: 'International'},
     africaisacountry: {'url': 'https://africasacountry.com/feed', origin: 'International'},
     icij: {'url': 'https://www.icij.org/rss', origin: 'International'},
-    uyghurnews: {'url': 'https://uyghurnews.org/rss', origin: 'International'}
+    uyghurnews: {'url': 'https://uyghurnews.org/rss', origin: 'International'},
+    uyghurtimes: {'url': 'https://uyghurtimes.com/rss', origin: 'International', noimg: true},
+    rohingyakhobor: {'url': 'https://rohingyakhobor.com/rss', origin: 'Myanmar'},
+    hyperallergic: {'url': 'https://hyperallergic.com/rss', 'origin': 'US'}
 }
     var t1 = performance.now();
     await fetchRawFeeds(sourcesObj);

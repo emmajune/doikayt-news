@@ -54,7 +54,7 @@ async function sleep(ms) {
 async function reCache() {
     cachedJson = await gatherFeeds();
     await neoCache(cachedJson);
-    await sleep(5000);
+    await sleep(50000);
     reCache();
     return undefined;
 }
