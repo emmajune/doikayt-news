@@ -202,7 +202,10 @@ export async function gatherFeeds() {
         icij: { 'url': 'https://www.icij.org/rss', origin: 'International' },
         uyghurnews: { 'url': 'https://uyghurnews.org/rss', origin: 'International' },
         uyghurtimes: { 'url': 'https://uyghurtimes.com/rss', origin: 'International', noimg: true },
-        rohingyakhobor: { 'url': 'https://rohingyakhobor.com/rss', origin: 'International' }
+        rohingyakhobor: { 'url': 'https://rohingyakhobor.com/rss', origin: 'Myanmar' },
+        hyperallergic: { 'url': 'https://hyperallergic.com/rss', 'origin': 'US' },
+        // aljazeera: {url: 'http://aljazeera.com/rss', origin: 'International'},
+        cpj: { url: 'https://cpj.org/rss', origin: 'International' }
     };
     var t1 = performance.now();
     await fetchRawFeeds(sourcesObj);
