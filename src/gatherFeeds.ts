@@ -32,13 +32,13 @@ async function fetchRawFeeds(sourcesObj: SourcesObj) {
 
 function parseFeeds(sourcesObj: SourcesObj) {
     for (const source in sourcesObj) {
-        const sourceObj: SourceObj = sourcesObj[source]
+        const sourceObj: SourceObj = sourcesObj[source];
         try {
-            sourceObj.feedObj = parseFeed(sourceObj.rss)
+            sourceObj.feedObj = parseFeed(sourceObj.rss);
             delete sourceObj.rss;
         } catch {
             delete sourcesObj[source];
-            console.log(`unable to parse feed for ${source}!`)
+            console.log(`unable to parse feed for ${source}!`);
         }
     }
 }
