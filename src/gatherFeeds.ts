@@ -216,7 +216,8 @@ export async function gatherFeeds() {
     freedom: {url: 'http://freedomnews.org.uk/rss', origin: 'Britain'},
     commons: {url: 'https://commons.com.ua/en/rss', origin: 'Ukraine'},
     anticapitalistresistance: {url: 'https://anticapitalistresistance.org/rss', origin: 'Britain'},
-    indiginews: {url: 'https://indiginews.com/rss', origin: 'Canada'}
+    indiginews: {url: 'https://indiginews.com/rss', origin: 'Canada'},
+    greenleft: {url: 'https://www.greenleft.org.au/feed', origin: 'Australia'}
 }
     var t1 = performance.now();
     await fetchRawFeeds(sourcesObj);
