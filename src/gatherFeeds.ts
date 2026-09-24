@@ -227,8 +227,6 @@ export async function gatherFeeds() {
     var t2 = performance.now();
     gatherImgUrls(sourcesObj);
     cleanSourcesObj(sourcesObj);
-    //@ts-ignore
-    sourcesObj.updated = Date.now();
     const json: string = JSON.stringify(sourcesObj);
     console.log(`json lenght: ${json.length}`)
     console.log(`gathering feeds took ${(t2 - t1)/1000}s`);
