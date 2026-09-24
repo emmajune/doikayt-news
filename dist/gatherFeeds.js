@@ -132,7 +132,7 @@ function cleanSourcesObj(sourcesObj) {
                 else if (description && description.replace(/(<[\s\S]*?>)+/g, '').length < 200 && item?.content?.encoded) {
                     description = item.content.encoded.replace(/(<[\s\S]*?>)+/g, ' / ').replace(/\/ \//g, '');
                 }
-                let categories = item?.categories;
+                // let categories = item?.categories;
                 item = { title, link, pubDate, imgUrl };
                 if (description) {
                     item.description = cleanDescription(description);
@@ -162,9 +162,9 @@ function cleanSourcesObj(sourcesObj) {
 }
 export async function gatherFeeds() {
     var sourcesObj = {
-        the_nation: { url: 'https://thenation.com/feed/?post_type=article', origin: 'US' },
+        // the_nation: {url: 'https://thenation.com/feed/?post_type=article', origin: 'US'},
         // npr: {url: 'https://feeds.npr.org/1014/rss.xml', origin: 'US'},
-        // the_guardian: {url: 'https://www.theguardian.com/world/rss', origin: 'UK'}, // ughh, it keepts being racist
+        // the_guardian: {url: 'https://www.theguardian.com/world/rss', origin: 'Britain'}, // ughh, it keepts being racist
         the_electronic_intifada: { url: 'https://electronicintifada.net/rss.xml', origin: 'Palestine' },
         drop_site_news: { url: 'https://www.dropsitenews.com/feed', origin: 'US' },
         // takes like 10s on my laptop :0 -- in_these_times: {url: 'https://inthesetimes.com/rss', origin: 'US'},
@@ -183,7 +183,7 @@ export async function gatherFeeds() {
         jewish_currents: { 'url': 'https://jewishcurrents.org/feed', origin: 'US' },
         crimethinc: { 'url': 'https://crimethinc.com/rss', 'origin': 'US' },
         newlinesmag: { 'url': 'https://newlinesmag.com/feed', origin: 'US' },
-        novara: { 'url': 'https://novaramedia.com/rss/', origin: 'UK' },
+        novara: { 'url': 'https://novaramedia.com/rss/', origin: 'Britain' },
         derspekter: { 'url': 'https://www.derspekter.org/rss', origin: 'International' },
         burningspear: { 'url': 'https://theburningspear.com/rss/', origin: 'US' },
         blackagendareport: { 'url': 'https://www.blackagendareport.com/feeds-story', origin: 'US' },
@@ -206,7 +206,10 @@ export async function gatherFeeds() {
         rohingyakhobor: { 'url': 'https://rohingyakhobor.com/rss', origin: 'Myanmar' },
         hyperallergic: { 'url': 'https://hyperallergic.com/rss', 'origin': 'US' },
         // aljazeera: {url: 'http://aljazeera.com/rss', origin: 'International'},
-        cpj: { url: 'https://cpj.org/rss', origin: 'International' }
+        cpj: { url: 'https://cpj.org/rss', origin: 'International' },
+        freedom: { url: 'http://freedomnews.org.uk/rss', origin: 'Britain' },
+        commons: { url: 'https://commons.com.ua/en/rss', origin: 'Ukraine' },
+        anticapitalistresistance: { url: 'https://anticapitalistresistance.org/rss', origin: 'Britain' }
     };
     var t1 = performance.now();
     await fetchRawFeeds(sourcesObj);
@@ -217,6 +220,8 @@ export async function gatherFeeds() {
     var t2 = performance.now();
     gatherImgUrls(sourcesObj);
     cleanSourcesObj(sourcesObj);
+    //@ts-ignore
+    sourcesObj.updated = Date.now();
     const json = JSON.stringify(sourcesObj);
     console.log(`json lenght: ${json.length}`);
     console.log(`gathering feeds took ${(t2 - t1) / 1000}s`);

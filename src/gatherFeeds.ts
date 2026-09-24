@@ -139,7 +139,7 @@ function cleanSourcesObj(sourcesObj: SourcesObj) {
             } else if (description && description.replace(/(<[\s\S]*?>)+/g, '').length < 200 && item?.content?.encoded) {
                 description = item.content.encoded.replace(/(<[\s\S]*?>)+/g, ' / ').replace(/\/ \//g, '');
             }
-            let categories = item?.categories;
+            // let categories = item?.categories;
             item = {title, link, pubDate, imgUrl};
             if (description) {
                 item.description = cleanDescription(description);
@@ -227,6 +227,8 @@ export async function gatherFeeds() {
     var t2 = performance.now();
     gatherImgUrls(sourcesObj);
     cleanSourcesObj(sourcesObj);
+    //@ts-ignore
+    sourcesObj.updated = Date.now();
     const json: string = JSON.stringify(sourcesObj);
     console.log(`json lenght: ${json.length}`)
     console.log(`gathering feeds took ${(t2 - t1)/1000}s`);
