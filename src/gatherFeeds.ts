@@ -40,6 +40,7 @@ function parseFeeds(sourcesObj: SourcesObj) {
             delete sourcesObj[source];
             console.log(`unable to parse feed for ${source}!`);
         }
+        console.log(sourcesObj['greenleft'].feedObj.feed)
     }
 }
 
@@ -219,6 +220,7 @@ export async function gatherFeeds() {
     indiginews: {url: 'https://indiginews.com/rss', origin: 'Canada'},
     greenleft: {url: 'https://www.greenleft.org.au/feed', origin: 'Australia'}
 }
+
     var t1 = performance.now();
     await fetchRawFeeds(sourcesObj);
     var t2 = performance.now();
