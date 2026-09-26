@@ -86,9 +86,9 @@ function gatherImgUrls(sourcesObj) {
 }
 function cleanDescription(description) {
     //remove annoying tag: "The post [x] first appeared on [y]"
-    description = description.split('The post')[0];
+    // description = description.split('The post')[0]
     //remove html elements and new lines
-    description = description.replace(/(<[\s\S]*?>)+/g, '').replace(/\n/g, '');
+    description = description /*.replace(/(<[\s\S]*?>)+/g, '')*/.replace(/\n/g, ''); //.replace(/"/g, "''");
     return description;
 }
 function cleanSourcesObj(sourcesObj) {
@@ -132,11 +132,11 @@ function cleanSourcesObj(sourcesObj) {
                 else if (description && description.replace(/(<[\s\S]*?>)+/g, '').length < 200 && item?.content?.encoded) {
                     description = item.content.encoded.replace(/(<[\s\S]*?>)+/g, ' / ').replace(/\/ \//g, '');
                 }
-                // let categories = item?.categories;
                 item = { title, link, pubDate, imgUrl };
                 if (description) {
                     item.description = cleanDescription(description);
                 }
+                // let categories = item?.categories;
                 // if (categories) {
                 //     item.categories = categories;
                 // } 

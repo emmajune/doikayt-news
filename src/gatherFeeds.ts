@@ -95,9 +95,9 @@ function gatherImgUrls(sourcesObj: SourcesObj) {
 
 function cleanDescription(description: string) {
     //remove annoying tag: "The post [x] first appeared on [y]"
-    description = description.split('The post')[0]
+    // description = description.split('The post')[0]
     //remove html elements and new lines
-    description = description.replace(/(<[\s\S]*?>)+/g, '').replace(/\n/g, '')
+    description = description/*.replace(/(<[\s\S]*?>)+/g, '')*/.replace(/\n/g, '')//.replace(/"/g, "''");
     return description
 }
 
@@ -106,52 +106,51 @@ function cleanSourcesObj(sourcesObj: SourcesObj) {
     let minPubDate = Date.now();
     for (const source in sourcesObj) {
         try {
-        const sourceObj: SourceObj = sourcesObj[source];
-        const items = sourceObj.feedObj.feed.items;
-        for (let i = 0; i < items.length; i++) {
-            let item = items[i];
-            const {title, imgUrl} = item;
-            var pubDate = item?.pubDate || item.published;
-            // pubDate = (new Date(pubDate)).toTimeString()
-            if (pubDate) {
-                pubDate = Date.parse(pubDate)
-                if (pubDate > maxPubDate) {
-                    maxPubDate = pubDate;
+            const sourceObj: SourceObj = sourcesObj[source];
+            const items = sourceObj.feedObj.feed.items;
+            for (let i = 0; i < items.length; i++) {
+                let item = items[i];
+                const {title, imgUrl} = item;
+                var pubDate = item?.pubDate || item.published;
+                // pubDate = (new Date(pubDate)).toTimeString()
+                if (pubDate) {
+                    pubDate = Date.parse(pubDate)
+                    if (pubDate > maxPubDate) {
+                        maxPubDate = pubDate;
+                    }
+                    if (pubDate < minPubDate) {
+                        minPubDate = pubDate;
+                    }
                 }
-                if (pubDate < minPubDate) {
-                    minPubDate = pubDate;
+                else {
+                    console.log('FUCKKDSFKFD')
                 }
+                // console.log({pubDate})
+                if (Object.hasOwn(item, 'link')) {
+                    var link = item.link;
+                } else if (Object.hasOwn(item, 'links')) {
+                    var link = item.links[0].href;
+                } else {
+                    var link = item.id;
+                }
+                let description = item?.description;
+                if (!description && Object.hasOwn(item, 'content')) {
+                    description = item.content.replace(/(<[\s\S]*?>)+/g, '').replace(/\//g, '');
+                } else if (description && description.replace(/(<[\s\S]*?>)+/g, '').length < 200 && item?.content?.encoded) {
+                    description = item.content.encoded.replace(/(<[\s\S]*?>)+/g, ' / ').replace(/\/ \//g, '');
+                }
+                item = {title, link, pubDate, imgUrl};
+                if (description) {
+                    item.description = cleanDescription(description);
+                }
+                // let categories = item?.categories;
+                // if (categories) {
+                //     item.categories = categories;
+                // } 
+                items[i] = item;
             }
-            else {
-                console.log('FUCKKDSFKFD')
-            }
-            // console.log({pubDate})
-            if (Object.hasOwn(item, 'link')) {
-                var link = item.link;
-            } else if (Object.hasOwn(item, 'links')) {
-                var link = item.links[0].href;
-            } else {
-                var link = item.id;
-            }
-            let description = item?.description;
-            if (!description && Object.hasOwn(item, 'content')) {
-                description = item.content.replace(/(<[\s\S]*?>)+/g, '').replace(/\//g, '');
-            } else if (description && description.replace(/(<[\s\S]*?>)+/g, '').length < 200 && item?.content?.encoded) {
-                description = item.content.encoded.replace(/(<[\s\S]*?>)+/g, ' / ').replace(/\/ \//g, '');
-            }
-            // let categories = item?.categories;
-            item = {title, link, pubDate, imgUrl};
-            if (description) {
-                item.description = cleanDescription(description);
-            }
-            // if (categories) {
-            //     item.categories = categories;
-            // } 
-            items[i] = item;
-        }
-        sourcesObj[source] = {items: items, url: sourceObj.url,  origin: sourceObj.origin};
-        }
-        catch {}
+            sourcesObj[source] = {items: items, url: sourceObj.url,  origin: sourceObj.origin};
+        } catch {}
     }
     for (const source in sourcesObj) {
         try {
