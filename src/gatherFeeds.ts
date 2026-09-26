@@ -217,7 +217,7 @@ export async function gatherFeeds() {
     anticapitalistresistance: {url: 'https://anticapitalistresistance.org/rss', origin: 'Britain'},
     indiginews: {url: 'https://indiginews.com/rss', origin: 'Canada'},
     greenleft: {url: 'https://www.greenleft.org.au/feed', origin: 'Australia'}
-}
+}  
 
     var t1 = performance.now();
     await fetchRawFeeds(sourcesObj);
