@@ -32,7 +32,6 @@ function parseFeeds(sourcesObj) {
             delete sourcesObj[source];
             console.log(`unable to parse feed for ${source}!`);
         }
-        console.log(sourcesObj['greenleft'].feedObj.feed);
     }
 }
 function gatherImgUrls(sourcesObj) {
