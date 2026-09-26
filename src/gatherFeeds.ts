@@ -95,9 +95,9 @@ function gatherImgUrls(sourcesObj: SourcesObj) {
 
 function cleanDescription(description: string) {
     //remove annoying tag: "The post [x] first appeared on [y]"
-    // description = description.split('The post')[0]
+    description = description.split('The post')[0]
     //remove html elements and new lines
-    description = description/*.replace(/(<[\s\S]*?>)+/g, '')*/.replace(/\n/g, '')//.replace(/"/g, "''");
+    description = description.replace(/(<[\s\S]*?>)+/g, '').replace(/\n/g, '').replace(/"/g, "''");
     return description
 }
 
