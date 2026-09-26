@@ -211,7 +211,8 @@ export async function gatherFeeds() {
         commons: { url: 'https://commons.com.ua/en/rss', origin: 'Ukraine' },
         anticapitalistresistance: { url: 'https://anticapitalistresistance.org/rss', origin: 'Britain' },
         indiginews: { url: 'https://indiginews.com/rss', origin: 'Canada' },
-        // greenleft: {url: 'https://www.greenleft.org.au/feed', origin: 'Australia'}
+        'greenleft (sorta glitchy)': { url: 'https://www.greenleft.org.au/feed', origin: 'Australia' },
+        'firstnationsnews': { url: 'https://firstnationsnews.com.au/rss', origin: 'Australia' }
     };
     var t1 = performance.now();
     await fetchRawFeeds(sourcesObj);
