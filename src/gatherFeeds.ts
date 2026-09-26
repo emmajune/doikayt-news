@@ -217,7 +217,9 @@ export async function gatherFeeds() {
     anticapitalistresistance: {url: 'https://anticapitalistresistance.org/rss', origin: 'Britain'},
     indiginews: {url: 'https://indiginews.com/rss', origin: 'Canada'},
     'greenleft (sorta glitchy)': {url: 'https://www.greenleft.org.au/feed', origin: 'Australia'},
-    'firstnationsnews': {url: 'https://firstnationsnews.com.au/rss', origin: 'Australia'}
+    'firstnationsnews': {url: 'https://firstnationsnews.com.au/rss', origin: 'Australia'},
+    mondoweiss: {url: 'https://mondoweiss.net/rss', origin: 'US'},
+    tibetanreview: {url: 'https://www.tibetanreview.net/rss', origin: 'Tibet'}
 }  
 
     var t1 = performance.now();
