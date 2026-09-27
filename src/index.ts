@@ -32,13 +32,13 @@ app.get('/fuse.js', async (req:any, res:any)=>{
 });
 
 app.get('/kelp.js', async (req:any, res:any)=>{
-  var js = await readFile(path.join(__dirname, '..', 'components', 'fuse.js'), 'utf-8');
+  var js = await readFile(path.join(__dirname, '..', 'components', 'kelp.js'), 'utf-8');
   res.type('js');
   res.send(js);
 });
 
 app.get('/kelp.css', async (req:any, res:any)=>{
-  var css = await readFile(path.join(__dirname, '..', 'components', 'fuse.css'), 'utf-8');
+  var css = await readFile(path.join(__dirname, '..', 'components', 'kelp.css'), 'utf-8');
   res.type('css');
   res.send(css);
 });

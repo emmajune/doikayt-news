@@ -24,12 +24,12 @@ app.get('/fuse.js', async (req, res) => {
     res.send(js);
 });
 app.get('/kelp.js', async (req, res) => {
-    var js = await readFile(path.join(__dirname, '..', 'components', 'fuse.js'), 'utf-8');
+    var js = await readFile(path.join(__dirname, '..', 'components', 'kelp.js'), 'utf-8');
     res.type('js');
     res.send(js);
 });
 app.get('/kelp.css', async (req, res) => {
-    var css = await readFile(path.join(__dirname, '..', 'components', 'fuse.css'), 'utf-8');
+    var css = await readFile(path.join(__dirname, '..', 'components', 'kelp.css'), 'utf-8');
     res.type('css');
     res.send(css);
 });
