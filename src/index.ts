@@ -17,13 +17,37 @@ import {gatherFeeds} from '../src/gatherFeeds.js';
 
 import {neoCache} from '../src/cache/neoCache.js';
 
-const app = express()
+const app = express();
 
 app.get('/', async (req:any, res:any)=>{
-  var html = await readFile(path.join(__dirname, '..', 'components', 'local_news.html'), 'utf-8')
-  res.type('html')
-  res.send(html.replace('?RANDOM', '?'+Math.random()))
-})
+  var html = await readFile(path.join(__dirname, '..', 'components', 'index.html'), 'utf-8');
+  res.type('html');
+  res.send(html);
+});
+
+app.get('/fuse.js', async (req:any, res:any)=>{
+  var js = await readFile(path.join(__dirname, '..', 'components', 'fuse.js'), 'utf-8');
+  res.type('js');
+  res.send(js);
+});
+
+app.get('/kelp.js', async (req:any, res:any)=>{
+  var js = await readFile(path.join(__dirname, '..', 'components', 'fuse.js'), 'utf-8');
+  res.type('js');
+  res.send(js);
+});
+
+app.get('/kelp.css', async (req:any, res:any)=>{
+  var css = await readFile(path.join(__dirname, '..', 'components', 'fuse.css'), 'utf-8');
+  res.type('css');
+  res.send(css);
+});
+
+app.get('/jdenticon.min.js', async (req:any, res:any)=>{
+  var js = await readFile(path.join(__dirname, '..', 'components', 'jdenticon.min.js'), 'utf-8');
+  res.type('js');
+  res.send(js);
+});
 
 
 //@ts-ignore

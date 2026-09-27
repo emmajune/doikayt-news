@@ -4,29 +4,46 @@
         <!-- split news items into days!! -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>doikayt</title>
-        <link rel="preload" href="/api" as="fetch">
-        <link id="fracty" rel="icon" type="image/png" href="https://fracty.replit.app?RANDOM">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/kelpui@1/css/kelp.css">
-        <script async type="module" src="https://cdn.jsdelivr.net/npm/kelpui@1/js/kelp.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
+		<title>Doikayt News</title>
+        <link id="favicon" rel="icon" type="image/png">
+        <link rel="stylesheet" href="kelp.css">
+        <script async type="module" src="kelp.js"></script>
+        <script src="fuse.js"></script>
     </head>
     <body style="display: none">
+    
+    
+        <canvas id="identicon" width="100" height="100" style="display: none"></canvas>
+
+        <script src="jdenticon.min.js">
+        </script>
+        <script>
+            jdenticon.configure({saturation: {color: 1, grayscale: 1}, lightness: {color: [.6, 1], grayscale: [.6, 1]}});
+            jdenticon.updateCanvas("#identicon", Math.random());
+            favicon.href = identicon.toDataURL('image/png');
+        </script>
+        
+        
         <form role="search" onsubmit="return false" class="flex justify-between gap-2xs">
             <kelp-disclosure is-dropdown>
               <button id="sources-button" type="button" tabindex="1">Sources</button>
               <ul id="selection-container">
                 <kelp-select-all id="ssa-container" target="#disclosed-sources input[type='checkbox']">
                   <label for="super-select-all">
-                    <input type="checkbox" role="switch" id="super-select-all" checked/>select all
+                    <input type="checkbox" role="switch" id="super-select-all"/>select all
                   </label>
                 </kelp-select-all>
                 <div id="disclosed-sources"></div>
               </ul>
             </kelp-disclosure>
-            <input type="text" id="searchbar" class="inline-block" name="q" autocomplete="off" tabindex="2"></input>
+            <input type="text" id="searchbar" class="inline-block" name="q" autocomplete="off" tabindex="2" />
             <button id="submit_button" class="inline-block" tabindex="3">Go</button>
         </form>
+        <button id="about" tabindex = "4" onclick="alert(`This is an aggregator of independent social-just-focused and leftist news sources. It doesn't collect any of your data or fingerprint you (but is safest with a VPN or Tor). The plurality of sources are from the US, but it's getting increasingly international -- please let me know if you have any reccomendations of news sources for me to add, ideally based in the Global South. Also, let me know if you find errors!
+        
+My email address is eknisbac@oberlin.edu.
+
+〝Doikayt〞is a Yiddish word that means here-ness and represents fighting for social justice locally to create international ripples (it's also an antonym for Antizionism!) Please use what you learn on this source to get involved in the above. Also, do horizontal reading! Like all media, a lot of this shit won't be fully accurate and can often be better understood in the context of sources with more varied viewpoints <3`)">About/Privacy</button>
         <main>
             <section> 
               <div id="search-content" class="flex justify-center direction-row wrap gap-l">
@@ -34,7 +51,7 @@
               </div>
             </section>
         </main>
-        <p style="padding: 1em; font-weight: bold;">Copyright 2026 Emma Knisbacher. Licensed under <a href="https://www.gnu.org/licenses/gpl-3.0.html">GPL 4(+)</a> with the caveat that all reproductions/redistributions of this software may not support or advocate for (racial) capitalism, imperialism, authoritarianism, or any other form of bigotry. This clause must be included in the licenses of any reproductions or redistributions. <a href="https://github.com/emmajune/doikayt-news">Gitub Source Code</a>.</p>
+        <p style="padding: 1em; padding-bottom: 2em; font-weight: bold; margin: 0;">Copyright 2026 Emma Knisbacher. Licensed under <a href="https://www.gnu.org/licenses/gpl-3.0.html">GPL 4(+)</a> with the caveat that all reproductions and redistributions of this software may not advocate for, support, or be used to advance (racial) capitalism, imperialism, authoritarianism, or any other forms of bigotry. This clause must be included in the licenses of any reproductions or redistributions of this software. Gitub Source Code <a href="https://github.com/emmajune/doikayt-news">here.</a></p>
         <style>
             #sources-button {
                 margin-right: .5em;
@@ -73,9 +90,11 @@
               border-radius: 0;
               flex-basis: 0;
             }
-            /* input[type="submit"]:focus {
-              z-index: 1;
-            } */
+            #about {
+              position: fixed;
+              bottom: .5em;
+              right: .5em;
+            }
             #search-content > div {
               justify-content: space-between;
             }
@@ -127,9 +146,11 @@
             .news-item details[open] summary {
                 font-style: oblique 20deg;
             }
+      
         </style>
         <script>
             //make this shit more object-oriented!!
+            
             function sourcesToHtml(sourcesObj) {
                 let reSourcesObj = {}//fixxxx
                 for (let source in sourcesObj) {
@@ -142,24 +163,25 @@
                 }
                 let sourcesHtml = `<li style="padding-top: 0; padding-bottom: 0;">`;
                 const selectAll = `
-                                    <kelp-select-all id="ss-${origin}-c" target="#${origin}-div [type='checkbox']">
-                                            <label for="select-all-${origin}">
-                                                <input type="checkbox" id="select-all-${origin}">
+                                    <kelp-select-all id="ss-origin-c" target="#origin-div input">
+                                            <label for="select-all-origin">
+                                                <input type="checkbox" id="select-all-origin" onchange="maybeSelectAll()" checked>
                                                 select all
                                             </label>
                                         </kelp-select-all>
-                `
+                `;
                 for (let origin in reSourcesObj) {
                     let sourcesArr = reSourcesObj[origin];
                     sourcesHtml += `
-                                    <li style="padding-top: 0; padding-bottom: 0;"><details>
+                                    <li style="padding-top: 0; padding-bottom: 0;">
+                                    <details>
                                         <summary style="padding: var(--size-m) !important">${origin}</summary>
-                                        ${(sourcesArr.length > 1) ? selectAll : ''}
+                                        ${(sourcesArr.length > 1) ? selectAll.replaceAll('origin', origin) : ''}
                                         <div id="${origin}-div">`;
                     for (let source of sourcesArr) {
                         sourcesHtml += `
                                             <label for="${source}">
-                                                <input type="checkbox" id="${source}" name="${source}" checked /> ${source}
+                                                <input type="checkbox" id="${source}" name="${source}" onchange="maybeSelectAll()" checked /> ${source}
                                             </label>`;
                     }
                     sourcesHtml += `
@@ -169,13 +191,17 @@
                 return sourcesHtml;
             }
 
-            async function updateNews() {
-                const jsonReq = await fetch('/api', {
+            async function updateNews(update) {
+                var url;
+                if (location.href.includes('vercel')) {
+                    url = 'https://doikayt.vercel.app/api';
+                } else {
+                    update ? 'https://doikayt.vercel.app/api' : 'https://doikaytn.neocities.org/cache.json';
+                }
+                const jsonReq = await fetch(url, {
                     method: 'GET',
-                    credentials: 'include',
-                    mode: 'no-cors',
                 });
-                const jsonT = await jsonReq.text();
+                const jsonT = (await jsonReq.text())//.replace('}}gin":"International"}}', '}}');
                 sourcesObj = JSON.parse(jsonT);
                 document.getElementById('disclosed-sources').innerHTML = sourcesToHtml(sourcesObj);
                 const newsItems = [];
@@ -183,7 +209,8 @@
                     const sourceObj = sourcesObj[source];
                     newsItems.push(sourceObj.items);
                 }
-                return newsItems.flat(2);
+                newsItemsJ = newsItems.flat(2);
+                return newsItemsJ;
             }
             
 
@@ -311,7 +338,6 @@
                     useExtendedSearch: true,
                     threshold: .3,
                     useTokenSearch: true,
-                    tokenMatch: 'any',
                     findAllMatches: true
                 })
                 if (query.length > 4) {
@@ -324,9 +350,9 @@
                 if (query) {
                     newsItems = searchNews(query, newsItems);
                     newsItems.sort((a,b)=>{
-                        const dateA = a.item.normPubDate + a.score/100;
+                        const dateA = a.item.normPubDate + a.score/60;
                         console.log(dateA)
-                        const dateB = b.item.normPubDate + b.score/100;
+                        const dateB = b.item.normPubDate + b.score/60;
                         let diff = dateB - dateA;
                         return dateB-dateA;
                     })
@@ -342,6 +368,7 @@
                 const sC = document.getElementById('search-content');
                 sC.innerHTML = newsHtml;
                 document.body.style.display = 'block';
+                maybeSelectAll()
             }
             
                 
@@ -465,9 +492,9 @@
                                 const hasImg = elem.firstChild.children[0].tagName === 'IMG';
                                 try {;
                                     //todo: un-hardcode this stuff better!!
-                                    elem.firstChild.children[1 + hasImg].tabIndex = gridIndex + 3;
+                                    elem.firstChild.children[1 + hasImg].tabIndex = gridIndex + 4;
                                     if (elem.children.length == 4) {
-                                        elem.children[2].tabIndex = gridIndex + 3;
+                                        elem.children[2].tabIndex = gridIndex + 4;
                                     }
                                 }
                                 catch {
@@ -493,22 +520,29 @@
             }
 
             async function initNews() {
-                var newsItemsJ = await updateNews();
                 dumpNews(searchbar.value, newsItemsJ);
                 styleNews(newsItemsJ);
                 submit_button.onclick = () => reSearchNews(newsItemsJ);
-                superSelectAll.click()
                 return newsItemsJ;
             }
 
-            function reSearchNews(newsItemsJ) {
+            function reSearchNews() {
                 const sources = getSelectedSources();
                 let newsItems = filterSources(newsItemsJ, sourcesObj, sources);
                 dumpNews(searchbar.value, newsItems);
                 styleNews(newsItemsJ);
             }
-
-            initNews();
+            
+            (async () => {
+              await updateNews(false);
+              initNews();
+              var superSelectAll = document.getElementById('super-select-all');
+              superSelectAll.click();
+              maybeSelectAll()
+              await updateNews(true);
+              initNews();
+              maybeSelectAll()
+            })();
 
 
             //from https://dev.to/teaganga/understanding-debounce-in-javascript-a-guide-with-examples-3cm4
@@ -523,24 +557,25 @@
             const uGridD = debounce(updateGrid, 250);
                 // Create a debounced version of updateGrid with a 250ms delay
 
-                window.addEventListener('resize', uGridD);
+            window.addEventListener('resize', uGridD);
 
-                var selectionContainer = document.getElementById('selection-container')
+            const selectionContainer = document.getElementById('selection-container');
 
-                var superSelectAll = document.getElementById('super-select-all')
-
-                selectionContainer.addEventListener('change', (e)=>{
-                    if(e.target.checked){
-                        const isCheckbox = 'input[type="checkbox"]'
-                        const numCheckbox = document.querySelectorAll(isCheckbox).length
-                        const isChecked = 'input[type="checkbox"]:checked'
-                        const numChecked = document.querySelectorAll(isChecked).length
-                        console.log(numChecked + ' ' + numCheckbox)
-                        if (numCheckbox === numChecked + 1) {
-                            superSelectAll.click()
-                        }
+            var superSelectAll = document.getElementById('super-select-all');
+            
+            function maybeSelectAll() {
+                const numChecked = document.querySelectorAll('#disclosed-sources input[type="checkbox"]:checked').length;
+                const numSources = Object.keys(sourcesObj).length;
+                const numSelectAlls = document.querySelectorAll('#disclosed-sources label[for*="select-all"]').length;
+                if (numChecked === numSources + numSelectAlls) {
+                    const superSelectAll = document.getElementById('super-select-all');
+                    if (!superSelectAll?.checked) {
+                      superSelectAll.click();
                     }
-                })
+                }
+            }                
+              
+              
         </script>
     </body>
 </html>
