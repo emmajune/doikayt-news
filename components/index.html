@@ -150,6 +150,20 @@ My email address is eknisbac@oberlin.edu.
         </style>
         <script>
             //make this shit more object-oriented!!
+            function contains(corpus, query) {
+                let contains = false;
+                let isArray = Array.isArray(query);
+                if (typeof corpus === 'object' && !isArray) {
+                    corpus = Object.values(corpus);
+                    isArray = true;
+                }
+                if (isArray) {
+                    query.forEach(val => corpus.includes(val) && (contains = true));
+                } else if (typeof query === 'string') {
+                    contains = corpus.includes(query);
+                }
+                return contains;
+            }
             
             function sourcesToHtml(sourcesObj) {
                 let reSourcesObj = {}//fixxxx
@@ -193,8 +207,8 @@ My email address is eknisbac@oberlin.edu.
 
             async function updateNews(update) {
                 var url;
-                if (location.href.includes('vercel')) {
-                    url = 'https://doikayt.vercel.app/api';
+                if (contains(location.href, ['vercel', 'localhost'])) {
+                    url = location.href + 'api'
                 } else {
                     update ? 'https://doikayt.vercel.app/api' : 'https://doikaytn.neocities.org/cache.json';
                 }
@@ -231,21 +245,20 @@ My email address is eknisbac@oberlin.edu.
                         continue;
                     }
                     var { title, pubDate, link, description, imgUrl } = newsItem?.item || newsItem;
-                    var pubDate = (new Date(pubDate)).toLocaleString(navigator.languages[0], { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone });
+                    if (pubDate !== 0) {
+                        pubDate = (new Date(pubDate)).toLocaleString(navigator.languages[0], { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone });
+                    } else {
+                        pubDate = 'No Date -- yet';
+                    }
                     var score = newsItem?.score
                     if (imgUrl) {
                         // console.log(imgUrl)
                     }
-                    let source = link.split('://')[1].split('/')[0]
+                    let source = link.split('://')[1].split('/')[0].replace(/ww[w0-9]\./, '').split('.')[0]
                     source = source.toUpperCase()
                     let longTitle = ''
                     let longDesc = ''
-                    if (source.split('.').length === 2) {
-                        source = source.split('.')[0]
-                    }
-                    else {
-                        source = source.split('.')[1].split('.')[0]
-                    }
+                    
                     score = 1 - score
                     if (score < 0.3) {
                         continue
@@ -292,7 +305,7 @@ My email address is eknisbac@oberlin.edu.
                     compiledHTML += `
                 <div class="news-item" id="${i}" title="${score}"><span class="news-infobar">
                         ${imgUrl ? `<img style="display:block; width: 100%" src="${imgUrl}" />` : ''}
-                        (${source}${pubDate ? `, ${pubDate}` : ''})<br />
+                        (${source}, ${pubDate})<br />
                         <a href="${link}">${title}</a>
                     </span>
                     <p class="description" ${(!imgUrl && !longDesc) ? 'style="font-size: 1.2em"' : ''}>${description}${(!imgUrl && !longDesc) ? '...' : ''}</p>
@@ -314,19 +327,21 @@ My email address is eknisbac@oberlin.edu.
             function filterSources(newsItems, sourcesObj, sources) {
                 const sourceUrls = [];
                 for (let i = 0; i < sources.length; i++) {
-                    sourceUrls.push(sourcesObj[sources[i].name].url.split('/')[2]);
+                    sourceUrls.push(sourcesObj[sources[i].name].url.split('/')[2])
                 }
+                console.log({sourceUrls})
                 const newNewsItems = [];
                 for (let newsItem of newsItems) {
                     if (newsItem === undefined) {
                         continue;
                     }
-                    console.log(newsItem.link.split('/')[2])
-                    if (sourceUrls.includes(newsItem.link.split('/')[2].replace('www.', '') )) {
+                    if (sourceUrls.includes(newsItem.link.split('/')[2])) {
                         newNewsItems.push(newsItem);
+                    } else {
+                        console.log(newsItem.link.split('/')[2])
                     }
                 }
-                console.log(newNewsItems)
+                // console.log(newNewsItems)
                 return newNewsItems;
             }
 
@@ -351,7 +366,7 @@ My email address is eknisbac@oberlin.edu.
                     newsItems = searchNews(query, newsItems);
                     newsItems.sort((a,b)=>{
                         const dateA = a.item.normPubDate + a.score/60;
-                        console.log(dateA)
+                        // console.log(dateA)
                         const dateB = b.item.normPubDate + b.score/60;
                         let diff = dateB - dateA;
                         return dateB-dateA;
@@ -497,9 +512,7 @@ My email address is eknisbac@oberlin.edu.
                                         elem.children[2].tabIndex = gridIndex + 4;
                                     }
                                 }
-                                catch {
-                                    console.log(elem)
-                                }
+                                catch {}
                             }
                             column.append(elem)
                         }
@@ -534,14 +547,14 @@ My email address is eknisbac@oberlin.edu.
             }
             
             (async () => {
-              await updateNews(false);
-              initNews();
-              var superSelectAll = document.getElementById('super-select-all');
-              superSelectAll.click();
-              maybeSelectAll()
-              await updateNews(true);
-              initNews();
-              maybeSelectAll()
+                await updateNews(false);
+                initNews();
+                var superSelectAll = document.getElementById('super-select-all');
+                superSelectAll.click();
+                maybeSelectAll()
+                await updateNews(true);
+                initNews();
+                maybeSelectAll()
             })();
 
 

@@ -94,7 +94,7 @@ async function sleep(ms: number) {
 async function reCache() {
   cachedJson = await gatherFeeds();
   await neoCache(cachedJson);
-  await sleep(50000);
+  await sleep(60000);
   reCache();
   return undefined;
 }
@@ -114,7 +114,7 @@ app.get('/api', async (req:any, res) => {
     cachedJson = await gatherFeeds();
     await neoCache(cachedJson);
     res.send(cachedJson);
-    await reCache();
+    setTimeout(async ()=> await reCache(), 60000)
   }
   //@ts-ignore
   //updateBucket(JSON.stringify(global.newsItemCache))

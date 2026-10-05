@@ -41,6 +41,7 @@ function parseFeeds(sourcesObj: SourcesObj) {
             console.log(`unable to parse feed for ${source}!`);
         }
     }
+    console.log(sourcesObj.lef)
 }
 
 function gatherImgUrls(sourcesObj: SourcesObj) {
@@ -97,7 +98,7 @@ function cleanDescription(description: string) {
     //remove annoying tag: "The post [x] first appeared on [y]"
     description = description.split('The post')[0]
     //remove html elements and new lines
-    description = description.replace(/(<[\s\S]*?>)+/g, '').replace(/\n/g, '').replace(/"/g, "''");
+    description = description.replace(/(<[\s\S]*?>)+/g, '').replace(/\n/g, '').replace(/"/g, "''").replaceAll('/ /', ' ').replaceAll('  ', ' ');
     return description
 }
 
@@ -111,7 +112,7 @@ function cleanSourcesObj(sourcesObj: SourcesObj) {
             for (let i = 0; i < items.length; i++) {
                 let item = items[i];
                 const {title, imgUrl} = item;
-                var pubDate = item?.pubDate || item.published;
+                var pubDate = item?.pubDate || item?.published;
                 // pubDate = (new Date(pubDate)).toTimeString()
                 if (pubDate) {
                     pubDate = Date.parse(pubDate)
@@ -123,7 +124,7 @@ function cleanSourcesObj(sourcesObj: SourcesObj) {
                     }
                 }
                 else {
-                    console.log('FUCKKDSFKFD')
+                    pubDate = 0;
                 }
                 // console.log({pubDate})
                 if (Object.hasOwn(item, 'link')) {
@@ -206,9 +207,12 @@ export async function gatherFeeds() {
     leftvoice: {url: 'https://www.leftvoice.org/rss', origin: 'International'},
     africaisacountry: {'url': 'https://africasacountry.com/feed', origin: 'International'},
     icij: {'url': 'https://www.icij.org/rss', origin: 'International'},
-    uyghurnews: {'url': 'https://uyghurnews.org/rss', origin: 'International'},
-    uyghurtimes: {'url': 'https://uyghurtimes.com/rss', origin: 'International', noimg: true},
-    rohingyakhobor: {'url': 'https://rohingyakhobor.com/rss', origin: 'Myanmar'},
+    uyghurnews: {'url': 'https://uyghurnews.org/rss', origin: 'East Turkistan'},
+    uyghurtimes: {'url': 'https://uyghurtimes.com/rss', origin: 'East Turkistan', noimg: true},
+    uyghurcongress: {'url': 'https://www.uyghurcongress.org/en/news/rss', origin: 'East Turkistan'},
+    rohingyakhobor: {'url': 'https://rohingyakhobor.com/rss', origin: 'Arakan'},
+    rohingyavision: {url: 'https://rohingyavision.com/rss', origin: 'Arakan'},
+    global_arakan_network: {url: 'https://www.globalarakannetwork.com/blog-feed.xml', origin: 'Arakan'},
     // hyperallergic: {'url': 'https://hyperallergic.com/rss', 'origin': 'US'},
     // aljazeera: {url: 'http://aljazeera.com/rss', origin: 'International'},
     cpj: {url: 'https://cpj.org/rss', origin: 'International'},
@@ -219,8 +223,22 @@ export async function gatherFeeds() {
     'greenleft (sorta glitchy)': {url: 'https://www.greenleft.org.au/feed', origin: 'Australia'},
     'firstnationsnews': {url: 'https://firstnationsnews.com.au/rss', origin: 'Australia'},
     mondoweiss: {url: 'https://mondoweiss.net/rss', origin: 'US'},
-    tibetanreview: {url: 'https://www.tibetanreview.net/rss', origin: 'Tibet'}
+    tibetanreview: {url: 'https://www.tibetanreview.net/rss', origin: 'Tibet'},
+    'fridaytimes-culture': {url: 'https://www.thefridaytimes.com/rss/culture', origin: 'Pakistan', noimg: true},
+    'fridaytimes-analysis': {url: 'https://www.thefridaytimes.com/rss/analysis', origin: 'Pakistan', noimg: true},
+    'fridaytimes-citizensvoice': {url: 'https://www.thefridaytimes.com/rss/citizens-voice', origin: 'Pakistan', noimg: true},
+    'fridaytimes-climatecrisis': {url: 'https://www.thefridaytimes.com/rss/climate-crisis', origin: 'Pakistan', noimg: true},
+    theprogressive: {url: 'https://progressive.org/api/rss/content.rss', origin: 'US'},
+    leftviews: {url: 'https://www.leftviews.in/feeds', origin: 'India'},
+    jcp: {url: 'https://www.jcp.or.jp/english/rss', origin: 'Japan'},
+    anarchistlibrary: {url: 'https://theanarchistlibrary.org/feed', origin: 'US'},
+    indoleft: {url: 'https://www.indoleft.org/rss/indoleft-news-feed.xml', origin: 'Indonesia'},
+    havanatimes: {url: 'https://havanatimes.org/rss', origin: 'Cuba'},
+    ict: {url: 'https://ictnews.org/rss', origin: 'US'}
+    // convergencemag: {url: 'https://convergencemag.com/rss', origin: 'US'}
 }  
+
+    // sourcesObj = {convergencemag: {url: 'https://convergencemag.com/rss', origin: 'US'}}
 
     var t1 = performance.now();
     await fetchRawFeeds(sourcesObj);
