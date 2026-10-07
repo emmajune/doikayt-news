@@ -513,17 +513,10 @@ My email address is eknisbac@oberlin.edu.
                                 const hasImg = elem.firstChild.children[0].tagName === 'IMG';
                                 try {;
                                     //todo: un-hardcode this stuff better!!
-                                    const elemA = elem.firstChild.children[1 + hasImg];
-                                    var top = elemA.getBoundingClientRect().top;
-                                    console.log(top)
-                                    top = Math.round(parseInt(elemA));
-                                    
-                                    elem.firstChild.children[1 + hasImg].tabIndex = top;
-                                    
-                                    if (elem.children.length === top) {
-                                        elem.children[2].tabIndex = top;
+                                    elem.firstChild.children[1 + hasImg].tabIndex = gridIndex + 4;
+                                    if (elem.children.length == 4) {
+                                        elem.children[2].tabIndex = gridIndex + 4;
                                     }
-                                    
                                 }
                                 catch {}
                             }
