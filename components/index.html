@@ -210,7 +210,7 @@ My email address is eknisbac@oberlin.edu.
                 if (contains(location.href, ['vercel', 'localhost'])) {
                     url = location.href + 'api'
                 } else {
-                    update ? 'https://doikayt.vercel.app/api' : 'https://doikaytn.neocities.org/cache.json';
+                    url = update ? 'https://doikayt.vercel.app/api' : 'https://doikaytn.neocities.org/cache.json';
                 }
                 const jsonReq = await fetch(url, {
                     method: 'GET',
