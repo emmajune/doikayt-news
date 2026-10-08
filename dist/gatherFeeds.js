@@ -229,7 +229,8 @@ export async function gatherFeeds() {
         anarchistlibrary: { url: 'https://theanarchistlibrary.org/feed', origin: 'US' },
         indoleft: { url: 'https://www.indoleft.org/rss/indoleft-news-feed.xml', origin: 'Indonesia' },
         havanatimes: { url: 'https://havanatimes.org/rss', origin: 'Cuba' },
-        ict: { url: 'https://ictnews.org/rss', origin: 'US' }
+        ict: { url: 'https://ictnews.org/rss', origin: 'US' },
+        palestinechronicle: { url: 'https://www.palestinechronicle.com/rss', origin: 'Palestine' }
         // convergencemag: {url: 'https://convergencemag.com/rss', origin: 'US'}
     };
     // sourcesObj = {convergencemag: {url: 'https://convergencemag.com/rss', origin: 'US'}}
