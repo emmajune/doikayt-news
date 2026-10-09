@@ -30,7 +30,7 @@
               <ul id="selection-container">
                 <kelp-select-all id="ssa-container" target="#disclosed-sources input[type='checkbox']">
                   <label for="super-select-all">
-                    <input type="checkbox" role="switch" id="super-select-all"/>select all
+                    <span style="padding-right: .5em;">Select All</span><input type="checkbox" role="switch" id="super-select-all"/>
                   </label>
                 </kelp-select-all>
                 <div id="disclosed-sources"></div>
@@ -51,7 +51,16 @@ My email address is eknisbac@oberlin.edu.
               </div>
             </section>
         </main>
-        <p style="padding: 1em; padding-bottom: 2em; font-weight: bold; margin: 0;">Copyright 2026 Emma Knisbacher. Licensed under <a href="https://www.gnu.org/licenses/gpl-3.0.html">GPL 4(+)</a> with the caveat that all reproductions and redistributions of this software may not advocate for, support, or be used to advance (racial) capitalism, imperialism, authoritarianism, or any other forms of bigotry. This clause must be included in the licenses of any reproductions or redistributions of this software. Gitub Source Code <a href="https://github.com/emmajune/doikayt-news">here.</a></p>
+        <footer>
+            <p style="padding: 1em; font-weight: bold; margin: 0;">
+                Copyright 2026 Emma Knisbacher. Licensed under <a href="https://www.gnu.org/licenses/gpl-3.0.html">GPL 4(+)</a> with the caveat that all reproductions and redistributions of this software may not advocate for, support, or be used to advance (racial) capitalism, imperialism, authoritarianism, or any other forms of bigotry. This clause must be included in the licenses of any reproductions or redistributions of this software. Gitub Source Code <a href="https://github.com/emmajune/doikayt-news">here.</a>
+            </p>
+            <nav class="flex justify-center">
+                <button id="prev_btn" style="border-radius: 0;" disabled>Back</button>
+                <span id="page_badge" class="badge outline" style="font-size: 1em; border-radius: 0; font-style: italic" aria-description="Page Number">Page 1</span>
+                <button id="next_btn" style="border-radius: 0;" onclick="nextPage()">Next</button>
+            </nav>
+        </footer>
         <style>
             #sources-button {
                 margin-right: .5em;
@@ -60,6 +69,12 @@ My email address is eknisbac@oberlin.edu.
               background-color: rgba(255, 255, 255, 0.97);
               overflow: scroll;
               height: 80vh;
+            }
+            #ssa-container {
+                margin-bottom: -1em;
+                margin-left: 1em;
+                margin-top: .5em;
+                padding: 0;
             }
             form {
                 width: calc(100vmin - 10px);
@@ -149,7 +164,10 @@ My email address is eknisbac@oberlin.edu.
       
         </style>
         <script>
-            //make this shit more object-oriented!!
+            var pageN = 1;
+            const itemsInPage = 40;
+            var newsItemsFlat;
+            //no globals
             function contains(corpus, query) {
                 let contains = false;
                 let isArray = Array.isArray(query);
@@ -165,6 +183,7 @@ My email address is eknisbac@oberlin.edu.
                 return contains;
             }
             
+            //no globals
             function sourcesToHtml(sourcesObj) {
                 let reSourcesObj = {}//fixxxx
                 for (let source in sourcesObj) {
@@ -205,6 +224,7 @@ My email address is eknisbac@oberlin.edu.
                 return sourcesHtml;
             }
 
+            //sets 3 globals: sourcesObj & newsItems & newsItemsFlat
             async function updateNews(update) {
                 var url;
                 if (contains(location.href, ['vercel', 'localhost'])) {
@@ -218,16 +238,15 @@ My email address is eknisbac@oberlin.edu.
                 const jsonT = (await jsonReq.text())//.replace('}}gin":"International"}}', '}}');
                 sourcesObj = JSON.parse(jsonT);
                 document.getElementById('disclosed-sources').innerHTML = sourcesToHtml(sourcesObj);
-                const newsItems = [];
+                newsItems = [];
                 for (source in sourcesObj) {
                     const sourceObj = sourcesObj[source];
                     newsItems.push(sourceObj.items);
                 }
-                newsItemsJ = newsItems.flat(2);
-                return newsItemsJ;
+                newsItemsFlat = newsItems.flat(2);
             }
             
-
+            //relies on global newsItems
             function compileNews(newsItems) {
                 var compiledHTML = ''
                 function unHtml(str) {
@@ -323,7 +342,7 @@ My email address is eknisbac@oberlin.edu.
             //stemmer code from "words" on github
             var x={ational:"ate",tional:"tion",enci:"ence",anci:"ance",izer:"ize",bli:"ble",alli:"al",entli:"ent",eli:"e",ousli:"ous",ization:"ize",ation:"ate",ator:"ate",alism:"al",iveness:"ive",fulness:"ful",ousness:"ous",aliti:"al",iviti:"ive",biliti:"ble",logi:"log"},r={icate:"ic",ative:"",alize:"al",iciti:"ic",ical:"ic",ful:"",ness:""},$="[^aeiou]",o="[aeiouy]",i="("+$+"[^aeiouy]*)",n="("+o+"[aeiou]*)",l=new RegExp("^"+i+"?"+n+i),g=new RegExp("^"+i+"?"+n+i+n+"?$"),s=new RegExp("^"+i+"?("+n+i+"){2,}"),a=new RegExp("^"+i+"?"+o),f=new RegExp("^"+i+o+"[^aeiouwxy]$"),v=/ll$/,z=/^(.+?)e$/,p=/^(.+?)y$/,w=/^(.+?(s|t))(ion)$/,b=/^(.+?)(ed|ing)$/,m=/(at|bl|iz)$/,E=/^(.+?)eed$/,y=/^.+?[^s]s$/,I=/^.+?(ss|i)es$/,L=/([^aeiouylsz])\1$/,R=/^(.+?)(ational|tional|enci|anci|izer|bli|alli|entli|eli|ousli|ization|ation|ator|alism|iveness|fulness|ousness|aliti|iviti|biliti|logi)$/,d=/^(.+?)(icate|ative|alize|iciti|ical|ful|ness)$/,C=/^(.+?)(al|ance|ence|er|ic|able|ible|ant|ement|ment|ent|ou|ism|ate|iti|ous|ive|ize)$/;function stemmer(u){let e=String(u).toLowerCase();if(e.length<3)return e;let c=!1;e.codePointAt(0)===121&&(c=!0,e="Y"+e.slice(1)),I.test(e)?e=e.slice(0,-2):y.test(e)&&(e=e.slice(0,-1));let t;return(t=E.exec(e))?l.test(t[1])&&(e=e.slice(0,-1)):(t=b.exec(e))&&a.test(t[1])&&(e=t[1],m.test(e)?e+="e":L.test(e)?e=e.slice(0,-1):f.test(e)&&(e+="e")),(t=p.exec(e))&&a.test(t[1])&&(e=t[1]+"i"),(t=R.exec(e))&&l.test(t[1])&&(e=t[1]+x[t[2]]),(t=d.exec(e))&&l.test(t[1])&&(e=t[1]+r[t[2]]),(t=C.exec(e))?s.test(t[1])&&(e=t[1]):(t=w.exec(e))&&s.test(t[1])&&(e=t[1]),(t=z.exec(e))&&(s.test(t[1])||g.test(t[1])&&!f.test(t[1]))&&(e=t[1]),v.test(e)&&s.test(e)&&(e=e.slice(0,-1)),c&&(e="y"+e.slice(1)),e}
 
-
+            //no globals
             function filterSources(newsItems, sourcesObj, sources) {
                 const sourceUrls = [];
                 for (let i = 0; i < sources.length; i++) {
@@ -345,6 +364,7 @@ My email address is eknisbac@oberlin.edu.
                 return newNewsItems;
             }
 
+            //no globals
             function searchNews(query, newsItems) {
                 const fuse = new Fuse(newsItems, {
                     keys: [{name: 'title', weight: 2}, {name: 'description', weight: 1}, {name: 'link', weight:1}],
@@ -361,6 +381,7 @@ My email address is eknisbac@oberlin.edu.
                 return fuse.search(query)
             }
 
+            //sets + relies on global newsItems
             function dumpNews(query, newsItems) {
                 if (query) {
                     newsItems = searchNews(query, newsItems);
@@ -390,6 +411,8 @@ My email address is eknisbac@oberlin.edu.
                 const params = new URL(location.href).searchParams;
                 searchbar.value = searchbar.value ? searchbar.value : params.get('q');//?
                 
+                
+                //no globals
                 function getSelectedSources() {
                     const sourceInputs = [...document.querySelectorAll('#disclosed-sources div input')];
                     const sources = [];
@@ -402,7 +425,7 @@ My email address is eknisbac@oberlin.edu.
                 }
 
 
-
+                //no globals
                 //search content -> {height, columns, rows}
                 function sConHCR(nNewsI) {
 
@@ -413,8 +436,8 @@ My email address is eknisbac@oberlin.edu.
 
                     const em = +nItem1S.getPropertyValue('font-size').slice(0,-2);
 
-                    style_sheet = document.styleSheets[document.styleSheets.length-1];
-                    CSS_Rules = style_sheet.cssRules;
+                    var style_sheet = document.styleSheets[document.styleSheets.length-1];
+                    var CSS_Rules = style_sheet.cssRules;
 
                     for (const rule of CSS_Rules) {
                         if (rule.cssText.includes('.news-item {')) {
@@ -453,7 +476,8 @@ My email address is eknisbac@oberlin.edu.
                 }
 
 
-            function styleNews(newsItemsJ) {
+
+            function styleNews(newsItemsFlat) {
 
                 var sCon = document.querySelector('#search-content');
                 var sConS = getComputedStyle(sCon);
@@ -476,21 +500,32 @@ My email address is eknisbac@oberlin.edu.
 
                 const mHeightEm = +nItemStyleS.split('max-height: ')[1].split('em')[0]
 
-                var nNewsI = newsItemsJ.length
+                var nNewsI = newsItemsFlat.length
 
+                //relies on local sConD, sCon
+                //relies on global newsItems
                 function updateGrid() {
                     var test = []
-                    let sConD = sConHCR(newsItems.length)
+                    let sConD = sConHCR(newsItems.length = 40)
                     sCon.style.height = sConD.height + 'px'
-                    sCon.replaceChildren(...gridify(sConD.nRows, sConD.nCols, newsItems))
+                    console.log({newsItems})
+                    var page = newsItems.slice((pageN-1)*itemsInPage, pageN*itemsInPage)
+                    page = gridify(sConD.nRows, sConD.nCols, page);
+                    sCon.replaceChildren(...page);
+                    
+                    console.log({page})
+                    console.log(page.length)
                     var i = 4;
-                    for (var newsItem of newsItems) {
+                    for (var newsItem of page) {
                         const hasImg = newsItem.firstChild.children[0].tagName === 'IMG';
                         const newsItemA = newsItem.firstChild.children[1 + hasImg];
                         newsItemA.tabIndex = ++i;
                     }
                 }
+
+                //relies on global newsItems
                 //uses flexbox columns to create a masonry-like grid
+                var firstTime = false;
                 function gridify(rows, cols, gridlings) {
 
                     const restyleNewsder = gridlings.length % cols
@@ -533,31 +568,34 @@ My email address is eknisbac@oberlin.edu.
 
                     return columns.slice(1)
                 }
-                var nItems = Array.from(document.querySelectorAll('.news-item'))
+                // var nItems = Array.from(document.querySelectorAll('.news-item'))
                 
                 if (!newsItems) {
                     var newsItems = Array.from(sCon.cloneNode(true).children)
                 }
 
-                var nItemsB = Array.from(document.querySelectorAll('.news-item'))
+                // var nItemsB = Array.from(document.querySelectorAll('.news-item'))
             
                 updateGrid()
                 
                 
             }
 
+            
+            //relies on global newsItemsFlat
             async function initNews() {
-                dumpNews(searchbar.value, newsItemsJ);
-                styleNews(newsItemsJ);
-                submit_button.onclick = () => reSearchNews(newsItemsJ);
-                return newsItemsJ;
+                dumpNews(searchbar.value, newsItemsFlat);
+                styleNews(newsItemsFlat);
+                submit_button.onclick = () => reSearchNews(newsItemsFlat);
+                return newsItemsFlat;
             }
 
+            //relies on globals newsItemsFlat and sourcesObj
             function reSearchNews() {
                 const sources = getSelectedSources();
-                let newsItems = filterSources(newsItemsJ, sourcesObj, sources);
+                let newsItems = filterSources(newsItemsFlat, sourcesObj, sources);
                 dumpNews(searchbar.value, newsItems);
-                styleNews(newsItemsJ);
+                styleNews(newsItemsFlat);
             }
             
             (async () => {
@@ -572,6 +610,7 @@ My email address is eknisbac@oberlin.edu.
             })();
 
 
+            //no globals
             //from https://dev.to/teaganga/understanding-debounce-in-javascript-a-guide-with-examples-3cm4
             function debounce(func, wait) {
                     let timeout;
@@ -600,9 +639,25 @@ My email address is eknisbac@oberlin.edu.
                       superSelectAll.click();
                     }
                 }
-            }                
+            }            
               
-              
+            function nextPage() {
+                    const maxPage = Math.ceil(newsItems.length/itemsInPage);
+                    if (pageN !== maxPage) {
+                        pageN++;
+                        initNews();
+                        if (pageN === maxPage) {
+                            next_btn.disabled = true;
+                            alert('AAAAA')
+                        }
+                        alert(prev_btn.disabled)
+                        prev_btn.disabled = false;
+                        alert(maxPage)
+                    }
+                    else {
+                        alert('FUCL')
+                    }
+                }
         </script>
     </body>
 </html>

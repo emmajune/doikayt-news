@@ -230,7 +230,8 @@ export async function gatherFeeds() {
         indoleft: { url: 'https://www.indoleft.org/rss/indoleft-news-feed.xml', origin: 'Indonesia' },
         havanatimes: { url: 'https://havanatimes.org/rss', origin: 'Cuba' },
         ict: { url: 'https://ictnews.org/rss', origin: 'US' },
-        palestinechronicle: { url: 'https://www.palestinechronicle.com/rss', origin: 'Palestine' }
+        palestinechronicle: { url: 'https://www.palestinechronicle.com/rss', origin: 'Palestine' },
+        borderchronicle: { url: "https://www.theborderchronicle.com/rss", origin: 'US' }
         // convergencemag: {url: 'https://convergencemag.com/rss', origin: 'US'}
     };
     var t1 = performance.now();
