@@ -89,7 +89,7 @@ function cleanDescription(description) {
     //remove annoying tag: "The post [x] first appeared on [y]"
     description = description.split('The post')[0];
     //remove html elements and new lines
-    description = description.replace(/(<[\s\S]*?>)+/g, '').replace(/\n/g, '').replace(/"/g, "''").replaceAll('/ /', ' ').replaceAll('  ', ' ');
+    description = description.replace(/(<[\s\S]*?>)+/g, '').replace(/\n/g, '').replace(/"/g, "''").replaceAll('/', '').replaceAll('  ', ' ');
     return description;
 }
 function cleanSourcesObj(sourcesObj) {
@@ -233,7 +233,6 @@ export async function gatherFeeds() {
         palestinechronicle: { url: 'https://www.palestinechronicle.com/rss', origin: 'Palestine' }
         // convergencemag: {url: 'https://convergencemag.com/rss', origin: 'US'}
     };
-    // sourcesObj = {convergencemag: {url: 'https://convergencemag.com/rss', origin: 'US'}}
     var t1 = performance.now();
     await fetchRawFeeds(sourcesObj);
     var t2 = performance.now();
