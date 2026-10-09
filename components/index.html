@@ -210,7 +210,7 @@ My email address is eknisbac@oberlin.edu.
                 if (contains(location.href, ['vercel', 'localhost'])) {
                     url = location.href + 'api'
                 } else {
-                    url = update ? 'https://doikayt.vercel.app/api' : 'https://doikaytn.neocities.org/cache.json';
+                    update ? 'https://doikayt.vercel.app/api' : 'https://doikaytn.neocities.org/cache.json';
                 }
                 const jsonReq = await fetch(url, {
                     method: 'GET',
@@ -487,8 +487,7 @@ My email address is eknisbac@oberlin.edu.
                     for (var newsItem of newsItems) {
                         const hasImg = newsItem.firstChild.children[0].tagName === 'IMG';
                         const newsItemA = newsItem.firstChild.children[1 + hasImg];
-                        var top = newsItem.getBoundingClientRect().top + window.scrollY;
-                        newsItemA.tabIndex = top;
+                        newsItemA.tabIndex = ++i;
                     }
                 }
                 //uses flexbox columns to create a masonry-like grid
