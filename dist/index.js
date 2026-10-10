@@ -10,8 +10,8 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { readFile } from 'fs/promises';
-import { gatherFeeds } from '../src/gatherFeeds.js';
-import { neoCache } from '../src/cache/neoCache.js';
+import { gatherFeeds } from '../dist/gatherFeeds.js';
+import { neoCache } from '../dist/cache/neoCache.js';
 const app = express();
 app.get('/', async (req, res) => {
     var html = await readFile(path.join(__dirname, '..', 'components', 'index.html'), 'utf-8');

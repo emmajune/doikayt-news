@@ -56,7 +56,7 @@ My email address is eknisbac@oberlin.edu.
                 Copyright 2026 Emma Knisbacher. Licensed under <a href="https://www.gnu.org/licenses/gpl-3.0.html">GPL 4(+)</a> with the caveat that all reproductions and redistributions of this software may not advocate for, support, or be used to advance (racial) capitalism, imperialism, authoritarianism, or any other forms of bigotry. This clause must be included in the licenses of any reproductions or redistributions of this software. Gitub Source Code <a href="https://github.com/emmajune/doikayt-news">here.</a>
             </p>
             <nav class="flex justify-center">
-                <button id="prev_btn" style="border-radius: 0;" disabled>Back</button>
+                <button id="prev_btn" style="border-radius: 0;" onclick="lastPage()" disabled>Back</button>
                 <span id="page_badge" class="badge outline" style="font-size: 1em; border-radius: 0; font-style: italic" aria-description="Page Number">Page 1</span>
                 <button id="next_btn" style="border-radius: 0;" onclick="nextPage()">Next</button>
             </nav>
@@ -400,11 +400,13 @@ My email address is eknisbac@oberlin.edu.
                         return dateB-dateA;
                     })
                 }
+                currItemsN = newsItems.length;
                 const newsHtml = compileNews(newsItems);
                 const sC = document.getElementById('search-content');
                 sC.innerHTML = newsHtml;
                 document.body.style.display = 'block';
                 maybeSelectAll()
+                return newsItems;
             }
             
                 
@@ -464,7 +466,7 @@ My email address is eknisbac@oberlin.edu.
 
                     var nCols = Math.floor(sConW/nItem1W)
 
-                    var nRows = Math.ceil(nNewsI/nCols)
+                    var nRows = Math.floor(nNewsI/nCols)
 
                     if (nRows === 1) {
                         nCols = nNewsI
@@ -506,21 +508,33 @@ My email address is eknisbac@oberlin.edu.
                 //relies on global newsItems
                 function updateGrid() {
                     var test = []
-                    let sConD = sConHCR(newsItems.length = 40)
+                    let sConD = sConHCR(itemsInPage)
                     sCon.style.height = sConD.height + 'px'
-                    console.log({newsItems})
-                    var page = newsItems.slice((pageN-1)*itemsInPage, pageN*itemsInPage)
-                    page = gridify(sConD.nRows, sConD.nCols, page);
-                    sCon.replaceChildren(...page);
                     
+                    // oldNewsItems = newsItems.cloneNode()
+                    //alert(newsItems[0])
+                    var page = newsItems.slice((pageN-1)*itemsInPage, pageN*itemsInPage)
+
+
+
+                    // var i = 4;
+                    
+                    // for (var newsItem of page) {
+                    //     const hasImg = newsItem.firstChild.children[0].tagName === 'IMG';
+                    //     const newsItemA = newsItem.firstChild.children[1 + hasImg];
+                    //     i++;
+                    //     newsItemA.tabIndex = i;
+                    //     console.log(newsItemA)
+                    // }
+
+
+                    page = gridify(sConD.nRows, sConD.nCols, page);
                     console.log({page})
-                    console.log(page.length)
-                    var i = 4;
-                    for (var newsItem of page) {
-                        const hasImg = newsItem.firstChild.children[0].tagName === 'IMG';
-                        const newsItemA = newsItem.firstChild.children[1 + hasImg];
-                        newsItemA.tabIndex = ++i;
-                    }
+                    sCon.replaceChildren(...page);
+                    sCon.innerHTML = sCon.innerHTML.replaceAll('undefined', '')
+                    
+                    
+                    
                 }
 
                 //relies on global newsItems
@@ -549,15 +563,9 @@ My email address is eknisbac@oberlin.edu.
                                 try {;
                                     //todo: un-hardcode this stuff better!!
                                     const elemA = elem.firstChild.children[1 + hasImg];
-                                    var top = elemA.getBoundingClientRect().top;
-                                    console.log(top)
-                                    top = Math.round(parseInt(elemA));
                                     
-                                    elem.firstChild.children[1 + hasImg].tabIndex = top;
+                                    elem.firstChild.children[1 + hasImg].tabIndex = gridIndex+4;
                                     
-                                    if (elem.children.length === top) {
-                                        elem.children[2].tabIndex = top;
-                                    }
                                     
                                 }
                                 catch {}
@@ -572,7 +580,9 @@ My email address is eknisbac@oberlin.edu.
                 
                 if (!newsItems) {
                     var newsItems = Array.from(sCon.cloneNode(true).children)
+                    console.log(newsItems)
                 }
+
 
                 // var nItemsB = Array.from(document.querySelectorAll('.news-item'))
             
@@ -584,18 +594,21 @@ My email address is eknisbac@oberlin.edu.
             
             //relies on global newsItemsFlat
             async function initNews() {
-                dumpNews(searchbar.value, newsItemsFlat);
-                styleNews(newsItemsFlat);
-                submit_button.onclick = () => reSearchNews(newsItemsFlat);
+                var newsItems = dumpNews(searchbar.value, newsItemsFlat);
+                styleNews(newsItems);
+                const maxPage = Math.ceil(currItemsN/itemsInPage);
+                page_badge.innerHTML = `Page ${pageN}/${maxPage}`;
+                submit_button.onclick = () => initNews();
                 return newsItemsFlat;
             }
 
             //relies on globals newsItemsFlat and sourcesObj
-            function reSearchNews() {
+            function reSearchNews(newsItems) {
                 const sources = getSelectedSources();
-                let newsItems = filterSources(newsItemsFlat, sourcesObj, sources);
-                dumpNews(searchbar.value, newsItems);
-                styleNews(newsItemsFlat);
+                var newsItems = filterSources(newsItems, sourcesObj, sources);
+                newsItems = dumpNews(searchbar.value, newsItems);
+                
+                styleNews(newsItems);
             }
             
             (async () => {
@@ -641,23 +654,28 @@ My email address is eknisbac@oberlin.edu.
                 }
             }            
               
-            function nextPage() {
-                    const maxPage = Math.ceil(newsItems.length/itemsInPage);
-                    if (pageN !== maxPage) {
-                        pageN++;
-                        initNews();
-                        if (pageN === maxPage) {
-                            next_btn.disabled = true;
-                            alert('AAAAA')
-                        }
-                        alert(prev_btn.disabled)
-                        prev_btn.disabled = false;
-                        alert(maxPage)
+            async function nextPage() {
+                const maxPage = Math.ceil(currItemsN/itemsInPage);
+                if (pageN !== maxPage) {
+                    pageN++;
+                    submit_button.onclick();
+                    if (pageN === maxPage) {
+                        next_btn.disabled = true;
                     }
-                    else {
-                        alert('FUCL')
-                    }
+                    prev_btn.disabled = false;
                 }
+            }
+
+            async function lastPage() {
+                if (pageN !== 1) {
+                    pageN--;
+                    submit_button.onclick();
+                    if (pageN === 0) {
+                        prev_btn.disabled = true;
+                    }
+                    next_btn.disabled = false;
+                }
+            }
         </script>
     </body>
 </html>

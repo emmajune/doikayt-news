@@ -19,7 +19,7 @@ async function fetchRawFeeds(sourcesObj: SourcesObj) {
               throw new Error(`Response status: ${response.status}`);
             }
             const result = await response.text();
-            console.log({result})
+            // console.log({result})
             sourceObj.rss = result;
             var t2 = performance.now();
             console.log(`fetching raw ${source} feed took ${(t2 - t1)/1000}`);
@@ -115,7 +115,16 @@ function cleanSourcesObj(sourcesObj: SourcesObj) {
                 var pubDate = item?.pubDate || item?.published;
                 // pubDate = (new Date(pubDate)).toTimeString()
                 if (pubDate) {
-                    pubDate = Date.parse(pubDate)
+                    let offsetHours = 0;
+                    let offsetMins = 0;
+                    if (pubDate.includes('+')) {
+                        const offsetStr = pubDate.split('+')[1];
+                        offsetHours = +(offsetStr.slice(0,2));
+                        offsetMins = +(offsetStr.slice(2,4));
+                    }
+                    pubDate = new Date(pubDate);
+                    // pubDate.setUTCHours(4);
+                    pubDate = pubDate.getTime();
                     if (pubDate > maxPubDate) {
                         maxPubDate = pubDate;
                     }
@@ -220,7 +229,7 @@ export async function gatherFeeds() {
     commons: {url: 'https://commons.com.ua/en/rss', origin: 'Ukraine'},
     anticapitalistresistance: {url: 'https://anticapitalistresistance.org/rss', origin: 'Britain'},
     indiginews: {url: 'https://indiginews.com/rss', origin: 'Canada'},
-    'greenleft (sorta glitchy)': {url: 'https://www.greenleft.org.au/feed', origin: 'Australia'},
+    'greenleft': {url: 'https://www.greenleft.org.au/feed', origin: 'Australia'},
     'firstnationsnews': {url: 'https://firstnationsnews.com.au/rss', origin: 'Australia'},
     mondoweiss: {url: 'https://mondoweiss.net/rss', origin: 'US'},
     tibetanreview: {url: 'https://www.tibetanreview.net/rss', origin: 'Tibet'},
@@ -240,7 +249,7 @@ export async function gatherFeeds() {
     // elfaro: {url: "https://beta.elfaro.net/en/rss.xml", origin: "International"}
     // convergencemag: {url: 'https://convergencemag.com/rss', origin: 'US'}
 }  
-    // sourcesObj = {elfaro: {url: "https://disorientalizing.substack.com/feed", origin: "International"}}
+    // sourcesObj = {'greenleft': {url: 'https://www.greenleft.org.au/feed', origin: 'Australia'}}
     var t1 = performance.now();
     await fetchRawFeeds(sourcesObj);
     var t2 = performance.now();
