@@ -19,7 +19,7 @@ async function fetchRawFeeds(sourcesObj: SourcesObj) {
               throw new Error(`Response status: ${response.status}`);
             }
             const result = await response.text();
-            
+            console.log({result})
             sourceObj.rss = result;
             var t2 = performance.now();
             console.log(`fetching raw ${source} feed took ${(t2 - t1)/1000}`);
@@ -235,10 +235,12 @@ export async function gatherFeeds() {
     indoleft: {url: 'https://www.indoleft.org/rss/indoleft-news-feed.xml', origin: 'Indonesia'},
     havanatimes: {url: 'https://havanatimes.org/rss', origin: 'Cuba'},
     ict: {url: 'https://ictnews.org/rss', origin: 'US'},
-    palestinechronicle: {url: 'https://www.palestinechronicle.com/rss', origin: 'Palestine'}
+    palestinechronicle: {url: 'https://www.palestinechronicle.com/rss', origin: 'Palestine'},
+    borderchronicle: {url: "https://www.theborderchronicle.com/rss", origin: 'US'},
+    // elfaro: {url: "https://beta.elfaro.net/en/rss.xml", origin: "International"}
     // convergencemag: {url: 'https://convergencemag.com/rss', origin: 'US'}
 }  
-
+    // sourcesObj = {elfaro: {url: "https://disorientalizing.substack.com/feed", origin: "International"}}
     var t1 = performance.now();
     await fetchRawFeeds(sourcesObj);
     var t2 = performance.now();
