@@ -114,7 +114,7 @@ function cleanSourcesObj(sourcesObj: SourcesObj) {
                 const {title, imgUrl} = item;
                 var pubDate = item?.pubDate || item?.published;
                 // pubDate = (new Date(pubDate)).toTimeString()
-                if (pubDate) {
+                if (pubDate && source != 'greenleft') {
                     let offsetHours = 0;
                     let offsetMins = 0;
                     if (pubDate.includes('+')) {
