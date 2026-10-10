@@ -51,16 +51,7 @@ My email address is eknisbac@oberlin.edu.
               </div>
             </section>
         </main>
-        <footer>
-            <p style="padding: 1em; font-weight: bold; margin: 0;">
-                Copyright 2026 Emma Knisbacher. Licensed under <a href="https://www.gnu.org/licenses/gpl-3.0.html">GPL 4(+)</a> with the caveat that all reproductions and redistributions of this software may not advocate for, support, or be used to advance (racial) capitalism, imperialism, authoritarianism, or any other forms of bigotry. This clause must be included in the licenses of any reproductions or redistributions of this software. Gitub Source Code <a href="https://github.com/emmajune/doikayt-news">here.</a>
-            </p>
-            <nav class="flex justify-center">
-                <button id="prev_btn" style="border-radius: 0;" onclick="lastPage()" disabled>Back</button>
-                <span id="page_badge" class="badge outline" style="font-size: 1em; border-radius: 0; font-style: italic" aria-description="Page Number">Page 1</span>
-                <button id="next_btn" style="border-radius: 0;" onclick="nextPage()">Next</button>
-            </nav>
-        </footer>
+        <p style="padding: 1em; padding-bottom: 2em; font-weight: bold; margin: 0;">Copyright 2026 Emma Knisbacher. Licensed under <a href="https://www.gnu.org/licenses/gpl-3.0.html">GPL 4(+)</a> with the caveat that all reproductions and redistributions of this software may not advocate for, support, or be used to advance (racial) capitalism, imperialism, authoritarianism, or any other forms of bigotry. This clause must be included in the licenses of any reproductions or redistributions of this software. Gitub Source Code <a href="https://github.com/emmajune/doikayt-news">here.</a></p>
         <style>
             #sources-button {
                 margin-right: .5em;
@@ -508,36 +499,16 @@ My email address is eknisbac@oberlin.edu.
                 //relies on global newsItems
                 function updateGrid() {
                     var test = []
-                    let sConD = sConHCR(itemsInPage)
+                    let sConD = sConHCR(newsItems.length)
                     sCon.style.height = sConD.height + 'px'
-                    
-                    // oldNewsItems = newsItems.cloneNode()
-                    //alert(newsItems[0])
-                    var page = newsItems.slice((pageN-1)*itemsInPage, pageN*itemsInPage)
-
-
-
-                    // var i = 4;
-                    
-                    // for (var newsItem of page) {
-                    //     const hasImg = newsItem.firstChild.children[0].tagName === 'IMG';
-                    //     const newsItemA = newsItem.firstChild.children[1 + hasImg];
-                    //     i++;
-                    //     newsItemA.tabIndex = i;
-                    //     console.log(newsItemA)
-                    // }
-
-
-                    page = gridify(sConD.nRows, sConD.nCols, page);
-                    console.log({page})
-                    sCon.replaceChildren(...page);
-                    sCon.innerHTML = sCon.innerHTML.replaceAll('undefined', '')
-                    
-                    
-                    
+                    sCon.replaceChildren(...gridify(sConD.nRows, sConD.nCols, newsItems))
+                    var i = 4;
+                    for (var newsItem of newsItems) {
+                        const hasImg = newsItem.firstChild.children[0].tagName === 'IMG';
+                        const newsItemA = newsItem.firstChild.children[1 + hasImg];
+                        newsItemA.tabIndex = ++i;
+                    }
                 }
-
-                //relies on global newsItems
                 //uses flexbox columns to create a masonry-like grid
                 var firstTime = false;
                 function gridify(rows, cols, gridlings) {
@@ -583,8 +554,7 @@ My email address is eknisbac@oberlin.edu.
                     console.log(newsItems)
                 }
 
-
-                // var nItemsB = Array.from(document.querySelectorAll('.news-item'))
+                var nItemsB = Array.from(document.querySelectorAll('.news-item'))
             
                 updateGrid()
                 
@@ -594,21 +564,17 @@ My email address is eknisbac@oberlin.edu.
             
             //relies on global newsItemsFlat
             async function initNews() {
-                var newsItems = dumpNews(searchbar.value, newsItemsFlat);
-                styleNews(newsItems);
-                const maxPage = Math.ceil(currItemsN/itemsInPage);
-                page_badge.innerHTML = `Page ${pageN}/${maxPage}`;
-                submit_button.onclick = () => initNews();
-                return newsItemsFlat;
+                dumpNews(searchbar.value, newsItemsJ);
+                styleNews(newsItemsJ);
+                submit_button.onclick = () => reSearchNews(newsItemsJ);
+                return newsItemsJ;
             }
 
-            //relies on globals newsItemsFlat and sourcesObj
-            function reSearchNews(newsItems) {
+            function reSearchNews() {
                 const sources = getSelectedSources();
-                var newsItems = filterSources(newsItems, sourcesObj, sources);
-                newsItems = dumpNews(searchbar.value, newsItems);
-                
-                styleNews(newsItems);
+                let newsItems = filterSources(newsItemsJ, sourcesObj, sources);
+                dumpNews(searchbar.value, newsItems);
+                styleNews(newsItemsJ);
             }
             
             (async () => {
@@ -654,28 +620,7 @@ My email address is eknisbac@oberlin.edu.
                 }
             }            
               
-            async function nextPage() {
-                const maxPage = Math.ceil(currItemsN/itemsInPage);
-                if (pageN !== maxPage) {
-                    pageN++;
-                    submit_button.onclick();
-                    if (pageN === maxPage) {
-                        next_btn.disabled = true;
-                    }
-                    prev_btn.disabled = false;
-                }
-            }
-
-            async function lastPage() {
-                if (pageN !== 1) {
-                    pageN--;
-                    submit_button.onclick();
-                    if (pageN === 0) {
-                        prev_btn.disabled = true;
-                    }
-                    next_btn.disabled = false;
-                }
-            }
+              
         </script>
     </body>
 </html>
