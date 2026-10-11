@@ -108,7 +108,7 @@ My email address is eknisbac@oberlin.edu.
             #about {
               position: fixed;
               bottom: .5em;
-              right: .5em;
+              right: .8em;
             }
             #search-content > div {
               justify-content: space-between;
@@ -230,7 +230,7 @@ My email address is eknisbac@oberlin.edu.
                 if (contains(location.href, ['vercel', 'localhost'])) {
                     url = location.href + 'api'
                 } else {
-                    url = update ? 'https://doikayt.vercel.app/api' : 'https://doikaytn.neocities.org/cache.json';
+                    url = update ? 'https://doikayt.vercel.app/api' : 'https://d-news.neocities.org/cache.json';
                 }
                 const jsonReq = await fetch(url, {
                     method: 'GET',
@@ -323,7 +323,7 @@ My email address is eknisbac@oberlin.edu.
                     }
                     compiledHTML += `
                 <div class="news-item" id="${i}" title="${score}"><span class="news-infobar">
-                        ${imgUrl ? `<img style="display:block; width: 100%" src="${imgUrl}" />` : ''}
+                        ${imgUrl ? `<img style="display:block; width: 100%" src="${imgUrl}" alt="Image sans alt text"/>` : ''}
                         (${source}, ${pubDate})<br />
                         <a href="${link}">${title}</a>
                     </span>
