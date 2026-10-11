@@ -565,6 +565,10 @@ My email address is eknisbac@oberlin.edu.
                                     const elemA = elem.firstChild.children[1 + hasImg];
                                     
                                     elem.firstChild.children[1 + hasImg].tabIndex = gridIndex+4;
+
+                                    if (elem.children.length > 2) {
+                                        elem.children[2].tabIndex = gridIndex+4;
+                                    }
                                     
                                     
                                 }
@@ -663,6 +667,7 @@ My email address is eknisbac@oberlin.edu.
                         next_btn.disabled = true;
                     }
                     prev_btn.disabled = false;
+                    next_btn.scrollIntoView();
                 }
             }
 
@@ -674,6 +679,7 @@ My email address is eknisbac@oberlin.edu.
                         prev_btn.disabled = true;
                     }
                     next_btn.disabled = false;
+                    prev_btn.scrollIntoView();
                 }
             }
         </script>
