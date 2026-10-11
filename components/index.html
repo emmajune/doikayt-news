@@ -662,7 +662,7 @@ My email address is eknisbac@oberlin.edu.
                 const maxPage = Math.ceil(currItemsN/itemsInPage);
                 if (pageN !== maxPage) {
                     pageN++;
-                    submit_button.onclick();
+                    submit_button.click();
                     if (pageN === maxPage) {
                         next_btn.disabled = true;
                     }
@@ -674,7 +674,7 @@ My email address is eknisbac@oberlin.edu.
             async function lastPage() {
                 if (pageN !== 1) {
                     pageN--;
-                    submit_button.onclick();
+                    submit_button.click();
                     if (pageN === 0) {
                         prev_btn.disabled = true;
                     }
