@@ -129,7 +129,7 @@ My email address is eknisbac@oberlin.edu.
               border-width: 2px;
               padding: 8px;
               padding-bottom: 0;
-              flex-grow: 0.1;
+              flex-grow: 0.05;
               flex-shrink: 5;
             }
             .news-infobar {
@@ -598,7 +598,8 @@ My email address is eknisbac@oberlin.edu.
             
             //relies on global newsItemsFlat
             async function initNews() {
-                var newsItems = dumpNews(searchbar.value, newsItemsFlat);
+                const sources = getSelectedSources();
+                var newsItems = dumpNews(searchbar.value, filterSources(newsItemsFlat, sourcesObj, sources));
                 styleNews(newsItems);
                 const maxPage = Math.ceil(currItemsN/itemsInPage);
                 page_badge.innerHTML = `Page ${pageN}/${maxPage}`;

@@ -7,7 +7,7 @@ async function fetchRawFeeds(sourcesObj) {
         const url = sourceObj.url;
         try {
             var t1 = performance.now();
-            const response = await fetch(url, { signal: AbortSignal.timeout(3000) });
+            const response = await fetch(url, { signal: AbortSignal.timeout(4000) });
             if (!response.ok) {
                 throw new Error(`Response status: ${response.status}`);
             }
@@ -184,6 +184,7 @@ export async function gatherFeeds() {
         // al_jazeera: {url: 'https://www.aljazeera.com/xml/rss/all.xml', origin: 'International'},
         human_rights_watch: { url: 'https://www.hrw.org/rss/news', origin: 'International' },
         haitian_times: { url: 'https://haitiantimes.com/feed/', origin: 'Haiti' },
+        haitilibre: { url: 'https://www.haitilibre.com/rss-flash-en.php', origin: 'Haiti' },
         truthout: { url: 'https://truthout.org/latest/feed/', origin: 'US' },
         democracy_now: { url: 'https://www.democracynow.org/democracynow.rss', origin: 'US' },
         the_intercept: { url: 'https://theintercept.com/feed/', origin: 'US' },
