@@ -187,8 +187,8 @@ export async function gatherFeeds() {
     mother_jones: {url: 'https://www.motherjones.com/feed', origin: 'US'},
     // al_jazeera: {url: 'https://www.aljazeera.com/xml/rss/all.xml', origin: 'International'},
     human_rights_watch: {url: 'https://www.hrw.org/rss/news', origin: 'International'},
-    haitian_times: {url: 'https://haitiantimes.com/feed/', origin: 'Haiti'},
-    haitilibre: {url: 'https://www.haitilibre.com/rss-flash-en.php', origin: 'Haiti'},
+    haitian_times: {url: 'https://haitiantimes.com/feed/', origin: 'Haiti'},//Haiti & US...
+    // haitilibre: {url: 'https://www.haitilibre.com/rss-flash-en.php', origin: 'Haiti'},
     truthout: {url: 'https://truthout.org/latest/feed/', origin: 'US'},
     democracy_now: {url: 'https://www.democracynow.org/democracynow.rss', origin: 'US'},
     the_intercept: {url: 'https://theintercept.com/feed/', origin: 'US'},
