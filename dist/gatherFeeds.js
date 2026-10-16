@@ -90,7 +90,7 @@ function cleanDescription(description) {
     //remove annoying tag: "The post [x] first appeared on [y]"
     description = description.split('The post')[0];
     //remove html elements and new lines
-    description = description.replace(/(<[\s\S]*?>)+/g, '').replace(/\n/g, '').replace(/"/g, "''").replaceAll('/', '').replaceAll('  ', ' ');
+    description = description.replace(/(<[\s\S]*?>)+/g, '').replace(/\n/g, '').replace(/"/g, "''").replaceAll('/', '').replaceAll('  ', ' ').replaceAll('[...]', '');
     return description;
 }
 function cleanSourcesObj(sourcesObj) {
@@ -183,8 +183,8 @@ export async function gatherFeeds() {
         mother_jones: { url: 'https://www.motherjones.com/feed', origin: 'US' },
         // al_jazeera: {url: 'https://www.aljazeera.com/xml/rss/all.xml', origin: 'International'},
         human_rights_watch: { url: 'https://www.hrw.org/rss/news', origin: 'International' },
-        haitian_times: { url: 'https://haitiantimes.com/feed/', origin: 'Haiti' },
-        haitilibre: { url: 'https://www.haitilibre.com/rss-flash-en.php', origin: 'Haiti' },
+        haitian_times: { url: 'https://haitiantimes.com/feed/', origin: 'Haiti' }, //clarify that it's Haiti & US
+        // haitilibre: {url: 'https://www.haitilibre.com/rss-flash-en.php', origin: 'Haiti'},
         truthout: { url: 'https://truthout.org/latest/feed/', origin: 'US' },
         democracy_now: { url: 'https://www.democracynow.org/democracynow.rss', origin: 'US' },
         the_intercept: { url: 'https://theintercept.com/feed/', origin: 'US' },
@@ -218,7 +218,7 @@ export async function gatherFeeds() {
         uyghurcongress: { 'url': 'https://www.uyghurcongress.org/en/news/rss', origin: 'East Turkistan' },
         rohingyakhobor: { 'url': 'https://rohingyakhobor.com/rss', origin: 'Arakan' },
         rohingyavision: { url: 'https://rohingyavision.com/rss', origin: 'Arakan' },
-        global_arakan_network: { url: 'https://www.globalarakannetwork.com/blog-feed.xml', origin: 'Arakan' },
+        global_arakan_network: { url: 'https://www.globalarakannetwork.com/blog-feed.xml', origin: 'Arakan', noimg: true },
         // hyperallergic: {'url': 'https://hyperallergic.com/rss', 'origin': 'US'},
         // aljazeera: {url: 'http://aljazeera.com/rss', origin: 'International'},
         cpj: { url: 'https://cpj.org/rss', origin: 'International' },
@@ -243,6 +243,8 @@ export async function gatherFeeds() {
         ict: { url: 'https://ictnews.org/rss', origin: 'US' },
         palestinechronicle: { url: 'https://www.palestinechronicle.com/rss', origin: 'Palestine' },
         borderchronicle: { url: "https://www.theborderchronicle.com/rss", origin: 'US' },
+        proteanmag: { url: "https://proteanmag.com/rss", origin: "US" },
+        underscorenews: { url: "https://www.underscore.news/rss", origin: "Pacific NW" }
         // elfaro: {url: "https://beta.elfaro.net/en/rss.xml", origin: "International"}
         // convergencemag: {url: 'https://convergencemag.com/rss', origin: 'US'}
     };

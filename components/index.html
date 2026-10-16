@@ -323,7 +323,7 @@ My email address is eknisbac@oberlin.edu.
                     }
                     compiledHTML += `
                 <div class="news-item" id="${i}" title="${score}"><span class="news-infobar">
-                        ${imgUrl ? `<img style="display:block; width: 100%" src="${imgUrl}" alt="Image sans alt text"/>` : ''}
+                        ${imgUrl ? `<img loading="lazy" style="display:block; width: 100%" src="${imgUrl}" alt="Image without alt text"/>` : ''}
                         (${source}, ${pubDate})<br />
                         <a href="${link}">${title}</a>
                     </span>
