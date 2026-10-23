@@ -13,9 +13,9 @@ import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { readFile } from 'fs/promises';
 
-import {gatherFeeds} from '../src/gatherFeeds.js';
+import {gatherFeeds} from '../dist/gatherFeeds.js';
 
-import {neoCache} from '../src/cache/neoCache.js';
+import {neoCache} from '../dist/cache/neoCache.js';
 
 const app = express();
 

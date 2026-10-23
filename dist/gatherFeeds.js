@@ -244,7 +244,8 @@ export async function gatherFeeds() {
         palestinechronicle: { url: 'https://www.palestinechronicle.com/rss', origin: 'Palestine' },
         borderchronicle: { url: "https://www.theborderchronicle.com/rss", origin: 'US' },
         proteanmag: { url: "https://proteanmag.com/rss", origin: "US" },
-        underscorenews: { url: "https://www.underscore.news/rss", origin: "Pacific NW" }
+        underscorenews: { url: "https://www.underscore.news/rss", origin: "Pacific NW" },
+        anarchistfederation: { url: "https://www.anarchistfederation.net/rss", origin: "International" }
         // elfaro: {url: "https://beta.elfaro.net/en/rss.xml", origin: "International"}
         // convergencemag: {url: 'https://convergencemag.com/rss', origin: 'US'}
     };

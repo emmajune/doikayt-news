@@ -238,12 +238,13 @@ My email address is eknisbac@oberlin.edu.
                 const jsonT = (await jsonReq.text())//.replace('}}gin":"International"}}', '}}');
                 sourcesObj = JSON.parse(jsonT);
                 document.getElementById('disclosed-sources').innerHTML = sourcesToHtml(sourcesObj);
-                newsItems = [];
+                var newsItems = [];
                 for (source in sourcesObj) {
                     const sourceObj = sourcesObj[source];
                     newsItems.push(sourceObj.items);
                 }
-                newsItemsFlat = newsItems.flat(2);
+                var newsItemsFlat = newsItems.flat(2);
+                return {newsItems, newsItemsFlat};
             }
             
             //relies on global newsItems
@@ -373,6 +374,7 @@ My email address is eknisbac@oberlin.edu.
                     useExtendedSearch: true,
                     threshold: .3,
                     useTokenSearch: true,
+                    tokenMatch: 'all',
                     findAllMatches: true
                 })
                 if (query.length > 4) {
@@ -596,8 +598,9 @@ My email address is eknisbac@oberlin.edu.
             }
 
             
-            //relies on global newsItemsFlat
-            async function initNews() {
+            //relies on global newsItemsFlat, sourcesObj, sources
+            async function initNews(sourcesDict) {
+                var {newsItems, newsItemsFlat} = sourcesDict;
                 const sources = getSelectedSources();
                 var newsItems = dumpNews(searchbar.value, filterSources(newsItemsFlat, sourcesObj, sources));
                 styleNews(newsItems);
@@ -608,23 +611,31 @@ My email address is eknisbac@oberlin.edu.
             }
 
             //relies on globals newsItemsFlat and sourcesObj
-            function reSearchNews(newsItems) {
-                const sources = getSelectedSources();
-                var newsItems = filterSources(newsItems, sourcesObj, sources);
-                newsItems = dumpNews(searchbar.value, newsItems);
+            // function reSearchNews(newsItems) {
+            //     const sources = getSelectedSources();
+            //     var newsItems = filterSources(newsItems, sourcesObj, sources);
+            //     newsItems = dumpNews(searchbar.value, newsItems);
                 
-                styleNews(newsItems);
-            }
+            //     styleNews(newsItems);
+            // }
             
             (async () => {
-                await updateNews(false);
-                initNews();
+                var {sourcesObj, newsItems, newsItemsFlat} = await updateNews(false);
+                initNews({sourcesObj, newsItems, newsItemsFlat});
                 var superSelectAll = document.getElementById('super-select-all');
                 superSelectAll.click();
                 maybeSelectAll()
                 await updateNews(true);
                 initNews();
                 maybeSelectAll()
+                const uGridD = debounce(updateGrid, 250);
+                // Create a debounced version of updateGrid with a 250ms delay
+
+                window.addEventListener('resize', uGridD);
+
+                const selectionContainer = document.getElementById('selection-container');
+
+                
             })();
 
 
@@ -638,14 +649,7 @@ My email address is eknisbac@oberlin.edu.
                 };
             }
 
-            const uGridD = debounce(updateGrid, 250);
-                // Create a debounced version of updateGrid with a 250ms delay
-
-            window.addEventListener('resize', uGridD);
-
-            const selectionContainer = document.getElementById('selection-container');
-
-            var superSelectAll = document.getElementById('super-select-all');
+            
             
             function maybeSelectAll() {
                 const numChecked = document.querySelectorAll('#disclosed-sources input[type="checkbox"]:checked').length;

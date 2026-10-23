@@ -30,5 +30,11 @@
       "dist/cache/neoCache.js": {
         "maxDuration": 60
       }
+    },
+    "crons": [
+    {
+      "path": "/api",
+      "schedule": "0 9 * * *"
     }
+  ]
 }
