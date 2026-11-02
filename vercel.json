@@ -1,5 +1,5 @@
 {
-    "devCommand": "bun dist/index.js",
+    "devCommand": "bun src/index.ts",
     "headers": [
         {
           "source": "/api/(.*)",
